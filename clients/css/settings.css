@@ -1,0 +1,623 @@
+/* ==========================================
+   GLOBAL
+========================================== */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:#f5f7fb;
+color:#111827;
+transition:background .25s,color .25s;
+}
+
+body.dark-mode{
+background:#0f172a;
+color:#e5e7eb;
+}
+
+body.dark-mode .settings-header h1,
+body.dark-mode .settings-card h2,
+body.dark-mode .setting-item span{
+color:#f8fafc;
+}
+
+body.dark-mode .settings-header p,
+body.dark-mode .form-group label{
+color:#94a3b8;
+}
+
+body.dark-mode .settings-card,
+body.dark-mode .modal-content{
+background:#1e293b;
+color:#e5e7eb;
+}
+
+body.dark-mode .setting-item{
+border-color:#334155;
+}
+
+body.dark-mode .form-group input{
+background:#0f172a;
+border-color:#475569;
+color:#f8fafc;
+}
+
+body.dark-mode .cancel-btn{
+background:#334155;
+color:#f8fafc;
+}
+
+body.compact-view .settings-grid{
+gap:12px;
+}
+
+body.compact-view .settings-card{
+padding:18px;
+border-radius:12px;
+}
+
+body.compact-view .setting-item{
+padding:10px 0;
+}
+
+body.reduced-motion *,
+body.reduced-motion *::before,
+body.reduced-motion *::after{
+animation-duration:0s !important;
+transition-duration:0s !important;
+scroll-behavior:auto !important;
+}
+
+.main{
+margin-left:260px;
+padding:30px;
+min-height:100vh;
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.settings-header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:35px;
+
+}
+
+.settings-header h1{
+
+font-size:38px;
+font-weight:700;
+color:#111827;
+margin-bottom:8px;
+
+}
+
+.settings-header p{
+
+font-size:15px;
+color:#64748b;
+
+}
+
+/* ==========================================
+   SETTINGS GRID
+========================================== */
+
+.settings-grid{
+
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:25px;
+
+}
+
+/* ==========================================
+   CARD
+========================================== */
+
+.settings-card{
+
+background:#ffffff;
+border-radius:22px;
+padding:28px;
+box-shadow:0 12px 28px rgba(0,0,0,.08);
+transition:.35s;
+
+}
+
+.settings-card:hover{
+
+transform:translateY(-6px);
+box-shadow:0 22px 45px rgba(0,0,0,.12);
+
+}
+
+.settings-card h2{
+
+font-size:24px;
+margin-bottom:28px;
+color:#111827;
+
+}
+
+/* ==========================================
+   SETTING ITEM
+========================================== */
+
+.setting-item{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 0;
+border-bottom:1px solid #edf2f7;
+
+}
+
+.setting-item:last-child{
+
+border-bottom:none;
+
+}
+
+.setting-item span{
+
+font-size:15px;
+font-weight:600;
+color:#374151;
+
+}
+
+/* ==========================================
+   TOGGLE SWITCH
+========================================== */
+
+.switch{
+
+position:relative;
+display:inline-block;
+width:56px;
+height:30px;
+
+}
+
+.switch input{
+
+opacity:0;
+width:0;
+height:0;
+
+}
+
+.slider{
+
+position:absolute;
+cursor:pointer;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:#cbd5e1;
+transition:.3s;
+border-radius:30px;
+
+}
+
+.slider:before{
+
+content:"";
+position:absolute;
+height:24px;
+width:24px;
+left:3px;
+top:3px;
+background:white;
+transition:.3s;
+border-radius:50%;
+
+}
+
+.switch input:checked + .slider{
+
+background:#2563eb;
+
+}
+
+.switch input:checked + .slider:before{
+
+transform:translateX(26px);
+
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.setting-btn{
+
+width:100%;
+height:52px;
+border:none;
+border-radius:14px;
+background:#2563eb;
+color:white;
+font-size:15px;
+font-weight:600;
+margin-bottom:15px;
+cursor:pointer;
+transition:.3s;
+
+}
+
+.setting-btn:hover{
+
+background:#1d4ed8;
+transform:translateY(-3px);
+
+}
+
+.setting-btn.danger{
+
+background:#dc2626;
+
+}
+
+.setting-btn.danger:hover{
+
+background:#b91c1c;
+
+}
+
+/* ==========================================
+   CHANGE PASSWORD MODAL
+========================================== */
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.45);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.modal-content{
+width:520px;
+background:#ffffff;
+border-radius:22px;
+overflow:hidden;
+box-shadow:0 25px 60px rgba(0,0,0,.25);
+animation:modalOpen .35s ease;
+}
+
+@keyframes modalOpen{
+
+from{
+opacity:0;
+transform:translateY(-25px) scale(.95);
+}
+
+to{
+opacity:1;
+transform:translateY(0) scale(1);
+}
+
+}
+
+.modal-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:22px 30px;
+background:#2563eb;
+color:#ffffff;
+}
+
+.modal-header h2{
+font-size:24px;
+font-weight:700;
+}
+
+.modal-header span{
+font-size:30px;
+cursor:pointer;
+transition:.3s;
+}
+
+.modal-header span:hover{
+transform:rotate(90deg);
+}
+
+.modal-body{
+padding:30px;
+}
+
+/* ==========================================
+   FORM
+========================================== */
+
+.form-group{
+margin-bottom:22px;
+}
+
+.form-group label{
+display:block;
+margin-bottom:8px;
+font-size:14px;
+font-weight:600;
+color:#64748b;
+}
+
+.form-group input{
+width:100%;
+height:50px;
+padding:0 15px;
+border:1px solid #dbe3ec;
+border-radius:12px;
+font-size:15px;
+outline:none;
+transition:.3s;
+}
+
+.form-group input:focus{
+border-color:#2563eb;
+box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+/* ==========================================
+   MODAL BUTTONS
+========================================== */
+
+.modal-buttons{
+display:flex;
+gap:15px;
+margin-top:20px;
+}
+
+.save-btn,
+.cancel-btn{
+
+flex:1;
+height:50px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-size:15px;
+font-weight:600;
+transition:.3s;
+
+}
+
+.save-btn{
+background:#2563eb;
+color:#ffffff;
+}
+
+.save-btn:hover{
+background:#1d4ed8;
+}
+
+.cancel-btn{
+background:#f1f5f9;
+color:#111827;
+}
+
+.cancel-btn:hover{
+background:#e2e8f0;
+}
+
+/* ==========================================
+   SAVE / RESET BUTTONS
+========================================== */
+
+.settings-actions{
+
+display:flex;
+justify-content:flex-end;
+gap:18px;
+margin-top:35px;
+
+}
+
+.save-settings-btn,
+.reset-settings-btn{
+
+padding:14px 28px;
+border:none;
+border-radius:12px;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+
+}
+
+.save-settings-btn{
+
+background:#16a34a;
+color:white;
+
+}
+
+.save-settings-btn:hover{
+
+background:#15803d;
+transform:translateY(-3px);
+
+}
+
+.reset-settings-btn{
+
+background:#ef4444;
+color:white;
+
+}
+
+.reset-settings-btn:hover{
+
+background:#dc2626;
+transform:translateY(-3px);
+
+}
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.loading-screen{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:99999;
+
+}
+
+.loader{
+
+width:60px;
+height:60px;
+border:6px solid #e5e7eb;
+border-top:6px solid #2563eb;
+border-radius:50%;
+animation:spin 1s linear infinite;
+
+}
+
+@keyframes spin{
+
+100%{
+transform:rotate(360deg);
+}
+
+}
+
+.loading-screen p{
+
+margin-top:18px;
+font-size:17px;
+font-weight:600;
+color:#64748b;
+
+}
+
+/* ==========================================
+   FLOAT BUTTON
+========================================== */
+
+.fab{
+
+position:fixed;
+bottom:25px;
+right:25px;
+width:58px;
+height:58px;
+border:none;
+border-radius:50%;
+background:#2563eb;
+color:white;
+font-size:22px;
+cursor:pointer;
+box-shadow:0 15px 30px rgba(37,99,235,.35);
+transition:.3s;
+
+}
+
+.fab:hover{
+
+background:#1d4ed8;
+transform:translateY(-4px);
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:1100px){
+
+.settings-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.main{
+
+margin-left:0;
+padding:20px;
+
+}
+
+.settings-actions{
+
+flex-direction:column;
+
+}
+
+.save-settings-btn,
+.reset-settings-btn{
+
+width:100%;
+
+}
+
+.modal-content{
+
+width:95%;
+
+}
+
+}
+
+/* ==========================================
+   ANIMATION
+========================================== */
+
+.settings-card{
+
+animation:fadeUp .45s ease;
+
+}
+
+@keyframes fadeUp{
+
+from{
+
+opacity:0;
+transform:translateY(20px);
+
+}
+
+to{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
+}

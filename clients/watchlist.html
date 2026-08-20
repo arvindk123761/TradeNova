@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>TradeNova | Watchlist</title>
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="css/sidebar.css">
+
+<link rel="stylesheet"
+href="css/topbar.css">
+
+<link rel="stylesheet"
+href="css/common.css">
+
+<link rel="stylesheet"
+href="css/watchlist.css">
+
+<link rel="stylesheet"
+href="css/toast.css">
+
+</head>
+
+<body>
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+<div id="topbar"></div>
+
+<!-- =======================
+HEADER
+======================= -->
+
+<div class="watchlist-header">
+
+<div>
+
+<h1>
+
+⭐ My Watchlist
+
+</h1>
+
+<p>
+
+Track your favourite stocks before investing.
+
+</p>
+
+</div>
+
+<input
+
+type="text"
+
+id="searchWatchlist"
+
+placeholder="Search Watchlist...">
+
+</div>
+
+<!-- =======================
+SUMMARY
+======================= -->
+
+<div class="watch-summary">
+
+<div class="summary-card">
+
+<h4>
+
+Total Stocks
+
+</h4>
+
+<h2 id="watchCount">
+
+0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>
+
+Highest Price
+
+</h4>
+
+<h2 id="highestPrice">
+
+₹0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>
+
+Lowest Price
+
+</h4>
+
+<h2 id="lowestPrice">
+
+₹0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>
+
+Average Price
+
+</h4>
+
+<h2 id="averagePrice">
+
+₹0
+
+</h2>
+
+</div>
+
+</div>
+
+<!-- =======================
+WATCHLIST GRID
+======================= -->
+
+<div
+
+class="watchlist-grid"
+
+id="watchlistContainer">
+
+</div>
+
+<!-- =======================
+EMPTY
+======================= -->
+
+<div
+
+id="emptyWatchlist"
+
+class="empty-state"
+
+style="display:none;">
+
+<img
+src="images/empty-watchlist.svg">
+
+<h2>
+
+Your Watchlist is Empty
+
+</h2>
+
+<p>
+
+Add stocks from the Stocks page.
+
+</p>
+
+<button
+onclick="location.href='stocks.html'">
+
+Browse Stocks
+
+</button>
+
+</div>
+
+<!-- Loading -->
+
+<div
+class="loading-screen"
+id="loadingScreen">
+
+<div class="loader"></div>
+
+<p>
+
+Loading Watchlist...
+
+</p>
+
+</div>
+
+<button
+
+class="fab"
+
+onclick="window.scrollTo({top:0,behavior:'smooth'})">
+
+↑
+
+</button>
+
+<script src="js/common.js"></script>
+
+<script src="js/toast.js"></script>
+
+<script src="js/watchlist.js"></script>
+
+</div>
+
+</body>
+
+</html>

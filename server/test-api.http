@@ -1,0 +1,140 @@
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+
+{
+  "full_name": "Arvind Kumar",
+  "email": "arvind2@gmail.com",
+  "password": "Arvind123",
+  "mobile": "9876543210"
+}
+
+###
+
+POST http://localhost:5000/api/trade/buy
+Content-Type: application/json
+
+{
+    "user_id": 1,
+    "stock_id": 1,
+    "quantity": 5,
+    "buy_price": 2945
+}
+
+###
+GET http://localhost:5000/api/portfolio
+
+###
+GET http://localhost:5000/api/wallet
+
+###
+POST http://localhost:5000/api/trade/buy
+Content-Type: application/json
+
+{
+  "user_id": 1,
+  "stock_id": 1,
+  "quantity": 2,
+  "buy_price": 2945
+}
+
+###
+GET http://localhost:5000/api/stocks
+
+
+
+
+
+### Test Sell API
+
+POST http://localhost:5000/api/trade/sell
+Content-Type: application/json
+
+{
+    "user_id": 1,
+    "stock_id": 4,
+    "quantity": 10
+}
+
+
+### Dashboard API
+
+GET http://localhost:5000/api/dashboard
+
+
+
+### Add Watchlist
+
+POST http://localhost:5000/api/watchlist
+Content-Type: application/json
+
+{
+    "user_id":1,
+    "stock_id":1
+}
+
+###
+
+### Get Watchlist
+
+GET http://localhost:5000/api/watchlist
+
+### Remove Watchlist
+
+DELETE http://localhost:5000/api/watchlist
+Content-Type: application/json
+
+{
+    "user_id":1,
+    "stock_id":1
+}
+
+
+###
+http://localhost:5000/api/portfolio
+
+###
+GET http://localhost:5000/api/orders
+
+### Get All Stocks
+GET http://localhost:5000/api/admin
+### Add Stock
+POST http://localhost:5000/api/admin/add
+Content-Type: application/json
+
+{
+    "company_name": "Tesla",
+    "symbol": "TSLA",
+    "current_price": 450
+}
+
+### Update Stock Price
+PUT http://localhost:5000/api/admin/update/10
+Content-Type: application/json
+
+{
+    "current_price": 500
+}
+
+### Delete Stock
+DELETE http://localhost:5000/api/admin/delete/10
+
+### Get IPOs
+GET http://localhost:5000/api/ipo
+
+### Apply for IPO
+POST http://localhost:5000/api/ipo/apply
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJjZkBnbWFpbC5jb20iLCJpYXQiOjE3ODQyNjA0NDMsImV4cCI6MTc4NDM0Njg0M30.1pzqNMl8JFsyLGeqwCQRPrzdN83AQAbrYJCakzuOzJY
+
+{
+    "ipo_id": 1,
+    "lots": 2
+}
+###
+GET http://localhost:5000/api/wallet
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJjZkBnbWFpbC5jb20iLCJpYXQiOjE3ODQyNjA0NDMsImV4cCI6MTc4NDM0Njg0M30.1pzqNMl8JFsyLGeqwCQRPrzdN83AQAbrYJCakzuOzJY
+
+
+###
+http://localhost:5000/api/portfolio

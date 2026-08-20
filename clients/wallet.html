@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeNova | Wallet</title>
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/topbar.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/toast.css">
+<style>
+.wallet-page { max-width: 720px; margin: 48px auto; padding: 0 24px; }
+.wallet-card { padding: 32px; background: #fff; border-radius: 12px; box-shadow: 0 8px 24px rgba(15,23,42,.08); }
+.wallet-card h1 { margin-top: 0; }
+.balance { font-size: 2.5rem; font-weight: 700; margin: 24px 0; }
+.wallet-card input { display: block; width: 100%; box-sizing: border-box; padding: 14px; margin: 16px 0; }
+.wallet-card button { padding: 13px 22px; border: 0; border-radius: 8px; background: #2563eb; color: #fff; cursor: pointer; }
+</style>
+</head>
+<body>
+<div id="sidebar"></div>
+<div class="main"><div id="topbar"></div><section class="wallet-page"><div class="wallet-card"><h1>Wallet</h1><div id="balance" class="balance">₹0</div><p id="investment">Investment: ₹0</p><p id="holdings">Holdings: 0</p><input id="amount" type="number" min="1" placeholder="Amount to add"><button id="addMoney">Add Money</button></div></section></div>
+<script src="js/wallet.js"></script>
+</body>
+</html>

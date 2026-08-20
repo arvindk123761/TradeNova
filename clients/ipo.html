@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TradeNova | IPO</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/sidebar.css">
+
+<link rel="stylesheet" href="css/topbar.css">
+
+<link rel="stylesheet" href="css/common.css">
+
+<link rel="stylesheet" href="css/ipo.css">
+
+<link rel="stylesheet" href="css/toast.css">
+
+</head>
+
+<body>
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+<div id="topbar"></div>
+
+<!-- =========================
+HEADER
+========================= -->
+
+<div class="ipo-header">
+
+<div>
+
+<h1>
+
+🚀 IPO Investments
+
+</h1>
+
+<p>
+
+Apply for the latest Initial Public Offerings before listing.
+
+</p>
+
+</div>
+
+<input
+
+type="text"
+
+id="searchIPO"
+
+placeholder="Search IPO...">
+
+</div>
+
+<!-- =========================
+SUMMARY
+========================= -->
+
+<div class="ipo-summary">
+
+<div class="summary-card">
+
+<h4>
+
+Active IPOs
+
+</h4>
+
+<h2 id="activeIPO">
+
+0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>
+
+Upcoming IPOs
+
+</h4>
+
+<h2 id="upcomingIPO">
+
+0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>
+
+Closed IPOs
+
+</h4>
+
+<h2 id="closedIPO">
+
+0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>
+
+My Applications
+
+</h4>
+
+<h2 id="myIPO">
+
+0
+
+</h2>
+
+</div>
+
+</div>
+
+<!-- =========================
+IPO GRID
+========================= -->
+
+<div
+
+class="ipo-grid"
+
+id="ipoContainer">
+
+</div>
+
+<!-- =========================
+EMPTY STATE
+========================= -->
+
+<div
+
+id="emptyIPO"
+
+class="empty-state"
+
+style="display:none;">
+
+<img
+
+src="images/empty-ipo.svg"
+
+alt="IPO">
+
+<h2>
+
+No IPO Available
+
+</h2>
+
+<p>
+
+Currently there are no IPOs available for investment.
+
+</p>
+
+</div>
+
+<!-- =========================
+LOADING
+========================= -->
+
+<div
+
+class="loading-screen"
+
+id="loadingScreen">
+
+<div class="loader"></div>
+
+<p>
+
+Loading IPOs...
+
+</p>
+
+</div>
+
+<button
+
+class="fab"
+
+onclick="window.scrollTo({top:0,behavior:'smooth'})">
+
+↑
+
+</button>
+
+<script src="js/common.js"></script>
+
+<script src="js/toast.js"></script>
+
+<script src="js/ipo.js"></script>
+
+</div>
+
+</body>
+
+</html>

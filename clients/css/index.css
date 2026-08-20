@@ -1,0 +1,770 @@
+/* ==========================================
+   GLOBAL
+========================================== */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+scroll-behavior:smooth;
+}
+
+body{
+background:#f8fafc;
+color:#111827;
+overflow-x:hidden;
+}
+
+a{
+text-decoration:none;
+}
+
+img{
+max-width:100%;
+display:block;
+}
+
+/* ==========================================
+   NAVBAR
+========================================== */
+
+.navbar{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+
+height:80px;
+
+background:#ffffff;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:0 70px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.05);
+
+z-index:999;
+
+}
+
+.logo{
+
+font-size:34px;
+
+font-weight:800;
+
+color:#2563eb;
+
+}
+
+.navbar ul{
+
+display:flex;
+
+align-items:center;
+
+gap:35px;
+
+list-style:none;
+
+}
+
+.navbar ul li a{
+
+color:#374151;
+
+font-weight:600;
+
+transition:.3s;
+
+}
+
+.navbar ul li a:hover{
+
+color:#2563eb;
+
+}
+
+.signup-btn{
+
+padding:12px 24px;
+
+background:#2563eb;
+
+color:white!important;
+
+border-radius:12px;
+
+transition:.3s;
+
+}
+
+.signup-btn:hover{
+
+background:#1d4ed8;
+
+transform:translateY(-2px);
+
+}
+
+/* ==========================================
+   HERO
+========================================== */
+
+.hero{
+
+padding:140px 80px 90px;
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+align-items:center;
+
+gap:70px;
+
+}
+
+.hero-left h1{
+
+font-size:64px;
+
+font-weight:800;
+
+line-height:1.15;
+
+margin-bottom:25px;
+
+}
+
+.hero-left p{
+
+font-size:19px;
+
+color:#64748b;
+
+line-height:1.8;
+
+margin-bottom:35px;
+
+max-width:560px;
+
+}
+
+/* ==========================================
+   HERO BUTTONS
+========================================== */
+
+.hero-buttons{
+
+display:flex;
+
+gap:20px;
+
+margin-bottom:50px;
+
+}
+
+.primary-btn{
+
+padding:16px 32px;
+
+background:#2563eb;
+
+color:white;
+
+border-radius:14px;
+
+font-weight:700;
+
+transition:.3s;
+
+}
+
+.primary-btn:hover{
+
+background:#1d4ed8;
+
+transform:translateY(-3px);
+
+}
+
+.secondary-btn{
+
+padding:16px 32px;
+
+border:2px solid #2563eb;
+
+color:#2563eb;
+
+border-radius:14px;
+
+font-weight:700;
+
+transition:.3s;
+
+}
+
+.secondary-btn:hover{
+
+background:#2563eb;
+
+color:white;
+
+}
+
+/* ==========================================
+   HERO STATS
+========================================== */
+
+.hero-stats{
+
+display:flex;
+
+gap:45px;
+
+}
+
+.hero-stats h2{
+
+font-size:34px;
+
+color:#2563eb;
+
+margin-bottom:8px;
+
+}
+
+.hero-stats p{
+
+font-size:14px;
+
+color:#64748b;
+
+}
+
+/* ==========================================
+   HERO IMAGE
+========================================== */
+
+.hero-right{
+
+display:flex;
+
+justify-content:center;
+
+}
+
+.hero-right img{
+
+width:95%;
+
+max-width:650px;
+
+animation:float 4s ease-in-out infinite;
+
+}
+
+@keyframes float{
+
+0%{
+transform:translateY(0);
+}
+
+50%{
+transform:translateY(-12px);
+}
+
+100%{
+transform:translateY(0);
+}
+
+}
+
+/* ==========================================
+   MARKET TICKER
+========================================== */
+
+.market-strip{
+
+background:#111827;
+
+color:white;
+
+overflow:hidden;
+
+padding:16px 0;
+
+}
+
+.ticker{
+
+display:flex;
+
+gap:60px;
+
+white-space:nowrap;
+
+animation:tickerMove 22s linear infinite;
+
+font-weight:600;
+
+}
+
+@keyframes tickerMove{
+
+0%{
+
+transform:translateX(100%);
+
+}
+
+100%{
+
+transform:translateX(-100%);
+
+}
+
+}
+
+/* ==========================================
+   POPULAR STOCKS
+========================================== */
+
+.popular-stocks{
+
+padding:90px 80px;
+
+}
+
+.popular-stocks h2{
+
+font-size:42px;
+
+text-align:center;
+
+margin-bottom:50px;
+
+}
+
+.stock-grid{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:25px;
+
+}
+
+.stock-card{
+
+background:white;
+
+padding:28px;
+
+border-radius:20px;
+
+box-shadow:0 12px 28px rgba(0,0,0,.08);
+
+transition:.35s;
+
+}
+
+.stock-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:0 20px 40px rgba(0,0,0,.12);
+
+}
+
+.stock-card h3{
+
+font-size:24px;
+
+margin-bottom:12px;
+
+}
+
+.stock-card p{
+
+font-size:18px;
+
+font-weight:700;
+
+margin-bottom:12px;
+
+}
+
+.green{
+
+color:#16a34a;
+
+font-weight:700;
+
+}
+
+.red{
+
+color:#dc2626;
+
+font-weight:700;
+
+}
+
+/* ==========================================
+   FEATURES
+========================================== */
+
+.features{
+padding:90px 80px;
+background:#ffffff;
+}
+
+.features h2{
+text-align:center;
+font-size:42px;
+margin-bottom:55px;
+}
+
+.feature-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+}
+
+.feature-card{
+background:#f8fafc;
+padding:30px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 10px 25px rgba(0,0,0,.06);
+transition:.35s;
+}
+
+.feature-card:hover{
+transform:translateY(-8px);
+box-shadow:0 18px 40px rgba(0,0,0,.10);
+}
+
+.feature-card h3{
+font-size:22px;
+margin-bottom:16px;
+color:#111827;
+}
+
+.feature-card p{
+color:#64748b;
+line-height:1.7;
+}
+
+/* ==========================================
+   IPO BANNER
+========================================== */
+
+.ipo-banner{
+padding:90px 80px;
+background:linear-gradient(135deg,#2563eb,#1d4ed8);
+color:#ffffff;
+text-align:center;
+}
+
+.ipo-banner h2{
+font-size:44px;
+margin-bottom:18px;
+}
+
+.ipo-banner p{
+font-size:18px;
+margin-bottom:30px;
+opacity:.95;
+}
+
+.ipo-banner .primary-btn{
+background:#ffffff;
+color:#2563eb;
+}
+
+.ipo-banner .primary-btn:hover{
+background:#eef4ff;
+}
+
+/* ==========================================
+   MUTUAL FUNDS
+========================================== */
+
+.funds-section{
+padding:90px 80px;
+}
+
+.funds-section h2{
+text-align:center;
+font-size:42px;
+margin-bottom:50px;
+}
+
+.fund-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+}
+
+.fund-card{
+background:#ffffff;
+padding:28px;
+border-radius:20px;
+box-shadow:0 12px 28px rgba(0,0,0,.08);
+transition:.35s;
+}
+
+.fund-card:hover{
+transform:translateY(-8px);
+}
+
+.fund-card h3{
+margin-bottom:15px;
+font-size:22px;
+}
+
+/* ==========================================
+   DOWNLOAD APP
+========================================== */
+
+.download-app{
+padding:90px 80px;
+display:grid;
+grid-template-columns:1fr 1fr;
+align-items:center;
+gap:60px;
+background:#ffffff;
+}
+
+.download-app h2{
+font-size:42px;
+margin-bottom:20px;
+}
+
+.download-app p{
+color:#64748b;
+line-height:1.8;
+margin-bottom:30px;
+}
+
+.store-buttons{
+display:flex;
+gap:18px;
+}
+
+.store-btn{
+padding:15px 26px;
+background:#111827;
+color:#ffffff;
+border-radius:14px;
+font-weight:600;
+transition:.3s;
+}
+
+.store-btn:hover{
+transform:translateY(-3px);
+}
+
+/* ==========================================
+   TESTIMONIALS
+========================================== */
+
+.testimonials{
+padding:90px 80px;
+}
+
+.testimonials h2{
+text-align:center;
+font-size:42px;
+margin-bottom:50px;
+}
+
+.testimonial-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+}
+
+.testimonial-card{
+background:#ffffff;
+padding:30px;
+border-radius:20px;
+box-shadow:0 12px 28px rgba(0,0,0,.08);
+}
+
+.testimonial-card p:nth-child(2){
+margin:18px 0;
+line-height:1.8;
+color:#64748b;
+}
+
+/* ==========================================
+   FAQ
+========================================== */
+
+.faq{
+padding:90px 80px;
+background:#ffffff;
+}
+
+.faq h2{
+text-align:center;
+font-size:42px;
+margin-bottom:45px;
+}
+
+.faq-item{
+background:#f8fafc;
+padding:25px;
+border-radius:16px;
+margin-bottom:18px;
+}
+
+.faq-item h3{
+margin-bottom:10px;
+}
+
+.faq-item p{
+color:#64748b;
+line-height:1.7;
+}
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.footer{
+background:#111827;
+color:#ffffff;
+padding:70px 80px 30px;
+}
+
+.footer-grid{
+display:grid;
+grid-template-columns:2fr 1fr 1fr 1fr;
+gap:40px;
+margin-bottom:40px;
+}
+
+.footer h2,
+.footer h3{
+margin-bottom:20px;
+}
+
+.footer p{
+color:#cbd5e1;
+margin-bottom:10px;
+}
+
+.copyright{
+text-align:center;
+padding-top:25px;
+border-top:1px solid rgba(255,255,255,.12);
+color:#94a3b8;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:1100px){
+
+.hero,
+.download-app{
+grid-template-columns:1fr;
+text-align:center;
+}
+
+.hero-stats{
+justify-content:center;
+}
+
+.stock-grid,
+.feature-grid,
+.fund-grid,
+.testimonial-grid,
+.footer-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:768px){
+
+.navbar{
+padding:0 20px;
+height:70px;
+}
+
+.navbar ul{
+display:none;
+}
+
+.hero,
+.popular-stocks,
+.features,
+.ipo-banner,
+.funds-section,
+.download-app,
+.testimonials,
+.faq,
+.footer{
+padding:60px 20px;
+}
+
+.hero h1{
+font-size:42px;
+}
+
+.hero-stats{
+flex-direction:column;
+gap:25px;
+}
+
+.stock-grid,
+.feature-grid,
+.fund-grid,
+.testimonial-grid,
+.footer-grid{
+grid-template-columns:1fr;
+}
+
+.store-buttons{
+flex-direction:column;
+}
+
+}
+
+/* ==========================================
+   FADE ANIMATION
+========================================== */
+
+.hero,
+.stock-card,
+.feature-card,
+.fund-card,
+.testimonial-card{
+animation:fadeUp .6s ease;
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(25px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}

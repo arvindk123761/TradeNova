@@ -1,0 +1,532 @@
+/* ==========================================
+   GLOBAL
+========================================== */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:#f5f7fb;
+}
+
+.main{
+margin-left:260px;
+padding:30px;
+min-height:100vh;
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.ipo-header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+gap:20px;
+
+}
+
+.ipo-header h1{
+
+font-size:36px;
+font-weight:700;
+color:#111827;
+margin-bottom:8px;
+
+}
+
+.ipo-header p{
+
+font-size:15px;
+color:#64748b;
+
+}
+
+.ipo-header input{
+
+width:340px;
+height:52px;
+padding:0 18px;
+border:none;
+outline:none;
+border-radius:14px;
+background:#ffffff;
+font-size:15px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+transition:.3s;
+
+}
+
+.ipo-header input:focus{
+
+box-shadow:0 15px 35px rgba(37,99,235,.18);
+
+}
+
+/* ==========================================
+   SUMMARY
+========================================== */
+
+.ipo-summary{
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:22px;
+margin-bottom:35px;
+
+}
+
+.summary-card{
+
+background:#ffffff;
+padding:28px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+border:1px solid #edf2f7;
+transition:.35s;
+
+}
+
+.summary-card:hover{
+
+transform:translateY(-6px);
+box-shadow:0 20px 40px rgba(0,0,0,.12);
+
+}
+
+.summary-card h4{
+
+font-size:15px;
+color:#64748b;
+margin-bottom:12px;
+
+}
+
+.summary-card h2{
+
+font-size:32px;
+font-weight:700;
+color:#111827;
+
+}
+
+/* ==========================================
+   IPO GRID
+========================================== */
+
+.ipo-grid{
+
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+gap:25px;
+
+}
+
+/* ==========================================
+   IPO CARD
+========================================== */
+
+.ipo-card{
+
+background:#ffffff;
+border-radius:22px;
+padding:28px;
+box-shadow:0 12px 28px rgba(0,0,0,.08);
+border:1px solid #edf2f7;
+transition:.35s;
+position:relative;
+overflow:hidden;
+
+}
+
+.ipo-card:hover{
+
+transform:translateY(-8px);
+box-shadow:0 22px 45px rgba(0,0,0,.12);
+
+}
+
+.ipo-card::before{
+
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:5px;
+background:#2563eb;
+
+}
+
+/* ==========================================
+   COMPANY
+========================================== */
+
+.company-name{
+
+font-size:24px;
+font-weight:700;
+color:#111827;
+margin-bottom:6px;
+
+}
+
+.company-sector{
+
+font-size:14px;
+color:#64748b;
+margin-bottom:22px;
+
+}
+
+/* ==========================================
+   PRICE BAND
+========================================== */
+
+.price-band{
+
+display:flex;
+justify-content:space-between;
+margin-bottom:18px;
+
+}
+
+.price-box{
+
+flex:1;
+background:#f8fafc;
+padding:14px;
+border-radius:14px;
+text-align:center;
+
+}
+
+.price-box:first-child{
+
+margin-right:10px;
+
+}
+
+.price-box h5{
+
+font-size:13px;
+color:#64748b;
+margin-bottom:6px;
+
+}
+
+.price-box h3{
+
+font-size:22px;
+font-weight:700;
+color:#111827;
+
+}
+
+/* ==========================================
+   IPO DETAILS
+========================================== */
+
+.ipo-details{
+
+margin-top:18px;
+
+}
+
+.detail-row{
+
+display:flex;
+justify-content:space-between;
+padding:12px 0;
+border-bottom:1px solid #eef2f7;
+
+}
+
+.detail-row:last-child{
+
+border-bottom:none;
+
+}
+
+.detail-row span:first-child{
+
+color:#64748b;
+font-size:14px;
+
+}
+
+.detail-row span:last-child{
+
+font-weight:600;
+color:#111827;
+
+}
+
+/* ==========================================
+   STATUS BADGES
+========================================== */
+
+.badge{
+
+display:inline-block;
+padding:7px 15px;
+border-radius:30px;
+font-size:13px;
+font-weight:700;
+margin-top:18px;
+
+}
+
+.badge.active{
+
+background:#dcfce7;
+color:#15803d;
+
+}
+
+.badge.upcoming{
+
+background:#dbeafe;
+color:#2563eb;
+
+}
+
+.badge.closed{
+
+background:#fee2e2;
+color:#dc2626;
+
+}
+
+/* ==========================================
+   APPLY BUTTON
+========================================== */
+
+.apply-btn{
+
+width:100%;
+margin-top:22px;
+height:50px;
+border:none;
+border-radius:14px;
+background:#2563eb;
+color:#ffffff;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+
+}
+
+.apply-btn:hover{
+
+background:#1d4ed8;
+transform:translateY(-3px);
+
+}
+
+/* ==========================================
+   IPO TIMELINE
+========================================== */
+
+.ipo-timeline{
+margin-top:18px;
+padding-top:18px;
+border-top:1px solid #eef2f7;
+}
+
+.timeline-item{
+display:flex;
+justify-content:space-between;
+padding:10px 0;
+font-size:14px;
+}
+
+.timeline-item span:first-child{
+color:#64748b;
+font-weight:500;
+}
+
+.timeline-item span:last-child{
+font-weight:600;
+color:#111827;
+}
+
+/* ==========================================
+   EMPTY STATE
+========================================== */
+
+.empty-state{
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:90px 20px;
+text-align:center;
+}
+
+.empty-state img{
+width:260px;
+margin-bottom:25px;
+}
+
+.empty-state h2{
+font-size:34px;
+font-weight:700;
+color:#111827;
+margin-bottom:12px;
+}
+
+.empty-state p{
+font-size:16px;
+color:#64748b;
+line-height:1.7;
+max-width:420px;
+}
+
+/* ==========================================
+   LOADING SCREEN
+========================================== */
+
+.loading-screen{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#ffffff;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:99999;
+}
+
+.loader{
+width:60px;
+height:60px;
+border:6px solid #e5e7eb;
+border-top:6px solid #2563eb;
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+
+100%{
+transform:rotate(360deg);
+}
+
+}
+
+.loading-screen p{
+margin-top:20px;
+font-size:17px;
+font-weight:600;
+color:#64748b;
+}
+
+/* ==========================================
+   FLOATING BUTTON
+========================================== */
+
+.fab{
+position:fixed;
+bottom:25px;
+right:25px;
+width:58px;
+height:58px;
+border:none;
+border-radius:50%;
+background:#2563eb;
+color:#ffffff;
+font-size:22px;
+cursor:pointer;
+box-shadow:0 15px 30px rgba(37,99,235,.35);
+transition:.3s;
+}
+
+.fab:hover{
+background:#1d4ed8;
+transform:translateY(-5px);
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:1100px){
+
+.ipo-summary{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:768px){
+
+.main{
+margin-left:0;
+padding:20px;
+}
+
+.ipo-header{
+flex-direction:column;
+align-items:flex-start;
+}
+
+.ipo-header input{
+width:100%;
+}
+
+.ipo-summary{
+grid-template-columns:1fr;
+}
+
+.ipo-grid{
+grid-template-columns:1fr;
+}
+
+.company-name{
+font-size:22px;
+}
+
+.price-band{
+flex-direction:column;
+gap:12px;
+}
+
+.price-box:first-child{
+margin-right:0;
+}
+
+}
+
+/* ==========================================
+   ANIMATION
+========================================== */
+
+.ipo-card{
+animation:fadeUp .45s ease;
+}
+
+@keyframes fadeUp{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}

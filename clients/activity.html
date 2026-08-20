@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeNova | Activity</title>
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/topbar.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/toast.css">
+<style>
+.activity-list { max-width: 900px; margin: 32px auto; padding: 0 24px; }
+.activity-list h1 { margin-bottom: 24px; }
+.activity-item { display: flex; justify-content: space-between; gap: 20px; padding: 18px 0; border-bottom: 1px solid #e5e7eb; }
+.activity-item time { color: #6b7280; white-space: nowrap; }
+@media (max-width: 600px) { .activity-item { display: block; } .activity-item time { display: block; margin-top: 8px; } }
+</style>
+</head>
+<body>
+<div id="sidebar"></div>
+<div class="main"><div id="topbar"></div><section class="activity-list"><h1>Activity</h1><div id="activityList">Loading...</div></section></div>
+<script src="js/activity.js"></script>
+</body>
+</html>

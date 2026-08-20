@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>TradeNova | Stocks</title>
+
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="css/sidebar.css">
+
+    <link rel="stylesheet"
+        href="css/topbar.css">
+
+    <link rel="stylesheet"
+        href="css/common.css">
+
+    <link rel="stylesheet"
+        href="css/stocks.css">
+
+    <link rel="stylesheet"
+        href="css/toast.css">
+
+</head>
+
+<body>
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+<div id="topbar"></div>
+
+<!-- Page Header -->
+
+<div class="stocks-header">
+
+<div class="left">
+
+<h1>📈 Stock Market</h1>
+
+<p>
+Trade stocks with real-time prices and professional tools.
+</p>
+
+</div>
+
+<div class="right">
+
+<input
+id="search"
+type="text"
+placeholder="Search company or symbol...">
+
+</div>
+
+</div>
+
+<!-- Market Overview -->
+
+<div class="market-overview">
+
+<div class="overview-card">
+
+<span>NIFTY 50</span>
+
+<h2 id="nifty">Loading...</h2>
+
+</div>
+
+<div class="overview-card">
+
+<span>SENSEX</span>
+
+<h2 id="sensex">Loading...</h2>
+
+</div>
+
+<div class="overview-card">
+
+<span>BANK NIFTY</span>
+
+<h2 id="banknifty">Loading...</h2>
+
+</div>
+
+<div class="overview-card">
+
+<span>Market Status</span>
+
+<h2 class="green">
+
+🟢 OPEN
+
+</h2>
+
+</div>
+
+</div>
+
+<!-- Filters -->
+
+<div class="stock-filter">
+
+<button class="filter-btn active">
+
+All Stocks
+
+</button>
+
+<button class="filter-btn">
+
+Top Gainers
+
+</button>
+
+<button class="filter-btn">
+
+Top Losers
+
+</button>
+
+<button class="filter-btn">
+
+Most Active
+
+</button>
+
+<button class="filter-btn">
+
+High Volume
+
+</button>
+
+</div>
+
+<!-- Top Gainers -->
+
+<div class="section-title">
+
+🔥 Top Gainers
+
+</div>
+
+<div
+id="topGainers"
+class="top-grid">
+
+</div>
+
+<!-- Top Losers -->
+
+<div class="section-title">
+
+📉 Top Losers
+
+</div>
+
+<div
+id="topLosers"
+class="top-grid">
+
+</div>
+
+<!-- All Stocks -->
+
+<div class="section-title">
+
+📊 All Stocks
+
+</div>
+
+<div
+id="stockContainer"
+class="stock-grid">
+
+</div>
+
+<!-- Buy Modal -->
+
+<div class="modal" id="buyModal">
+
+    <div class="modal-box">
+
+        <span class="close" id="closeModal">
+
+            &times;
+
+        </span>
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2 id="stockName">
+
+                    Company Name
+
+                </h2>
+
+                <p id="stockSymbol">
+
+                    NSE
+
+                </p>
+
+            </div>
+
+            <div class="price-box">
+
+                <h1 id="stockPrice">
+
+                    ₹0
+
+                </h1>
+
+            </div>
+
+        </div>
+
+        <div class="modal-content">
+
+            <div class="input-group">
+
+                <label>
+
+                    Quantity
+
+                </label>
+
+                <input
+
+                    id="quantity"
+
+                    type="number"
+
+                    min="1"
+
+                    value="1">
+
+            </div>
+
+            <div class="summary">
+
+                <div class="summary-row">
+
+                    <span>
+
+                        Price
+
+                    </span>
+
+                    <span id="pricePerShare">
+
+                        ₹0
+
+                    </span>
+
+                </div>
+
+                <div class="summary-row">
+
+                    <span>
+
+                        Brokerage
+
+                    </span>
+
+                    <span>
+
+                        ₹0
+
+                    </span>
+
+                </div>
+
+                <div class="summary-row total">
+
+                    <span>
+
+                        Total
+
+                    </span>
+
+                    <span id="totalPrice">
+
+                        ₹0
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="modal-buttons">
+
+                <button
+
+                    class="cancel-btn"
+
+                    id="cancelBuy">
+
+                    Cancel
+
+                </button>
+
+                <button
+
+                    class="buy-btn"
+
+                    id="confirmBuy">
+
+                    Buy Stock
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- View Details Modal -->
+
+<div class="modal"
+
+id="detailsModal">
+
+<div class="modal-box details-box">
+
+<span
+
+class="close"
+
+id="closeDetails">
+
+&times;
+
+</span>
+
+<h2>
+
+📊 Stock Details
+
+</h2>
+
+<div class="details-grid">
+
+<div class="detail-item">
+
+<span>Company</span>
+
+<h3 id="detailCompany">
+
+-
+
+</h3>
+
+</div>
+
+<div class="detail-item">
+
+<span>Symbol</span>
+
+<h3 id="detailSymbol">
+
+-
+
+</h3>
+
+</div>
+
+<div class="detail-item">
+
+<span>Current Price</span>
+
+<h3 id="detailPrice">
+
+₹0
+
+</h3>
+
+</div>
+
+<div class="detail-item">
+
+<span>Market Cap</span>
+
+<h3>
+
+₹1.5T
+
+</h3>
+
+</div>
+
+<div class="detail-item">
+
+<span>Sector</span>
+
+<h3>
+
+Technology
+
+</h3>
+
+</div>
+
+<div class="detail-item">
+
+<span>52W High</span>
+
+<h3>
+
+₹0
+
+</h3>
+
+</div>
+
+<div class="detail-item">
+
+<span>52W Low</span>
+
+<h3>
+
+₹0
+
+</h3>
+
+</div>
+
+<div class="detail-item">
+
+<span>Status</span>
+
+<h3 class="green">
+
+Active
+
+</h3>
+
+</div>
+
+</div>
+
+<div class="details-actions">
+
+<button
+
+class="buy-btn"
+
+id="buyFromDetails">
+
+Buy Now
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Loading Overlay -->
+
+<div id="loadingScreen" class="loading-screen">
+
+    <div class="loader"></div>
+
+    <p>
+
+        Loading Market Data...
+
+    </p>
+
+</div>
+
+<!-- Floating Action Button -->
+
+<button
+
+class="fab"
+
+onclick="window.scrollTo({top:0,behavior:'smooth'})">
+
+↑
+
+</button>
+
+<!-- Toast -->
+
+<div id="toastContainer"></div>
+
+<!-- Scripts -->
+
+<script src="js/common.js"></script>
+
+<script src="js/toast.js"></script>
+
+<script src="js/stocks.js"></script>
+
+</div>
+
+</body>
+
+</html>

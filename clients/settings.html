@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>TradeNova | Settings</title>
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="css/sidebar.css">
+
+<link rel="stylesheet"
+href="css/topbar.css">
+
+<link rel="stylesheet"
+href="css/common.css">
+
+<link rel="stylesheet"
+href="css/settings.css">
+
+<link rel="stylesheet"
+href="css/toast.css">
+
+</head>
+
+<body>
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+<div id="topbar"></div>
+
+<!-- ===========================
+PAGE HEADER
+=========================== -->
+
+<div class="settings-header">
+
+<div>
+
+<h1>
+
+⚙ Settings
+
+</h1>
+
+<p>
+
+Manage your TradeNova account preferences.
+
+</p>
+
+</div>
+
+</div>
+
+<!-- ===========================
+SETTINGS GRID
+=========================== -->
+
+<div class="settings-grid">
+
+<!-- Notifications -->
+
+<div class="settings-card">
+
+<h2>
+
+🔔 Notifications
+
+</h2>
+
+<div class="setting-item">
+
+<span>Email Notifications</span>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="emailNotification"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<div class="setting-item">
+
+<span>SMS Notifications</span>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="smsNotification">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<div class="setting-item">
+
+<span>Price Alerts</span>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="priceAlert"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+</div>
+
+<!-- Appearance -->
+
+<div class="settings-card">
+
+<h2>
+
+🎨 Appearance
+
+</h2>
+
+<div class="setting-item">
+
+<span>Dark Mode</span>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="darkMode">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<div class="setting-item">
+
+<span>Compact View</span>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="compactView">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<div class="setting-item">
+
+<span>Animations</span>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="animationToggle"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+</div>
+
+<!-- Security -->
+
+<div class="settings-card">
+
+<h2>
+
+🔐 Security
+
+</h2>
+
+<button
+class="setting-btn"
+id="changePasswordBtn">
+
+Change Password
+
+</button>
+
+<button
+class="setting-btn">
+
+Enable Two Factor Authentication
+
+</button>
+
+<button
+class="setting-btn danger">
+
+Deactivate Account
+
+</button>
+
+</div>
+
+<!-- Preferences -->
+
+<div class="settings-card">
+
+<h2>
+
+📊 Trading Preferences
+
+</h2>
+
+<div class="setting-item">
+
+<span>Intraday Mode</span>
+
+<label class="switch">
+
+<input
+type="checkbox"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<div class="setting-item">
+
+<span>Auto Refresh</span>
+
+<label class="switch">
+
+<input
+type="checkbox"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<div class="setting-item">
+
+<span>Market News</span>
+
+<label class="switch">
+
+<input
+type="checkbox"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ===========================
+CHANGE PASSWORD MODAL
+=========================== -->
+
+<div class="modal" id="passwordModal">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<h2>
+
+🔐 Change Password
+
+</h2>
+
+<span id="closePasswordModal">&times;</span>
+
+</div>
+
+<div class="modal-body">
+
+<div class="form-group">
+
+<label>
+
+Current Password
+
+</label>
+
+<input
+type="password"
+id="currentPassword">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+New Password
+
+</label>
+
+<input
+type="password"
+id="newPassword">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Confirm Password
+
+</label>
+
+<input
+type="password"
+id="confirmPassword">
+
+</div>
+
+<div class="modal-buttons">
+
+<button
+class="save-btn"
+id="updatePassword">
+
+Update Password
+
+</button>
+
+<button
+class="cancel-btn"
+id="cancelPassword">
+
+Cancel
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ===========================
+SAVE SETTINGS
+=========================== -->
+
+<div class="settings-actions">
+
+<button
+class="save-settings-btn"
+id="saveSettings">
+
+💾 Save Settings
+
+</button>
+
+<button
+class="reset-settings-btn"
+id="resetSettings">
+
+↺ Reset Default
+
+</button>
+
+</div>
+
+<!-- ===========================
+LOADING SCREEN
+=========================== -->
+
+<div
+class="loading-screen"
+id="loadingScreen">
+
+<div class="loader"></div>
+
+<p>
+
+Loading Settings...
+
+</p>
+
+</div>
+
+<!-- ===========================
+FLOAT BUTTON
+=========================== -->
+
+<button
+class="fab"
+onclick="window.scrollTo({top:0,behavior:'smooth'})">
+
+↑
+
+</button>
+
+<!-- ===========================
+SCRIPTS
+=========================== -->
+
+<script src="js/common.js"></script>
+
+<script src="js/toast.js"></script>
+
+<script src="js/settings.js"></script>
+
+</div>
+
+</body>
+
+</html>

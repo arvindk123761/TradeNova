@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>TradeNova | Orders</title>
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="css/sidebar.css">
+
+<link rel="stylesheet"
+href="css/topbar.css">
+
+<link rel="stylesheet"
+href="css/common.css">
+
+<link rel="stylesheet"
+href="css/orders.css">
+
+<link rel="stylesheet"
+href="css/toast.css">
+
+</head>
+
+<body>
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+<div id="topbar"></div>
+
+<!-- =========================
+HEADER
+========================= -->
+
+<div class="orders-header">
+
+<div>
+
+<h1>
+
+📝 Order History
+
+</h1>
+
+<p>
+
+Track every Buy & Sell transaction.
+
+</p>
+
+</div>
+
+<input
+
+type="text"
+
+id="searchOrders"
+
+placeholder="Search Orders...">
+
+</div>
+
+<!-- =========================
+SUMMARY
+========================= -->
+
+<div class="orders-summary">
+
+<div class="summary-card">
+
+<h4>
+
+Total Orders
+
+</h4>
+
+<h2 id="totalOrders">
+
+0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>
+
+Buy Orders
+
+</h4>
+
+<h2 id="buyOrders">
+
+0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>
+
+Sell Orders
+
+</h4>
+
+<h2 id="sellOrders">
+
+0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>
+
+Today's Orders
+
+</h4>
+
+<h2 id="todayOrders">
+
+0
+
+</h2>
+
+</div>
+
+</div>
+
+<!-- =========================
+ORDERS TABLE
+========================= -->
+
+<div class="table-card">
+
+<div class="table-header">
+
+<h2>
+
+Recent Orders
+
+</h2>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Company</th>
+
+<th>Type</th>
+
+<th>Quantity</th>
+
+<th>Price</th>
+
+<th>Total</th>
+
+<th>Status</th>
+
+<th>Date</th>
+
+</tr>
+
+</thead>
+
+<tbody id="ordersTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- =========================
+EMPTY STATE
+========================= -->
+
+<div
+
+class="empty-state"
+
+id="emptyOrders"
+
+style="display:none;">
+
+<img
+
+src="images/empty-orders.svg"
+
+alt="Empty Orders">
+
+<h2>
+
+No Orders Yet
+
+</h2>
+
+<p>
+
+Your Buy & Sell history will appear here.
+
+</p>
+
+<button
+
+onclick="location.href='stocks.html'">
+
+Buy Stocks
+
+</button>
+
+</div>
+
+<!-- =========================
+LOADING
+========================= -->
+
+<div
+
+class="loading-screen"
+
+id="loadingScreen">
+
+<div class="loader"></div>
+
+<p>
+
+Loading Orders...
+
+</p>
+
+</div>
+
+<button
+
+class="fab"
+
+onclick="window.scrollTo({top:0,behavior:'smooth'})">
+
+↑
+
+</button>
+
+<script src="js/common.js"></script>
+
+<script src="js/toast.js"></script>
+
+<script src="js/orders.js"></script>
+
+</div>
+
+</body>
+
+</html>

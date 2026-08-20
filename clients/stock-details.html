@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TradeNova | Stock Details</title>
+<link rel="stylesheet" href="css/sidebar.css">
+
+<link rel="stylesheet" href="css/topbar.css">
+
+<link rel="stylesheet" href="css/common.css">
+
+    <link rel="stylesheet" href="css/stockDetails.css">
+<link rel="stylesheet" href="css/toast.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="top">
+
+            <button onclick="history.back()" class="backBtn">
+
+                ← Back
+
+            </button>
+
+        </div>
+
+        <div class="stockCard">
+
+            <h1 id="companyName">
+
+                Loading...
+
+            </h1>
+
+            <h2 id="companySymbol">
+
+                --
+
+            </h2>
+
+            <h1 id="currentPrice">
+
+                ₹0
+
+            </h1>
+
+            <p id="priceChange">
+
+                0%
+
+            </p>
+
+        </div>
+
+        <div class="chart">
+
+            <h2>
+
+                Stock Chart
+
+            </h2>
+
+            <canvas id="priceChart"></canvas>
+
+        </div>
+
+        <div class="details">
+
+            <div class="item">
+
+                <span>Open</span>
+
+                <strong id="openPrice">-</strong>
+
+            </div>
+
+            <div class="item">
+
+                <span>High</span>
+
+                <strong id="highPrice">-</strong>
+
+            </div>
+
+            <div class="item">
+
+                <span>Low</span>
+
+                <strong id="lowPrice">-</strong>
+
+            </div>
+
+            <div class="item">
+
+                <span>Current</span>
+
+                <strong id="current">-</strong>
+
+            </div>
+
+            <div class="item">
+
+                <span>Volume</span>
+
+                <strong id="volume">-</strong>
+
+            </div>
+
+            <div class="item">
+
+                <span>Market Cap</span>
+
+                <strong id="marketCap">-</strong>
+
+            </div>
+
+            <div class="item">
+
+                <span>PE Ratio</span>
+
+                <strong id="peRatio">-</strong>
+
+            </div>
+
+        </div>
+
+        <div class="buttons">
+
+            <button
+    class="buyBtn"
+    onclick="openBuyModal()">
+
+    Buy
+
+</button>
+<button
+    class="sellBtn"
+    onclick="openSellModal()">
+
+    Sell
+
+</button>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="js/stockDetails.js"></script>
+    
+<!-- BUY MODAL -->
+
+<div id="buyModal" class="modal">
+
+    <div class="modal-box">
+
+        <span class="close" onclick="closeBuyModal()">&times;</span>
+
+        <h2 id="buyCompany">Buy Stock</h2>
+
+        <div class="modal-row">
+
+            <label>Current Price</label>
+
+            <h3 id="buyPrice">₹0</h3>
+
+        </div>
+
+        <div class="modal-row">
+
+            <label>Quantity</label>
+
+            <input
+                type="number"
+                id="buyQty"
+                value="1"
+                min="1"
+                oninput="calculateTotal()"
+            >
+
+        </div>
+
+        <div class="modal-row">
+
+            <label>Total Amount</label>
+
+            <h2 id="buyTotal">₹0</h2>
+
+        </div>
+
+        <button class="confirmBuy" onclick="confirmBuy()">
+            Confirm Buy
+        </button>
+
+    </div>
+
+</div>
+
+<!-- SELL MODAL -->
+
+<div id="sellModal" class="modal">
+
+    <div class="modal-box">
+
+        <span class="close" onclick="closeSellModal()">&times;</span>
+
+        <h2 id="sellCompany">Sell Stock</h2>
+
+        <div class="modal-row">
+
+            <label>Current Price</label>
+
+            <h3 id="sellPrice">₹0</h3>
+
+        </div>
+
+        <div class="modal-row">
+
+            <label>Quantity to Sell</label>
+
+            <input
+                type="number"
+                id="sellQty"
+                value="1"
+                min="1"
+                oninput="calculateSellTotal()"
+            >
+
+        </div>
+
+        <div class="modal-row">
+
+            <label>You'll Receive</label>
+
+            <h2 id="sellTotal">₹0</h2>
+
+        </div>
+
+        <button class="sellConfirmBtn" onclick="confirmSell()">
+            Confirm Sell
+        </button>
+
+    </div>
+
+</div>
+
+<script src="js/toast.js"></script>
+<script src="js/common.js"></script>
+</body>
+
+</html>

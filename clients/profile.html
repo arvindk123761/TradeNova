@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>TradeNova | Profile</title>
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="css/sidebar.css">
+
+<link rel="stylesheet"
+href="css/topbar.css">
+
+<link rel="stylesheet"
+href="css/common.css">
+
+<link rel="stylesheet"
+href="css/profile.css">
+
+<link rel="stylesheet"
+href="css/toast.css">
+
+</head>
+
+<body>
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+<div id="topbar"></div>
+
+<!-- ===========================
+PROFILE HEADER
+=========================== -->
+
+<div class="profile-header">
+
+<div class="profile-left">
+
+<div class="profile-avatar">
+
+<img
+id="profileImage"
+src="images/default-user.png"
+alt="Profile">
+
+</div>
+
+<div>
+
+<h1 id="profileName">
+
+Loading...
+
+</h1>
+
+<p id="profileEmail">
+
+Loading...
+
+</p>
+
+<span class="member-badge">
+
+⭐ Premium Investor
+
+</span>
+
+</div>
+
+</div>
+
+<button
+class="edit-btn"
+id="editProfileBtn">
+
+✏ Edit Profile
+
+</button>
+
+</div>
+
+<!-- ===========================
+PROFILE STATS
+=========================== -->
+
+<div class="profile-stats">
+
+<div class="stat-card">
+
+<h4>
+
+Wallet Balance
+
+</h4>
+
+<h2 id="walletBalance">
+
+₹0
+
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<h4>
+
+Portfolio Value
+
+</h4>
+
+<h2 id="portfolioValue">
+
+₹0
+
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<h4>
+
+Holdings
+
+</h4>
+
+<h2 id="holdingCount">
+
+0
+
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<h4>
+
+Orders
+
+</h4>
+
+<h2 id="orderCount">
+
+0
+
+</h2>
+
+</div>
+
+</div>
+
+<!-- ===========================
+PROFILE DETAILS
+=========================== -->
+
+<div class="profile-grid">
+
+<div class="profile-card">
+
+<h2>
+
+👤 Personal Information
+
+</h2>
+
+<div class="info-row">
+
+<label>Full Name</label>
+
+<p id="fullName">
+
+Loading...
+
+</p>
+
+</div>
+
+<div class="info-row">
+
+<label>Email</label>
+
+<p id="email">
+
+Loading...
+
+</p>
+
+</div>
+
+<div class="info-row">
+
+<label>Mobile</label>
+
+<p id="mobile">
+
+Loading...
+
+</p>
+
+</div>
+
+<div class="info-row">
+
+<label>Member Since</label>
+
+<p id="createdAt">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+<div class="profile-card">
+
+<h2>
+
+📊 Account Status
+
+</h2>
+
+<div class="status-item">
+
+<span>KYC</span>
+
+<span class="verified">
+
+Verified
+
+</span>
+
+</div>
+
+<div class="status-item">
+
+<span>PAN</span>
+
+<span class="verified">
+
+Verified
+
+</span>
+
+</div>
+
+<div class="status-item">
+
+<span>Email</span>
+
+<span class="verified">
+
+Verified
+
+</span>
+
+</div>
+
+<div class="status-item">
+
+<span>Mobile</span>
+
+<span class="verified">
+
+Verified
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ===========================
+EDIT PROFILE MODAL
+=========================== -->
+
+<div class="modal" id="editProfileModal">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<h2>Edit Profile</h2>
+
+<span id="closeProfileModal">&times;</span>
+
+</div>
+
+<div class="modal-body">
+
+<div class="form-group">
+
+<label>Full Name</label>
+
+<input
+type="text"
+id="editName">
+
+</div>
+
+<div class="form-group">
+
+<label>Email</label>
+
+<input
+type="email"
+id="editEmail"
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>Mobile</label>
+
+<input
+type="text"
+id="editMobile">
+
+</div>
+
+<div class="modal-buttons">
+
+<button
+class="save-btn"
+id="saveProfile">
+
+Save Changes
+
+</button>
+
+<button
+class="cancel-btn"
+id="cancelProfile">
+
+Cancel
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ===========================
+CHANGE PASSWORD
+=========================== -->
+
+<div class="profile-card password-card">
+
+<h2>
+
+🔒 Change Password
+
+</h2>
+
+<div class="form-group">
+
+<label>Current Password</label>
+
+<input
+type="password"
+id="currentPassword">
+
+</div>
+
+<div class="form-group">
+
+<label>New Password</label>
+
+<input
+type="password"
+id="newPassword">
+
+</div>
+
+<div class="form-group">
+
+<label>Confirm Password</label>
+
+<input
+type="password"
+id="confirmPassword">
+
+</div>
+
+<button
+class="change-password-btn"
+id="changePassword">
+
+Update Password
+
+</button>
+
+</div>
+
+<!-- ===========================
+LOGOUT
+=========================== -->
+
+<div class="logout-section">
+
+<button
+class="logout-btn"
+id="logoutBtn">
+
+🚪 Logout
+
+</button>
+
+</div>
+
+<!-- ===========================
+LOADING SCREEN
+=========================== -->
+
+<div
+class="loading-screen"
+id="loadingScreen">
+
+<div class="loader"></div>
+
+<p>
+
+Loading Profile...
+
+</p>
+
+</div>
+
+<!-- ===========================
+FLOATING BUTTON
+=========================== -->
+
+<button
+class="fab"
+onclick="window.scrollTo({top:0,behavior:'smooth'})">
+
+↑
+
+</button>
+
+<!-- ===========================
+SCRIPTS
+=========================== -->
+
+<script src="js/common.js"></script>
+
+<script src="js/toast.js"></script>
+
+<script src="js/profile.js"></script>
+
+</div>
+
+</body>
+
+</html>

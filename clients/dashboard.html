@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TradeNova Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/topbar.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/toast.css">
+
+</head>
+
+<body>
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+<div id="topbar"></div>
+
+<div class="ticker">
+
+<div class="ticker-content" id="tickerContent">
+
+Loading Market...
+
+</div>
+
+</div>
+
+<section class="hero">
+
+<div class="hero-left">
+
+<h1 id="greeting">
+👋 Welcome Back
+</h1>
+
+<p>
+
+Welcome back to TradeNova.
+
+Manage your investments with real-time market data,
+portfolio analytics and smart trading.
+
+</p>
+
+<div class="hero-buttons">
+
+<button onclick="location.href='stocks.html'">
+
+📈 Buy Stocks
+
+</button>
+
+<button class="secondary-btn"
+
+onclick="location.href='portfolio.html'">
+
+💼 Portfolio
+
+</button>
+
+</div>
+
+</div>
+
+<div class="hero-right">
+
+<div class="hero-info">
+
+<h4>Market</h4>
+
+<h2>OPEN</h2>
+
+</div>
+
+<div class="hero-info">
+
+<h4>Date</h4>
+
+<h2 id="todayDate"></h2>
+
+</div>
+
+<div class="hero-info">
+
+<h4>Holdings</h4>
+
+<h2 id="heroHoldings">0</h2>
+
+</div>
+
+<div class="hero-info">
+
+<h4>Wallet</h4>
+
+<h2 id="heroWallet">₹0</h2>
+
+</div>
+
+</div>
+
+</section>
+
+<div class="cards">
+
+<div class="card">
+
+<h3>Total Investment</h3>
+
+<h2 id="investment">₹0</h2>
+
+</div>
+
+<div class="card">
+
+<h3>Wallet Balance</h3>
+
+<h2 id="wallet">₹0</h2>
+
+<button id="addMoneyBtn">
+
++ Add Money
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Total Holdings</h3>
+
+<h2 id="stocks">0</h2>
+
+</div>
+
+</div>
+
+<div class="analytics-section">
+
+<div class="analytics-card">
+
+<h3>Total Investment</h3>
+
+<h2 id="totalInvestment">₹0</h2>
+
+</div>
+
+<div class="analytics-card">
+
+<h3>Current Value</h3>
+
+<h2 id="currentValue">₹0</h2>
+
+</div>
+
+<div class="analytics-card">
+
+<h3>Total Profit</h3>
+
+<h2 id="totalProfit">₹0</h2>
+
+</div>
+
+</div>
+
+<div class="chart-card">
+
+<h2>
+
+📈 Portfolio Performance
+
+</h2>
+
+<canvas id="portfolioChart"></canvas>
+
+</div>
+
+<div class="market-section">
+
+<div class="market-card">
+
+<h2>
+
+🔥 Top Gainers
+
+</h2>
+
+<div id="topGainers"></div>
+
+</div>
+
+<div class="market-card">
+
+<h2>
+
+📉 Top Losers
+
+</h2>
+
+<div id="topLosers"></div>
+
+</div>
+
+</div>
+
+<h2 class="section-title">
+
+Recent Orders
+
+</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Company</th>
+
+<th>Type</th>
+
+<th>Quantity</th>
+
+<th>Price</th>
+
+</tr>
+
+</thead>
+
+<tbody id="recentOrders">
+
+</tbody>
+
+</table>
+
+<div class="market-overview">
+
+<h2>
+
+Market Overview
+
+</h2>
+
+<div class="market-cards">
+
+<div class="market-card">
+
+<h3>NIFTY 50</h3>
+
+<h2 id="nifty"></h2>
+
+</div>
+
+<div class="market-card">
+
+<h3>SENSEX</h3>
+
+<h2 id="sensex"></h2>
+
+</div>
+
+<div class="market-card">
+
+<h3>BANK NIFTY</h3>
+
+<h2 id="banknifty"></h2>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="js/common.js"></script>
+
+<script src="js/toast.js"></script>
+
+<script src="js/dashboard.js"></script>
+
+</body>
+
+</html>

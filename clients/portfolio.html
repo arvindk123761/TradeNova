@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>TradeNova | Portfolio</title>
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="css/sidebar.css">
+
+<link rel="stylesheet"
+href="css/topbar.css">
+
+<link rel="stylesheet"
+href="css/common.css">
+
+<link rel="stylesheet"
+href="css/portfolio.css">
+
+<link rel="stylesheet"
+href="css/toast.css">
+
+</head>
+
+<body>
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+<div id="topbar"></div>
+
+<!-- ==========================
+Portfolio Header
+========================== -->
+
+<div class="portfolio-header">
+
+<div>
+
+<h1>
+
+💼 My Portfolio
+
+</h1>
+
+<p>
+
+Track your investments, profits and holdings.
+
+</p>
+
+</div>
+
+<div>
+
+<input
+type="text"
+id="portfolioSearch"
+placeholder="Search Holdings...">
+
+</div>
+
+</div>
+
+<!-- ==========================
+Summary Cards
+========================== -->
+
+<div class="summary-grid">
+
+<div class="summary-card">
+
+<h4>
+
+Total Investment
+
+</h4>
+
+<h2 id="investment">
+
+₹0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>
+
+Current Value
+
+</h4>
+
+<h2 id="currentValue">
+
+₹0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>
+
+Overall Profit
+
+</h4>
+
+<h2 id="profit">
+
+₹0
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h4>
+
+Total Holdings
+
+</h4>
+
+<h2 id="holdings">
+
+0
+
+</h2>
+
+</div>
+
+</div>
+
+<!-- ==========================
+Portfolio Performance
+========================== -->
+
+<div class="chart-card">
+
+<h2>
+
+📈 Portfolio Performance
+
+</h2>
+
+<canvas
+id="portfolioChart">
+
+</canvas>
+
+</div>
+
+<!-- ==========================
+Portfolio Table
+========================== -->
+
+<div class="table-card">
+
+<div class="table-header">
+
+<h2>
+
+Your Holdings
+
+</h2>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Company</th>
+
+<th>Qty</th>
+
+<th>Avg Price</th>
+
+<th>Current</th>
+
+<th>Investment</th>
+
+<th>P/L</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody
+id="portfolioTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- ==========================
+SELL MODAL
+========================== -->
+
+<div class="modal" id="sellModal">
+
+<div class="modal-box">
+
+<span
+class="close"
+id="closeSellModal">
+
+&times;
+
+</span>
+
+<h2>
+
+Sell Stock
+
+</h2>
+
+<div class="modal-content">
+
+<div class="input-group">
+
+<label>
+
+Company
+
+</label>
+
+<input
+type="text"
+id="sellCompany"
+readonly>
+
+</div>
+
+<div class="input-group">
+
+<label>
+
+Available Quantity
+
+</label>
+
+<input
+type="text"
+id="availableQty"
+readonly>
+
+</div>
+
+<div class="input-group">
+
+<label>
+
+Sell Quantity
+
+</label>
+
+<input
+type="number"
+id="sellQty"
+min="1">
+
+</div>
+
+<div class="input-group">
+
+<label>
+
+Current Price
+
+</label>
+
+<input
+type="text"
+id="sellPrice"
+readonly>
+
+</div>
+
+<div class="summary">
+
+<div class="summary-row">
+
+<span>
+
+Estimated Amount
+
+</span>
+
+<strong
+id="sellTotal">
+
+₹0
+
+</strong>
+
+</div>
+
+</div>
+
+<div class="modal-buttons">
+
+<button
+class="cancel-btn"
+id="cancelSell">
+
+Cancel
+
+</button>
+
+<button
+class="sell-btn"
+id="confirmSell">
+
+Sell Now
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================
+EMPTY PORTFOLIO
+========================== -->
+
+<div
+class="empty-state"
+id="emptyPortfolio"
+style="display:none;">
+
+<img
+src="images/empty-portfolio.svg"
+alt="Empty Portfolio">
+
+<h2>
+
+No Holdings Found
+
+</h2>
+
+<p>
+
+Start investing today to build your portfolio.
+
+</p>
+
+<button
+onclick="location.href='stocks.html'">
+
+Buy Stocks
+
+</button>
+
+</div>
+
+<!-- ==========================
+LOADING
+========================== -->
+
+<div
+class="loading-screen"
+id="loadingScreen">
+
+<div class="loader"></div>
+
+<p>
+
+Loading Portfolio...
+
+</p>
+
+</div>
+
+<!-- Floating Button -->
+
+<button
+class="fab"
+onclick="window.scrollTo({top:0,behavior:'smooth'})">
+
+↑
+
+</button>
+
+<!-- ==========================
+SCRIPTS
+========================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="js/common.js"></script>
+
+<script src="js/toast.js"></script>
+
+<script src="js/portfolio.js"></script>
+
+</div>
+
+</body>
+
+</html>

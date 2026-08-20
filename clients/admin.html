@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TradeNova Admin</title>
+    <link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/topbar.css">
+<link rel="stylesheet" href="css/common.css">
+
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+
+    <h1>TradeNova Admin Panel</h1>
+
+    <div class="container">
+
+        <h2>Add New Stock</h2>
+
+        <input type="text" id="company" placeholder="Company Name">
+
+        <input type="text" id="symbol" placeholder="Symbol">
+
+        <input type="number" id="price" placeholder="Current Price">
+
+        <button onclick="addStock()">
+            Add Stock
+        </button>
+
+    </div>
+
+    <hr>
+
+    <h2>Available Stocks</h2>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>ID</th>
+                <th>Company</th>
+                <th>Symbol</th>
+                <th>Price</th>
+                <th>Action</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="stockBody"></tbody>
+
+    </table>
+
+    <script src="js/admin.js"></script>
+
+</body>
+
+</html>
