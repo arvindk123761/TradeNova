@@ -1,4 +1,4 @@
-const API = "http://localhost:5000/api";
+const API = `${window.location.origin}/api`;
 
 const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
@@ -28,16 +28,40 @@ document.getElementById("topbar").innerHTML=data;
 
 async function loadPortfolio(){
 
+if(!token){
+
+showToast("Session expired. Please log in again.","error");
+
+setTimeout(()=>{
+window.location.href="login.html";
+},1000);
+
+return;
+
+}
+
 try{
 
 const response =
 await fetch(`${API}/portfolio`,{
 
 headers:{
-Authorization:token
+Authorization:`Bearer ${token}`
 }
 
 });
+
+if(!response.ok){
+
+if(response.status===401){
+showToast("Session expired. Please log in again.","error");
+setTimeout(()=>window.location.href="login.html",1000);
+return;
+}
+
+throw new Error(`Portfolio request failed: ${response.status}`);
+
+}
 
 const data =
 await response.json();
@@ -422,6 +446,14 @@ document
 const qty =
 Number(document.getElementById("sellQty").value);
 
+if(!token){
+
+showToast("Session expired. Please log in again.","error");
+setTimeout(()=>window.location.href="login.html",1000);
+return;
+
+}
+
 if(qty<=0){
 
 showToast("Invalid Quantity","error");
@@ -441,7 +473,7 @@ headers:{
 
 "Content-Type":"application/json",
 
-Authorization:token
+Authorization:`Bearer ${token}`
 
 },
 

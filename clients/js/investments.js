@@ -1,4 +1,4 @@
-const API = "http://localhost:5000/api";
+const API = `${window.location.origin}/api`;
 const category = document.body.dataset.category;
 const title = document.body.dataset.title;
 let investments = [];

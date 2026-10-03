@@ -17,10 +17,7 @@ const auth = (req, res, next) => {
 
     try {
 
-       console.log("Authorization Header:", req.headers.authorization);
-console.log("Secret:", secret);
         const decoded = jwt.verify(token, secret);
-console.log("Logged in user:", decoded);
         req.user = decoded;
 
         next();

@@ -21,7 +21,7 @@ fetch("components/topbar.html")
 document.getElementById("topbar").innerHTML=data;
 
 });
-const API = "http://localhost:5000/api";
+const API = `${window.location.origin}/api`;
 
 async function loadDashboard() {
 

@@ -1,6 +1,6 @@
 let selectedStock = null;
 let currentPrice = 0;
-const API = "http://localhost:5000/api";
+const API = `${window.location.origin}/api`;
 
 // Read stock ID from URL
 const params = new URLSearchParams(window.location.search);
@@ -182,7 +182,7 @@ async function confirmBuy() {
     try {
 
         const response = await fetch(
-            "http://localhost:5000/api/trade/buy",
+            `${API}/trade/buy`,
             {
 
                 method: "POST",
@@ -276,7 +276,7 @@ async function confirmSell() {
 
         // Get portfolio first
         const portfolioResponse = await fetch(
-            "http://localhost:5000/api/portfolio",
+            `${API}/portfolio`,
             {
                 headers: {
                     Authorization: token
@@ -301,7 +301,7 @@ async function confirmSell() {
 
         // Sell API
         const response = await fetch(
-            "http://localhost:5000/api/trade/sell",
+            `${API}/trade/sell`,
             {
                 method: "POST",
 

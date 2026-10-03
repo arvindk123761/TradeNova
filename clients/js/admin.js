@@ -1,4 +1,4 @@
-const API = "http://localhost:5000/api/admin";
+const API = `${window.location.origin}/api/admin`;
 
 const body = document.getElementById("stockBody");
 

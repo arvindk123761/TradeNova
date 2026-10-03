@@ -1,6 +1,7 @@
 const portfolioRoutes = require("./routes/portfolioRoutes");
 const cors = require("cors");
 const express = require("express");
+const path = require("path");
 const updatePrices = require("./utils/priceUpdater");
 
 const db = require("./config/db");
@@ -38,9 +39,12 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/activity", activityRoutes);
 app.use("/api/investments", investmentRoutes);
 
-app.get("/", (req, res) => {
-    res.send("Welcome to TradeNova 🚀");
-});
 app.use("/api/ipo", ipoRoutes);
+
+app.get("/api/health", (req, res) => {
+    res.json({ success: true, message: "TradeNova API is running" });
+});
+
+app.use(express.static(path.join(__dirname, "../clients")));
 
 module.exports = app;
