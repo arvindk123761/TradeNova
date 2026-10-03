@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="270" viewBox="0 0 720 270" role="img" aria-labelledby="title description">
+  <title id="title">TradeNova</title>
+  <desc id="description">TradeNova Smart Investing logo</desc>
+  <rect width="720" height="270" rx="18" fill="#10182d"/>
+  <rect x="42" y="42" width="120" height="120" rx="32" fill="#2563eb"/>
+  <rect x="72" y="72" width="60" height="60" rx="8" fill="#d8dced"/>
+  <path d="M74 90h56M74 108h56M74 126h56M91 73v58M109 73v58" stroke="#aeb9da" stroke-width="2" opacity=".8"/>
+  <path d="M74 130l18-19 13 9 27-31" fill="none" stroke="#2388f5" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="132" cy="89" r="4" fill="#2388f5"/>
+  <text x="200" y="105" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="54" font-weight="800">TradeNova</text>
+  <text x="200" y="145" fill="#9fb3d1" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="500">Smart Investing</text>
+</svg>

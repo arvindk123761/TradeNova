@@ -90,6 +90,40 @@ position:relative;
 
 z-index:2;
 
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+flex-wrap:wrap;
+
+}
+
+.brand .logo-mark{
+
+display:inline-flex;
+
+align-items:center;
+
+justify-content:center;
+
+width:48px;
+
+height:48px;
+
+border-radius:14px;
+
+background:#ffffff;
+
+color:#2563eb;
+
+font-size:14px;
+
+font-weight:800;
+
+letter-spacing:.5px;
+
 }
 
 .brand h1{
@@ -103,6 +137,8 @@ margin-bottom:12px;
 }
 
 .brand p{
+
+width:100%;
 
 font-size:20px;
 

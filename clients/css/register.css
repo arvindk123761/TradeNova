@@ -9,15 +9,24 @@ box-sizing:border-box;
 font-family:'Inter',sans-serif;
 }
 
+html{
+min-height:100%;
+overflow-y:auto;
+}
+
 body{
 background:#f5f7fb;
-overflow:hidden;
+overflow-x:hidden;
+overflow-y:auto;
+min-height:100vh;
 }
 
 .register-container{
 display:grid;
 grid-template-columns:1.1fr .9fr;
-height:100vh;
+grid-template-rows:minmax(100vh,auto);
+min-height:100vh;
+height:auto;
 }
 
 /* ==========================================
@@ -90,6 +99,40 @@ position:relative;
 
 z-index:2;
 
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+flex-wrap:wrap;
+
+}
+
+.brand .logo-mark{
+
+display:inline-flex;
+
+align-items:center;
+
+justify-content:center;
+
+width:48px;
+
+height:48px;
+
+border-radius:14px;
+
+background:#ffffff;
+
+color:#2563eb;
+
+font-size:14px;
+
+font-weight:800;
+
+letter-spacing:.5px;
+
 }
 
 .brand h1{
@@ -111,6 +154,8 @@ opacity:.9;
 margin-bottom:50px;
 
 line-height:1.6;
+
+width:100%;
 
 }
 
@@ -177,6 +222,9 @@ align-items:center;
 padding:40px;
 
 background:#f8fafc;
+
+min-height:100vh;
+height:auto;
 
 }
 
@@ -420,6 +468,7 @@ transform:translateY(0);
 
 .register-container{
 grid-template-columns:1fr;
+grid-template-rows:auto;
 }
 
 .left-section{
@@ -428,6 +477,8 @@ display:none;
 
 .right-section{
 padding:30px;
+min-height:100vh;
+height:auto;
 }
 
 .register-card{
@@ -439,11 +490,19 @@ max-width:500px;
 @media(max-width:576px){
 
 body{
-overflow:auto;
+overflow-y:auto;
+}
+
+.register-container{
+min-height:100svh;
+grid-template-rows:auto;
 }
 
 .right-section{
 padding:20px;
+align-items:flex-start;
+min-height:100svh;
+height:auto;
 }
 
 .register-card{
