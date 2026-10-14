@@ -212,6 +212,34 @@
 
 }
 
+.profile-avatar{
+
+    width:36px;
+
+    height:36px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex:0 0 36px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+}
+
 /* MOBILE */
 
 @media(max-width:1200px){
