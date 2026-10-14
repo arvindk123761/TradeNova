@@ -45,7 +45,9 @@ app.get("/api/health", (req, res) => {
     res.json({ success: true, message: "TradeNova API is running" });
 });
 
-// Serve the sibling vanilla frontend from the same origin as the API.
-app.use(express.static(path.join(__dirname, "../clients")));
+// Serve the frontend from the repository and prevent stale deployed assets.
+app.use(express.static(path.join(__dirname, "../clients"), {
+    setHeaders: (res) => res.setHeader("Cache-Control", "no-store")
+}));
 
 module.exports = app;
