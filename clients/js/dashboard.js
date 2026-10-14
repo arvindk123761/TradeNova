@@ -44,15 +44,6 @@ if (!data.success) {
 
         document.getElementById("wallet").innerText =
             "₹" + Number(data.balance).toLocaleString();
-            const topWallet =
-document.getElementById("topWallet");
-
-if(topWallet){
-
-topWallet.innerText =
-"₹"+Number(data.balance).toLocaleString();
-
-}
 
         document.getElementById("investment").innerText =
             "₹" + Number(data.investment).toLocaleString();

@@ -30,6 +30,7 @@ document.getElementById("addMoney").addEventListener("click", async () => {
     if (data.success) {
         document.getElementById("amount").value = "";
         loadWallet();
+        window.dispatchEvent(new Event("tradenova:wallet-updated"));
     }
 });
 
