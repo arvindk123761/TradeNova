@@ -37,6 +37,43 @@
                 <p><strong>Learning only:</strong> This content is educational, not investment advice. The practice area uses virtual money and illustrative prices; it does not place real orders or show live market data.</p>
             </section>
 
+            <section class="assistant-section" id="learningAssistant" aria-labelledby="assistantTitle">
+                <div class="assistant-heading">
+                    <div class="assistant-avatar" aria-hidden="true">TN</div>
+                    <div>
+                        <span class="eyebrow">YOUR PRIVATE COURSE HELPER</span>
+                        <h2 id="assistantTitle">Learning Assistant</h2>
+                        <p>Ask a question in your own words. I’ll find a clear explanation from the learning course.</p>
+                    </div>
+                </div>
+                <div class="assistant-notice">
+                    This built-in helper searches course material in your browser. Your questions are not sent to an AI service. It does not have live market prices and cannot recommend what you should buy or sell.
+                </div>
+                <div class="assistant-suggestions" role="group" aria-label="Try asking">
+                    <button class="assistant-prompt" type="button">What is a share?</button>
+                    <button class="assistant-prompt" type="button">Explain risk in simple words</button>
+                    <button class="assistant-prompt" type="button">What is a limit order?</button>
+                    <button class="assistant-prompt" type="button">How does paper trading work?</button>
+                </div>
+                <div class="assistant-chat" id="assistantChat" role="log" aria-live="polite" aria-relevant="additions">
+                    <article class="chat-message assistant-message">
+                        <span class="chat-avatar" aria-hidden="true">TN</span>
+                        <div class="chat-bubble">
+                            <strong>TradeNova Learning Helper</strong>
+                            <p>Hi! I can explain the course topics in simple language, give examples, define market words, and help you use the virtual paper-trading lab. What would you like to learn?</p>
+                        </div>
+                    </article>
+                </div>
+                <form class="assistant-form" id="assistantForm">
+                    <label class="sr-only" for="assistantInput">Your learning question</label>
+                    <textarea id="assistantInput" rows="2" maxlength="500" placeholder="For example: What is diversification? Please explain simply." required></textarea>
+                    <div class="assistant-form-footer">
+                        <span id="assistantStatus" role="status">500 characters max</span>
+                        <button type="submit" id="assistantSend">Ask question</button>
+                    </div>
+                </form>
+            </section>
+
             <section class="course-section" id="courseCatalog">
                 <div class="section-heading">
                     <div>

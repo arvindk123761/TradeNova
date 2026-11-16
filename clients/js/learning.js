@@ -573,6 +573,145 @@
         $("tradeMessage").classList.toggle("error-message", isError);
     }
 
+    const ASSISTANT_STOP_WORDS = new Set([
+        "about", "after", "also", "and", "are", "can", "could", "does", "for", "from",
+        "give", "help", "how", "into", "like", "mean", "more", "please", "tell", "that",
+        "the", "their", "them", "there", "this", "what", "when", "where", "which", "who",
+        "why", "with", "would", "your", "explain", "simple", "words"
+    ]);
+
+    function normalizeAssistantText(value) {
+        return value.toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+    }
+
+    function findRelevantModules(question) {
+        const normalizedQuestion = normalizeAssistantText(question);
+        const words = [...new Set(normalizedQuestion.split(" ").filter((word) =>
+            word.length > 2 && !ASSISTANT_STOP_WORDS.has(word)
+        ))];
+        if (!words.length) return [];
+
+        return MODULES.map((module) => {
+            const details = LESSON_DETAILS[module.id];
+            const title = normalizeAssistantText(module.title);
+            const summary = normalizeAssistantText(module.summary);
+            const explanation = normalizeAssistantText(details.simple);
+            const topics = normalizeAssistantText(module.topics.map(([topic, text]) => `${topic} ${text}`).join(" "));
+            const vocabulary = normalizeAssistantText(details.vocabulary.map(([term, definition]) => `${term} ${definition}`).join(" "));
+            let score = 0;
+            words.forEach((word) => {
+                if (title.includes(word)) score += 4;
+                if (summary.includes(word)) score += 2;
+                if (topics.includes(word)) score += 1;
+                if (vocabulary.includes(word)) score += 2;
+                if (explanation.includes(word)) score += 1;
+            });
+            if (normalizedQuestion.includes(title)) score += 8;
+            return { module, details, score };
+        }).filter((result) => result.score > 0)
+            .sort((first, second) => second.score - first.score)
+            .slice(0, 2);
+    }
+
+    function getAssistantReply(question) {
+        const normalized = normalizeAssistantText(question);
+
+        if (/\b(should i (buy|sell|invest)|which .{0,30}(stock|share|company)|what .{0,30}(stock|share) .{0,30}(buy|invest)|best .{0,20}(stock|share|company)|recommend|choose.{0,25}(stocks?|shares?)|pick.{0,25}(stocks?|shares?)|stock picks?|target price|price target|worth buying)\b/.test(normalized)) {
+            return {
+                text: "I can’t tell you which stock to buy or sell, or predict a target price. That depends on your personal goals and financial situation, and no market outcome is guaranteed.\n\nFor learning, start by understanding the business, reading its official financial reports, checking valuation and risks, and comparing it with similar companies. The “Fundamental analysis” and “Risk, return and diversification” modules can help you learn those ideas. You can practise with virtual money, but the practice prices are fictional.",
+                source: "Learning only — not personal financial advice."
+            };
+        }
+
+        if (/\b(live|latest|current|today|right now|real time|news|price|quote|trading at)\b/.test(normalized)) {
+            return {
+                text: "I don’t have live prices, current company news, or real-time market data. The paper-trading instruments use fictional names and fixed example prices.\n\nFor current information, check your broker’s live quote and the company’s official exchange filings. I can still explain how to read a quote, what bid and ask mean, or how to think about market risk.",
+                source: "This helper uses course material only."
+            };
+        }
+
+        if (/\b(paper trading|paper trade|virtual money|practice account|simulation|simulated trade)\b/.test(normalized)) {
+            return {
+                text: "Paper trading lets you practise order steps without using real money. In TradeNova’s lab, you start with ₹1,00,000 in virtual cash and use fictional instruments at fixed illustrative prices. A practice trade does not reach an exchange.\n\nChoose an instrument, enter a whole-number quantity and select “Buy with virtual cash”. Your holdings and virtual cash update on this device. “Sell holding” can sell only units already held. “Reset simulation” clears practice holdings and orders and returns the virtual cash to ₹1,00,000.\n\nA simulation cannot fully reproduce real-world price changes, execution delays, fees, or emotions.",
+                source: "Paper Trading Lab — practice only."
+            };
+        }
+
+        if (/^(hi|hello|hey|good morning|good afternoon|good evening)$/.test(normalized)) {
+            return {
+                text: "Hello! Ask me to explain a course topic, define a market word, or help you understand the paper-trading lab. For example: “What is a share?”",
+                source: "TradeNova Learning Helper"
+            };
+        }
+
+        const matches = findRelevantModules(question);
+        if (!matches.length) {
+            return {
+                text: "I couldn’t find a close match in the course yet. Try asking about shares, exchanges, stock quotes, order types, investing, risk, company financials, valuation, charts, portfolios, derivatives, margin, trading strategies, costs, or paper trading.\n\nI can explain learning topics, but I don’t provide live stock data or personalised buy/sell advice.",
+                source: "TradeNova course material"
+            };
+        }
+
+        const result = matches[0];
+        const { module, details } = result;
+        const keyIdeas = module.topics.slice(0, 2)
+            .map(([title, text]) => `${title}: ${text}`)
+            .join("\n\n");
+        const vocabulary = details.vocabulary.slice(0, 2)
+            .map(([term, definition]) => `${term}: ${definition}`)
+            .join("\n");
+        return {
+            text: `Here’s a simple explanation of ${module.title}:\n\n${details.simple}\n\nA simple example:\n${details.example}\n\nKey ideas:\n${keyIdeas}\n\nUseful words:\n${vocabulary}\n\nTry this: ${details.practice}`,
+            source: `From the ${module.level.toLowerCase()} module: ${module.title}`
+        };
+    }
+
+    function appendAssistantMessage(message, isUser = false) {
+        const article = document.createElement("article");
+        article.className = `chat-message ${isUser ? "user-message" : "assistant-message"}`;
+
+        const avatar = document.createElement("span");
+        avatar.className = "chat-avatar";
+        avatar.setAttribute("aria-hidden", "true");
+        avatar.textContent = isUser ? "YOU" : "TN";
+
+        const bubble = document.createElement("div");
+        bubble.className = "chat-bubble";
+
+        const label = document.createElement("strong");
+        label.textContent = isUser ? "You" : "TradeNova Learning Helper";
+        bubble.appendChild(label);
+
+        const text = document.createElement("p");
+        text.textContent = message.text;
+        bubble.appendChild(text);
+
+        if (message.source) {
+            const source = document.createElement("span");
+            source.className = "chat-source";
+            source.textContent = message.source;
+            bubble.appendChild(source);
+        }
+
+        article.append(avatar, bubble);
+        $("assistantChat").appendChild(article);
+        $("assistantChat").scrollTop = $("assistantChat").scrollHeight;
+    }
+
+    function submitAssistantQuestion(question) {
+        const trimmedQuestion = question.trim();
+        if (!trimmedQuestion) {
+            $("assistantStatus").textContent = "Type a question first.";
+            $("assistantStatus").classList.add("assistant-error");
+            return;
+        }
+
+        appendAssistantMessage({ text: trimmedQuestion }, true);
+        appendAssistantMessage(getAssistantReply(trimmedQuestion));
+        $("assistantStatus").textContent = "Questions stay in this browser and are not sent to an AI service.";
+        $("assistantStatus").classList.remove("assistant-error");
+    }
+
     function executePaperTrade(side) {
         const symbol = $("paperSymbol").value;
         const instrument = INSTRUMENTS.find((item) => item.symbol === symbol);
@@ -626,7 +765,9 @@
             })
             .then((html) => {
                 $("sidebar").innerHTML = html;
-                const active = [...document.querySelectorAll(".sidebar li")].find((item) => item.textContent.includes("Learn & Practice"));
+                const active = window.location.hash === "#learningAssistant"
+                    ? $("learningAssistantLink")
+                    : [...document.querySelectorAll(".sidebar li")].find((item) => item.textContent.includes("Learn & Practice"));
                 if (active) active.classList.add("active");
             })
             .catch((error) => console.error("Unable to load the sidebar", error));
@@ -645,6 +786,33 @@
             `<option value="${item.symbol}">${item.symbol} — ${item.name}</option>`
         ).join("");
         updateSelectedQuote();
+        $("assistantForm").addEventListener("submit", (event) => {
+            event.preventDefault();
+            const input = $("assistantInput");
+            submitAssistantQuestion(input.value);
+            input.value = "";
+            input.focus();
+        });
+        $("assistantInput").addEventListener("input", () => {
+            $("assistantStatus").textContent = `${500 - $("assistantInput").value.length} characters remaining`;
+            $("assistantStatus").classList.remove("assistant-error");
+        });
+        $("assistantInput").addEventListener("keydown", (event) => {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                $("assistantForm").requestSubmit();
+            }
+        });
+        document.querySelectorAll(".assistant-prompt").forEach((button) => {
+            button.addEventListener("click", () => {
+                submitAssistantQuestion(button.textContent);
+                $("assistantInput").focus();
+            });
+        });
+
+        if (window.location.hash === "#learningAssistant") {
+            window.setTimeout(() => $("learningAssistant").scrollIntoView({ behavior: "smooth" }), 300);
+        }
     }
 
     function updateSelectedQuote() {
