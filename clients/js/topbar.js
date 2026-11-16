@@ -132,6 +132,7 @@
     let activeMarketKey = null;
     let activeMarketPeriod = "day";
     let marketTick = 0;
+    let selectedChartPoint = null;
 
     Object.values(marketIndexes).forEach((index) => {
         index.referenceValue = index.baseValue / (1 + index.baseChange / 100);
@@ -177,6 +178,29 @@
         if (activeMarketKey && !document.getElementById("marketDetailModal")?.hidden) {
             renderMarketDetails(activeMarketKey);
         }
+    }
+
+    function showChartPointValue(pointIndex) {
+        const index = marketIndexes[activeMarketKey];
+        const period = marketPeriods[activeMarketPeriod];
+        if (!index || !period) return;
+
+        const safeIndex = Math.max(0, Math.min(pointIndex, period.count - 1));
+        const progress = safeIndex / (period.count - 1);
+        const wave = Math.sin(safeIndex * 1.31 + index.seed) * 0.48 +
+            Math.cos(safeIndex * 0.57 + index.seed * 2) * 0.28 +
+            (progress - 0.5) * 0.8;
+        const pointValue = safeIndex === period.count - 1
+            ? index.currentValue
+            : index.referenceValue * (1 + wave * period.range / 100);
+        const tick = period.ticks[Math.round(safeIndex * (period.ticks.length - 1) / (period.count - 1))];
+        document.getElementById("marketChartPointValue").textContent =
+            `${tick} · ${index.name}: ${formatIndexValue(pointValue)} (simulated)`;
+        selectedChartPoint = {
+            index: safeIndex,
+            indexKey: activeMarketKey,
+            period: activeMarketPeriod
+        };
     }
 
     function renderMarketDetails(indexKey) {
@@ -245,13 +269,45 @@
         chartLine.setAttribute("stroke-linejoin", "round");
         svg.appendChild(chartLine);
 
-        const lastPoint = chartPoints[chartPoints.length - 1].split(",");
-        const currentPoint = document.createElementNS(namespace, "circle");
-        currentPoint.setAttribute("cx", lastPoint[0]);
-        currentPoint.setAttribute("cy", lastPoint[1]);
-        currentPoint.setAttribute("r", "3");
-        currentPoint.setAttribute("fill", index.color);
-        svg.appendChild(currentPoint);
+        chartPoints.forEach((point, position) => {
+            const [x, y] = point.split(",");
+            const hitTarget = document.createElementNS(namespace, "circle");
+            hitTarget.setAttribute("class", "market-chart-point");
+            hitTarget.setAttribute("data-point-index", String(position));
+            hitTarget.setAttribute("cx", x);
+            hitTarget.setAttribute("cy", y);
+            hitTarget.setAttribute("r", "9");
+            hitTarget.setAttribute("fill", "transparent");
+            hitTarget.setAttribute("tabindex", "0");
+            hitTarget.setAttribute("role", "button");
+            hitTarget.setAttribute(
+                "aria-label",
+                `${period.ticks[Math.round(position * (period.ticks.length - 1) / (period.count - 1))]}: ${formatIndexValue(points[position])}`
+            );
+
+            const title = document.createElementNS(namespace, "title");
+            title.textContent = formatIndexValue(points[position]);
+            hitTarget.appendChild(title);
+            svg.appendChild(hitTarget);
+
+            const dot = document.createElementNS(namespace, "circle");
+            dot.setAttribute("class", "market-chart-point-dot");
+            dot.setAttribute("cx", x);
+            dot.setAttribute("cy", y);
+            dot.setAttribute("r", position === points.length - 1 ? "3" : "2");
+            dot.setAttribute("fill", index.color);
+            dot.setAttribute("pointer-events", "none");
+            svg.appendChild(dot);
+        });
+
+        if (selectedChartPoint && selectedChartPoint.indexKey === indexKey &&
+            selectedChartPoint.period === activeMarketPeriod) {
+            showChartPointValue(selectedChartPoint.index);
+        } else {
+            selectedChartPoint = null;
+            document.getElementById("marketChartPointValue").textContent =
+                "Hover over, focus, or tap a chart point to see its value.";
+        }
 
         labels.replaceChildren();
         period.ticks.forEach((tick) => {
@@ -271,6 +327,19 @@
 
         let searchTimer;
         let activeSearchController;
+        const chart = document.getElementById("marketDetailChart");
+        chart.addEventListener("pointerover", (event) => {
+            const point = event.target.closest("[data-point-index]");
+            if (point) showChartPointValue(Number(point.dataset.pointIndex));
+        });
+        chart.addEventListener("focusin", (event) => {
+            const point = event.target.closest("[data-point-index]");
+            if (point) showChartPointValue(Number(point.dataset.pointIndex));
+        });
+        chart.addEventListener("click", (event) => {
+            const point = event.target.closest("[data-point-index]");
+            if (point) showChartPointValue(Number(point.dataset.pointIndex));
+        });
 
         const hideSearchResults = () => {
             searchResults.hidden = true;
@@ -383,6 +452,7 @@
             const periodButton = event.target.closest("[data-market-period]");
             if (periodButton && activeMarketKey) {
                 activeMarketPeriod = periodButton.dataset.marketPeriod;
+                selectedChartPoint = null;
                 renderMarketDetails(activeMarketKey);
             }
             if (event.target === modal) closeMarketDetails();
@@ -416,6 +486,7 @@
 
             activeMarketKey = indexKey;
             activeMarketPeriod = "day";
+            selectedChartPoint = null;
             document.getElementById("marketDetailTitle").textContent = index.name;
             document.getElementById("marketDetailDescription").textContent = index.description;
             renderMarketDetails(indexKey);
@@ -440,6 +511,7 @@
         function closeMarketDetails() {
             modal.hidden = true;
             activeMarketKey = null;
+            selectedChartPoint = null;
         }
     }
 

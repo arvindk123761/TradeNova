@@ -398,6 +398,24 @@
     margin-top:10px;
 }
 
+.market-chart-point{
+    cursor:crosshair;
+    outline:none;
+}
+
+.market-chart-point:focus-visible .market-chart-point-dot{
+    stroke:#fff;
+    stroke-width:2;
+}
+
+.market-chart-point-value{
+    min-height:18px;
+    margin:4px 0 8px;
+    color:#334155;
+    font-size:12px;
+    font-weight:600;
+}
+
 .market-detail-chart-labels{
     display:flex;
     justify-content:space-between;

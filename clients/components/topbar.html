@@ -96,7 +96,8 @@
                         <button type="button" data-market-period="month" aria-pressed="false">Month</button>
                         <button type="button" data-market-period="year" aria-pressed="false">Year</button>
                     </div>
-                    <svg id="marketDetailChart" viewBox="0 0 640 190" role="img" aria-label="Illustrative index trend chart"></svg>
+                    <svg id="marketDetailChart" viewBox="0 0 640 190" role="group" aria-label="Illustrative index trend chart. Hover over, focus, or tap a point to see its value."></svg>
+                    <p class="market-chart-point-value" id="marketChartPointValue" aria-live="polite">Hover over, focus, or tap a chart point to see its value.</p>
                     <div class="market-detail-chart-labels" id="marketDetailChartLabels"></div>
                 </div>
                 <div class="market-detail-companies">
