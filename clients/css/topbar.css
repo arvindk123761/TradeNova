@@ -29,6 +29,7 @@
 .top-left{
 
     width:30%;
+    position:relative;
 
 }
 
@@ -85,7 +86,10 @@
     min-width:110px;
 
     transition:.3s;
-
+    border:0;
+    color:inherit;
+    font:inherit;
+    cursor:pointer;
 }
 
 .market-box:hover{
@@ -127,38 +131,6 @@
     align-items:center;
 
     gap:16px;
-
-}
-
-.notification{
-
-    width:48px;
-
-    height:48px;
-
-    border-radius:50%;
-
-    background:#f1f5f9;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-    font-size:20px;
-
-}
-
-.notification:hover{
-
-    background:#2563eb;
-
-    color:white;
 
 }
 
@@ -240,6 +212,191 @@
 
 }
 
+.stock-search-results{
+    position:absolute;
+    z-index:1000;
+    top:calc(100% + 8px);
+    left:0;
+    right:0;
+    max-height:340px;
+    overflow-y:auto;
+    padding:6px;
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    box-shadow:0 12px 30px rgba(15,23,42,.16);
+}
+
+.stock-search-results[hidden],
+.market-detail-modal[hidden]{
+    display:none;
+}
+
+.stock-search-result{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    padding:10px 12px;
+    border:0;
+    border-radius:8px;
+    background:transparent;
+    color:#1e293b;
+    text-align:left;
+    cursor:pointer;
+}
+
+.stock-search-result:hover,
+.stock-search-result:focus-visible{
+    background:#f1f5f9;
+    outline:none;
+}
+
+.stock-search-result strong,
+.stock-search-result small{
+    display:block;
+}
+
+.stock-search-result small{
+    margin-top:3px;
+    color:#64748b;
+}
+
+.stock-search-empty{
+    padding:12px;
+    color:#64748b;
+    font-size:13px;
+}
+
+.market-detail-modal{
+    position:fixed;
+    z-index:2000;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(15,23,42,.55);
+}
+
+.market-detail-panel{
+    position:relative;
+    width:min(760px,100%);
+    max-height:90vh;
+    overflow-y:auto;
+    padding:28px;
+    border-radius:18px;
+    background:#fff;
+    color:#1e293b;
+    box-shadow:0 20px 60px rgba(15,23,42,.25);
+}
+
+.market-detail-close{
+    position:absolute;
+    top:14px;
+    right:18px;
+    border:0;
+    background:transparent;
+    color:#64748b;
+    font-size:28px;
+    line-height:1;
+    cursor:pointer;
+}
+
+.market-detail-eyebrow{
+    color:#15806d;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.08em;
+}
+
+.market-detail-panel h2{
+    margin:6px 40px 6px 0;
+    font-size:26px;
+}
+
+.market-detail-description,
+.market-detail-companies p{
+    color:#64748b;
+    line-height:1.55;
+}
+
+.market-detail-chart{
+    margin:18px 0;
+    padding:16px;
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+    background:#f8fafc;
+}
+
+.market-detail-chart-heading{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.market-detail-chart-heading strong{
+    font-size:22px;
+}
+
+.market-detail-chart-heading span,
+.market-detail-chart-labels{
+    color:#64748b;
+    font-size:12px;
+}
+
+.market-detail-chart svg{
+    display:block;
+    width:100%;
+    height:190px;
+    margin-top:10px;
+}
+
+.market-detail-chart-labels{
+    display:flex;
+    justify-content:space-between;
+}
+
+.market-detail-companies h3{
+    margin:18px 0 4px;
+    font-size:17px;
+}
+
+.market-detail-company-list{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+    margin-top:12px;
+}
+
+.market-detail-company{
+    padding:10px 12px;
+    border:1px solid #e2e8f0;
+    border-radius:10px;
+}
+
+.market-detail-company strong{
+    display:block;
+    font-size:13px;
+}
+
+.market-detail-company span{
+    color:#64748b;
+    font-size:12px;
+}
+
+.market-detail-disclaimer{
+    margin-top:18px;
+    padding:10px 12px;
+    border-radius:9px;
+    background:#fff7ed;
+    color:#9a3412;
+    font-size:12px;
+    line-height:1.5;
+}
+
 /* MOBILE */
 
 @media(max-width:1200px){
@@ -284,6 +441,23 @@
 
     justify-content:space-between;
 
+}
+
+.top-center{
+    display:flex;
+    width:100%;
+    justify-content:space-between;
+    gap:8px;
+}
+
+.market-box{
+    flex:1;
+    min-width:0;
+    padding:8px;
+}
+
+.market-detail-panel{
+    padding:22px 18px;
 }
 
 }
