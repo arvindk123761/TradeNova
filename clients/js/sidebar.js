@@ -21,9 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             "ipo.html": "ipoLink",
 
-            "mutualfunds.html": "mutualFundsLink",
-
-            "etfs.html": "etfsLink"
+            "mutualfunds.html": "mutualFundsLink"
 
         };
 

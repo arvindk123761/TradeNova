@@ -6,21 +6,6 @@ const catalogs = {
         { name: "TradeNova Balanced Growth", type: "Hybrid Fund", risk: "Moderate", minimum: 500, returnRate: "12.4%" },
         { name: "India Large Cap Index", type: "Equity Fund", risk: "High", minimum: 1000, returnRate: "15.1%" },
         { name: "Short Term Debt Plus", type: "Debt Fund", risk: "Low", minimum: 500, returnRate: "7.8%" }
-    ],
-    etfs: [
-        { name: "Nifty 50 ETF", type: "Index ETF", risk: "High", minimum: 250, returnRate: "14.2%" },
-        { name: "Gold ETF", type: "Commodity ETF", risk: "Moderate", minimum: 100, returnRate: "9.6%" },
-        { name: "Banking Sector ETF", type: "Sector ETF", risk: "High", minimum: 300, returnRate: "13.7%" }
-    ],
-    bonds: [
-        { name: "Government 2032 Bond", type: "Government Bond", risk: "Low", minimum: 1000, returnRate: "7.2%" },
-        { name: "Infrastructure NCD", type: "Corporate Bond", risk: "Moderate", minimum: 10000, returnRate: "9.1%" },
-        { name: "Tax Saver Bond", type: "Tax Saving", risk: "Low", minimum: 5000, returnRate: "7.5%" }
-    ],
-    fo: [
-        { name: "NIFTY Futures", type: "Index Futures", risk: "Very High", minimum: 25000, returnRate: "Market linked" },
-        { name: "BANKNIFTY Options", type: "Index Options", risk: "Very High", minimum: 5000, returnRate: "Market linked" },
-        { name: "Stock Futures", type: "Equity Futures", risk: "Very High", minimum: 15000, returnRate: "Market linked" }
     ]
 };
 

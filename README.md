@@ -11,7 +11,7 @@ TradeNova is a full-stack stock trading and investment dashboard built with a va
 - Portfolio summary, holdings, profit/loss, and a Day/Week/Month/Year performance chart with five-minute history snapshots and five-second current-value refreshes
 - Orders, watchlist, and activity history
 - IPO listing and applications
-- Mutual Funds, ETFs, Bonds, and F&O investment catalogs with wallet-backed demo investments
+- Mutual Funds investment catalog with wallet-backed demo investments
 - Profile, password change, settings, dark mode, compact view, and animation preferences
 - Authenticated admin stock management routes
 - Authenticated Google Gemini assistant for stock-market education and learning questions
