@@ -7,6 +7,7 @@ TradeNova is a full-stack stock trading and investment dashboard built with a va
 - User registration and login with JWT authentication
 - Wallet funding and balance tracking
 - Stock browsing, search, filters, simulated price updates, and percentage changes
+- Dashboard market news and insights with category filters (sample briefings, not a live news feed)
 - Stock buy and sell flow with portfolio updates
 - Portfolio summary, holdings, profit/loss, and chart
 - Orders, watchlist, and activity history

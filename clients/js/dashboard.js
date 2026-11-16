@@ -512,3 +512,86 @@ async function loadTicker() {
 loadTicker();
 
 setInterval(loadTicker,5000);
+
+/* ---------------- Market News Demo Briefings ---------------- */
+
+const marketBriefings = [
+    {
+        category: "Markets",
+        title: "What can move a broad market index?",
+        summary: "Index moves reflect the combined performance of their constituent companies. A few heavily weighted stocks can influence the headline number more than others."
+    },
+    {
+        category: "Stocks",
+        title: "Reading an earnings announcement",
+        summary: "Compare reported revenue and profit with the same period last year, then look at management guidance and the risks described in the filing."
+    },
+    {
+        category: "Economy",
+        title: "Why interest rates matter to equity investors",
+        summary: "Rate changes can affect borrowing costs, consumer demand, and how investors value future company earnings. Their impact varies across industries."
+    },
+    {
+        category: "Trading",
+        title: "A quick guide to volatility",
+        summary: "Volatility describes how much a price fluctuates over time. It does not indicate direction, and sharp moves can increase the risk of a trade."
+    },
+    {
+        category: "Markets",
+        title: "How global markets can influence local shares",
+        summary: "Overseas market moves, currency changes, and commodity prices can shape sentiment, but local company and economic factors matter too."
+    },
+    {
+        category: "Stocks",
+        title: "Look beyond a stock's headline price",
+        summary: "A share price alone does not tell you whether a company is expensive or cheap. Investors often consider earnings, debt, cash flow, and business risks."
+    }
+];
+
+function renderMarketBriefings(category = "All") {
+    const container = document.getElementById("marketNews");
+
+    if (!container) {
+        return;
+    }
+
+    container.replaceChildren();
+
+    marketBriefings
+        .filter(briefing => category === "All" || briefing.category === category)
+        .forEach(briefing => {
+            const article = document.createElement("article");
+            article.className = "news-card";
+
+            const label = document.createElement("span");
+            label.className = "news-category";
+            label.textContent = briefing.category;
+
+            const title = document.createElement("h3");
+            title.textContent = briefing.title;
+
+            const summary = document.createElement("p");
+            summary.textContent = briefing.summary;
+
+            const source = document.createElement("span");
+            source.className = "news-source";
+            source.textContent = "TradeNova learning brief";
+
+            article.append(label, title, summary, source);
+            container.appendChild(article);
+        });
+}
+
+document.querySelectorAll("[data-news-filter]").forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll("[data-news-filter]").forEach(filter => {
+            const isActive = filter === button;
+            filter.classList.toggle("active", isActive);
+            filter.setAttribute("aria-pressed", String(isActive));
+        });
+
+        renderMarketBriefings(button.dataset.newsFilter);
+    });
+});
+
+renderMarketBriefings();
