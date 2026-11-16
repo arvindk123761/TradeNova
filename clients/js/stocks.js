@@ -384,10 +384,10 @@ document.getElementById("detailPrice").innerText =
 "₹"+Number(stock.current_price).toFixed(2);
 
 document.getElementById("detailMarketCap").innerText =
-stock.market_cap ? `₹${Number(stock.market_cap).toLocaleString("en-IN")}` : "-";
+TradeNovaStockChart.formatMarketCap(stock.market_cap);
 
 document.getElementById("detailSector").innerText =
-stock.sector || "-";
+TradeNovaStockChart.getSector(stock);
 
 if (detailsChart) {
     detailsChart.update(stock);

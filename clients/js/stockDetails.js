@@ -62,7 +62,10 @@ currentPrice = Number(stock.current_price);
             stock.volume ?? "-";
 
         document.getElementById("marketCap").innerText =
-            stock.market_cap ?? "-";
+            TradeNovaStockChart.formatMarketCap(stock.market_cap);
+
+        document.getElementById("sector").innerText =
+            TradeNovaStockChart.getSector(stock);
 
         document.getElementById("peRatio").innerText =
             stock.pe_ratio ?? "-";

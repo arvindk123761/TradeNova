@@ -31,15 +31,55 @@
     }
 
     function createTradingDates(count) {
-        const dates = [new Date()];
+        const dates = [];
+        const cursor = new Date();
         while (dates.length < count) {
-            const previousDate = new Date(dates[dates.length - 1]);
-            previousDate.setDate(previousDate.getDate() - 1);
-            if (previousDate.getDay() !== 0 && previousDate.getDay() !== 6) {
-                dates.push(previousDate);
+            if (cursor.getDay() !== 0 && cursor.getDay() !== 6) {
+                dates.push(new Date(cursor));
             }
+            cursor.setDate(cursor.getDate() - 1);
         }
         return dates.reverse();
+    }
+
+    function formatMarketCap(value) {
+        if (value === null || value === undefined || value === "") return "Not available";
+        const normalized = String(value).trim().replace(/[₹$,\s]/g, "");
+        const match = normalized.match(/^([-+]?\d*\.?\d+)(t|trillion|b|bn|billion|m|mn|million|k|thousand|cr|crores?|l|lakhs?)?$/i);
+        if (!match) return "Not available";
+        const units = {
+            t: 1e12, trillion: 1e12,
+            b: 1e9, bn: 1e9, billion: 1e9,
+            m: 1e6, mn: 1e6, million: 1e6,
+            k: 1e3, thousand: 1e3,
+            cr: 1e7, crore: 1e7, crores: 1e7,
+            l: 1e5, lakh: 1e5, lakhs: 1e5
+        };
+        const amount = Number(match[1]) * (units[(match[2] || "").toLowerCase()] || 1);
+        if (!Number.isFinite(amount)) return "Not available";
+        return `₹${amount.toLocaleString("en-IN", {
+            maximumFractionDigits: 2
+        })}`;
+    }
+
+    function getSector(stock) {
+        if (stock.sector && String(stock.sector).trim()) return String(stock.sector).trim();
+
+        const identity = `${stock.symbol || ""} ${stock.company_name || ""}`.toLowerCase();
+        const sectors = [
+            [/hdfc|icici|kotak|axis|sbi|bank|federal|indusind|idfc/, "Banking"],
+            [/adani.?power|powergrid|ntpc|coal.?india|tata.?power|jsw.?energy/, "Energy & Utilities"],
+            [/infosys|tcs|wipro|hcl|tech.?mahindra|persistent|ltimindtree/, "Information Technology"],
+            [/itc|hindustan.?unilever|britannia|nestle|dabur|godrej.?consumer/, "Consumer Goods"],
+            [/sun.?pharma|cipla|dr.?reddy|divis.?lab|apollo.?hospital/, "Healthcare"],
+            [/maruti|tata.?motor|mahindra|eicher|bajaj.?auto|ola.?electric/, "Automobiles"],
+            [/reliance/, "Energy & Retail"],
+            [/adani.?ports|container.?corp/, "Transportation & Logistics"],
+            [/arvind/, "Textiles"]
+        ];
+
+        const match = sectors.find(([pattern]) => pattern.test(identity));
+        return match ? match[1] : "Sector not provided";
     }
 
     function formatLabel(date, range, index, total) {
@@ -160,7 +200,7 @@
             const series = getSeries(activeStock, activeRange);
             chart.data.labels = series.labels;
             chart.data.datasets[0].data = series.values;
-            chart.update();
+            chart.update("none");
 
             if (options.highElement) {
                 options.highElement.textContent = `₹${series.yearlyStats.high.toLocaleString("en-IN", {
@@ -205,5 +245,5 @@
         };
     }
 
-    window.TradeNovaStockChart = { create };
+    window.TradeNovaStockChart = { create, formatMarketCap, getSector };
 })();
