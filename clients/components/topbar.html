@@ -27,7 +27,7 @@
 
             <small>NIFTY</small>
 
-            <strong class="green">
+            <strong class="green" data-market-change="nifty">
 
                 +0.82%
 
@@ -39,7 +39,7 @@
 
             <small>SENSEX</small>
 
-            <strong class="green">
+            <strong class="green" data-market-change="sensex">
 
                 +0.55%
 
@@ -51,7 +51,7 @@
 
             <small>BANK NIFTY</small>
 
-            <strong class="red">
+            <strong class="red" data-market-change="banknifty">
 
                 -0.24%
 
@@ -83,18 +83,28 @@
                 <p class="market-detail-description" id="marketDetailDescription"></p>
                 <div class="market-detail-chart">
                     <div class="market-detail-chart-heading">
-                        <strong id="marketDetailValue"></strong>
-                        <span>Illustrative intraday trend</span>
+                        <div>
+                            <strong id="marketDetailValue"></strong>
+                            <span id="marketDetailChange"></span>
+                        </div>
+                        <span id="marketDetailPeriodLabel">Illustrative day trend</span>
+                    </div>
+                    <p class="market-detail-updated">Last simulated update: <span id="marketDetailUpdatedAt">--</span></p>
+                    <div class="market-period-tabs" role="group" aria-label="Chart period">
+                        <button type="button" class="active" data-market-period="day" aria-pressed="true">Day</button>
+                        <button type="button" data-market-period="week" aria-pressed="false">Week</button>
+                        <button type="button" data-market-period="month" aria-pressed="false">Month</button>
+                        <button type="button" data-market-period="year" aria-pressed="false">Year</button>
                     </div>
                     <svg id="marketDetailChart" viewBox="0 0 640 190" role="img" aria-label="Illustrative index trend chart"></svg>
-                    <div class="market-detail-chart-labels"><span>9:15 AM</span><span>12:00 PM</span><span>3:30 PM</span></div>
+                    <div class="market-detail-chart-labels" id="marketDetailChartLabels"></div>
                 </div>
                 <div class="market-detail-companies">
                     <h3>Example constituent companies</h3>
                     <p>Index membership can change. These are examples, not a complete current constituents list.</p>
                     <div id="marketDetailCompanyList"></div>
                 </div>
-                <p class="market-detail-disclaimer">Sample prices and chart only; TradeNova is not connected to a live exchange index feed.</p>
+                <p class="market-detail-disclaimer">Simulated example only; values and charts refresh every 5 seconds but are not live exchange data. Company lists are examples, not current full index constituents.</p>
             </div>
         </section>
 

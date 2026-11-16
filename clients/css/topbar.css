@@ -341,10 +341,54 @@
     font-size:22px;
 }
 
-.market-detail-chart-heading span,
+.market-detail-chart-heading > span,
 .market-detail-chart-labels{
     color:#64748b;
     font-size:12px;
+}
+
+.market-detail-chart-heading #marketDetailChange{
+    margin-left:10px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.market-detail-chart-heading #marketDetailChange.positive{
+    color:#16803c;
+}
+
+.market-detail-chart-heading #marketDetailChange.negative{
+    color:#dc2626;
+}
+
+.market-detail-updated{
+    margin:6px 0 0;
+    color:#64748b;
+    font-size:11px;
+}
+
+.market-period-tabs{
+    display:flex;
+    gap:6px;
+    margin-top:14px;
+}
+
+.market-period-tabs button{
+    padding:7px 13px;
+    border:1px solid #e2e8f0;
+    border-radius:8px;
+    background:#fff;
+    color:#475569;
+    font:inherit;
+    font-size:13px;
+    cursor:pointer;
+}
+
+.market-period-tabs button.active,
+.market-period-tabs button:hover{
+    border-color:#15806d;
+    background:#e9f7f3;
+    color:#116b5a;
 }
 
 .market-detail-chart svg{
@@ -357,6 +401,7 @@
 .market-detail-chart-labels{
     display:flex;
     justify-content:space-between;
+    gap:8px;
 }
 
 .market-detail-companies h3{
@@ -458,6 +503,15 @@
 
 .market-detail-panel{
     padding:22px 18px;
+}
+
+.market-period-tabs{
+    justify-content:space-between;
+}
+
+.market-period-tabs button{
+    flex:1;
+    padding:7px 4px;
 }
 
 }

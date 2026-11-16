@@ -65,10 +65,11 @@
     const marketIndexes = {
         nifty: {
             name: "NIFTY 50",
-            value: "25,180",
+            baseValue: 25180,
+            baseChange: 0.82,
             description: "NSE's broad large-company index, covering companies across major sectors of the Indian economy.",
             color: "#16803c",
-            trend: [44, 49, 42, 59, 53, 65, 60, 74, 68, 82, 77, 91],
+            seed: 1,
             companies: [
                 ["RELIANCE", "Reliance Industries"],
                 ["HDFCBANK", "HDFC Bank"],
@@ -82,10 +83,11 @@
         },
         sensex: {
             name: "SENSEX",
-            value: "82,420",
+            baseValue: 82420,
+            baseChange: 1.14,
             description: "BSE's benchmark index of 30 large, established companies listed on the Bombay Stock Exchange.",
             color: "#16803c",
-            trend: [47, 42, 50, 57, 48, 64, 59, 70, 65, 80, 75, 88],
+            seed: 2,
             companies: [
                 ["RELIANCE", "Reliance Industries"],
                 ["HDFCBANK", "HDFC Bank"],
@@ -99,10 +101,11 @@
         },
         banknifty: {
             name: "BANK NIFTY",
-            value: "56,800",
+            baseValue: 56800,
+            baseChange: -0.25,
             description: "NSE's banking-sector index, tracking large and liquid banks listed on the exchange.",
             color: "#dc2626",
-            trend: [82, 75, 80, 68, 73, 61, 66, 53, 59, 45, 50, 38],
+            seed: 3,
             companies: [
                 ["HDFCBANK", "HDFC Bank"],
                 ["ICICIBANK", "ICICI Bank"],
@@ -115,6 +118,148 @@
             ]
         }
     };
+
+    const marketPeriods = {
+        day: { label: "Illustrative day trend", count: 24, range: 0.35, ticks: ["9:15", "10:30", "12:00", "1:30", "3:30"] },
+        week: { label: "Illustrative week trend", count: 28, range: 1.8, ticks: ["Mon", "Tue", "Wed", "Thu", "Fri"] },
+        month: { label: "Illustrative month trend", count: 30, range: 4, ticks: ["1", "7", "14", "21", "30"] },
+        year: { label: "Illustrative year trend", count: 12, range: 12, ticks: ["Jan", "Apr", "Jul", "Oct", "Dec"] }
+    };
+    const numberFormat = new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+    let activeMarketKey = null;
+    let activeMarketPeriod = "day";
+    let marketTick = 0;
+
+    Object.values(marketIndexes).forEach((index) => {
+        index.referenceValue = index.baseValue / (1 + index.baseChange / 100);
+        index.currentValue = index.baseValue;
+    });
+
+    function formatIndexValue(value) {
+        return numberFormat.format(value);
+    }
+
+    function getMarketChange(index) {
+        return (index.currentValue / index.referenceValue - 1) * 100;
+    }
+
+    function updateMarketSnapshots(advance = true) {
+        if (advance) marketTick += 1;
+        Object.entries(marketIndexes).forEach(([key, index]) => {
+            if (advance) {
+                const movement = Math.sin(marketTick * 1.7 + index.seed) * index.baseValue * 0.00012;
+                index.currentValue = Math.max(0, index.currentValue + movement);
+            }
+            const change = getMarketChange(index);
+            const changeText = `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`;
+
+            document.querySelectorAll(`[data-market-change="${key}"]`).forEach((element) => {
+                element.textContent = changeText;
+                element.classList.toggle("green", change >= 0);
+                element.classList.toggle("red", change < 0);
+            });
+
+            const dashboardValue = document.getElementById(key);
+            if (dashboardValue) {
+                const changeElement = document.createElement("span");
+                changeElement.className = change >= 0 ? "green" : "red";
+                changeElement.textContent = changeText;
+                dashboardValue.replaceChildren(
+                    document.createTextNode(formatIndexValue(index.currentValue) + " "),
+                    changeElement
+                );
+            }
+        });
+
+        if (activeMarketKey && !document.getElementById("marketDetailModal")?.hidden) {
+            renderMarketDetails(activeMarketKey);
+        }
+    }
+
+    function renderMarketDetails(indexKey) {
+        const index = marketIndexes[indexKey];
+        const period = marketPeriods[activeMarketPeriod];
+        if (!index || !period) return;
+
+        const value = document.getElementById("marketDetailValue");
+        const change = document.getElementById("marketDetailChange");
+        const svg = document.getElementById("marketDetailChart");
+        const labels = document.getElementById("marketDetailChartLabels");
+        if (!value || !change || !svg || !labels) return;
+
+        const changePercent = getMarketChange(index);
+        value.textContent = formatIndexValue(index.currentValue);
+        change.textContent = `${changePercent >= 0 ? "+" : ""}${changePercent.toFixed(2)}%`;
+        change.classList.toggle("positive", changePercent >= 0);
+        change.classList.toggle("negative", changePercent < 0);
+        document.getElementById("marketDetailPeriodLabel").textContent = period.label;
+        document.getElementById("marketDetailUpdatedAt").textContent =
+            new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+        document.querySelectorAll("[data-market-period]").forEach((button) => {
+            const selected = button.dataset.marketPeriod === activeMarketPeriod;
+            button.classList.toggle("active", selected);
+            button.setAttribute("aria-pressed", String(selected));
+        });
+
+        const points = Array.from({ length: period.count }, (_, position) => {
+            const progress = position / (period.count - 1);
+            const wave = Math.sin(position * 1.31 + index.seed) * 0.48 +
+                Math.cos(position * 0.57 + index.seed * 2) * 0.28 +
+                (progress - 0.5) * 0.8;
+            return index.referenceValue * (1 + wave * period.range / 100);
+        });
+        points[points.length - 1] = index.currentValue;
+
+        const minValue = Math.min(...points);
+        const maxValue = Math.max(...points);
+        const valueRange = maxValue - minValue || 1;
+        const chartPoints = points.map((point, position) => {
+            const x = 20 + position * (600 / (points.length - 1));
+            const y = 20 + ((maxValue - point) / valueRange) * 145;
+            return `${x},${y}`;
+        });
+
+        svg.replaceChildren();
+        const namespace = "http://www.w3.org/2000/svg";
+        [45, 90, 135].forEach((y) => {
+            const line = document.createElementNS(namespace, "line");
+            line.setAttribute("x1", "20");
+            line.setAttribute("x2", "620");
+            line.setAttribute("y1", String(y));
+            line.setAttribute("y2", String(y));
+            line.setAttribute("stroke", "#e2e8f0");
+            line.setAttribute("stroke-dasharray", "4 6");
+            svg.appendChild(line);
+        });
+
+        const chartLine = document.createElementNS(namespace, "polyline");
+        chartLine.setAttribute("points", chartPoints.join(" "));
+        chartLine.setAttribute("fill", "none");
+        chartLine.setAttribute("stroke", index.color);
+        chartLine.setAttribute("stroke-width", "1.8");
+        chartLine.setAttribute("stroke-linecap", "round");
+        chartLine.setAttribute("stroke-linejoin", "round");
+        svg.appendChild(chartLine);
+
+        const lastPoint = chartPoints[chartPoints.length - 1].split(",");
+        const currentPoint = document.createElementNS(namespace, "circle");
+        currentPoint.setAttribute("cx", lastPoint[0]);
+        currentPoint.setAttribute("cy", lastPoint[1]);
+        currentPoint.setAttribute("r", "3");
+        currentPoint.setAttribute("fill", index.color);
+        svg.appendChild(currentPoint);
+
+        labels.replaceChildren();
+        period.ticks.forEach((tick) => {
+            const label = document.createElement("span");
+            label.textContent = tick;
+            labels.appendChild(label);
+        });
+    }
 
     function initializeTopbarInteractions() {
         if (interactionsBound) return;
@@ -235,6 +380,11 @@
             if (!event.target.closest(".top-left")) hideSearchResults();
             const indexButton = event.target.closest("[data-market-index]");
             if (indexButton) openMarketDetails(indexButton.dataset.marketIndex);
+            const periodButton = event.target.closest("[data-market-period]");
+            if (periodButton && activeMarketKey) {
+                activeMarketPeriod = periodButton.dataset.marketPeriod;
+                renderMarketDetails(activeMarketKey);
+            }
             if (event.target === modal) closeMarketDetails();
         });
 
@@ -257,39 +407,18 @@
         document.addEventListener("keydown", (event) => {
             if (event.key === "Escape" && !modal.hidden) closeMarketDetails();
         });
+        updateMarketSnapshots(false);
+        window.setInterval(updateMarketSnapshots, 5000);
 
         function openMarketDetails(indexKey) {
             const index = marketIndexes[indexKey];
             if (!index) return;
 
+            activeMarketKey = indexKey;
+            activeMarketPeriod = "day";
             document.getElementById("marketDetailTitle").textContent = index.name;
             document.getElementById("marketDetailDescription").textContent = index.description;
-            document.getElementById("marketDetailValue").textContent = index.value;
-
-            const svg = document.getElementById("marketDetailChart");
-            svg.replaceChildren();
-            const namespace = "http://www.w3.org/2000/svg";
-            [45, 90, 135].forEach((y) => {
-                const line = document.createElementNS(namespace, "line");
-                line.setAttribute("x1", "20");
-                line.setAttribute("x2", "620");
-                line.setAttribute("y1", String(y));
-                line.setAttribute("y2", String(y));
-                line.setAttribute("stroke", "#e2e8f0");
-                line.setAttribute("stroke-dasharray", "4 6");
-                svg.appendChild(line);
-            });
-            const points = index.trend.map((value, position) =>
-                `${20 + position * (600 / (index.trend.length - 1))},${175 - value * 1.55}`
-            );
-            const path = document.createElementNS(namespace, "polyline");
-            path.setAttribute("points", points.join(" "));
-            path.setAttribute("fill", "none");
-            path.setAttribute("stroke", index.color);
-            path.setAttribute("stroke-width", "4");
-            path.setAttribute("stroke-linecap", "round");
-            path.setAttribute("stroke-linejoin", "round");
-            svg.appendChild(path);
+            renderMarketDetails(indexKey);
 
             const companyList = document.getElementById("marketDetailCompanyList");
             companyList.replaceChildren();
@@ -310,6 +439,7 @@
 
         function closeMarketDetails() {
             modal.hidden = true;
+            activeMarketKey = null;
         }
     }
 
