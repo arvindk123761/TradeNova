@@ -195,12 +195,26 @@ async function loadUser() {
 
     if (data.success && data.user) {
 
+        try {
+            const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
+            localStorage.setItem("user", JSON.stringify({ ...savedUser, ...data.user }));
+        } catch (error) {
+            console.error("Unable to cache the latest TradeNova profile", error);
+        }
+
         const user = document.getElementById("topUser");
 
         if (user) {
 
             user.innerText = data.user.full_name;
 
+        }
+
+        const avatar = document.getElementById("topUserAvatar");
+        if (avatar) {
+            const initial = String(data.user.full_name || data.user.email || "U").trim().charAt(0).toLocaleUpperCase() || "U";
+            avatar.textContent = initial;
+            avatar.setAttribute("aria-label", `${data.user.full_name || "User"} profile`);
         }
 
     } else {

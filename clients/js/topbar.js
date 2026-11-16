@@ -50,8 +50,11 @@
             : "";
         const displayName = fullName || email || "Account";
 
-        const initial = displayName.charAt(0).toUpperCase() || "U";
+        const initial = fullName.charAt(0).toLocaleUpperCase()
+            || email.charAt(0).toLocaleUpperCase()
+            || "U";
         if (avatar.textContent !== initial) avatar.textContent = initial;
+        avatar.setAttribute("aria-label", `${displayName} profile`);
         if (label.textContent !== displayName) label.textContent = displayName;
 
         if (!walletLoadStarted && document.getElementById("topWallet")) {
@@ -516,6 +519,10 @@
     }
 
     window.addEventListener("tradenova:wallet-updated", loadWalletBalance);
+    window.addEventListener("tradenova:user-updated", initializeProfile);
+    window.addEventListener("storage", (event) => {
+        if (event.key === "user") initializeProfile();
+    });
     initializeProfile();
 
     const observer = new MutationObserver(initializeProfile);

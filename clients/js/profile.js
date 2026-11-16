@@ -2,6 +2,16 @@ const API = `${window.location.origin}/api`;
 
 const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
+function saveUserProfile(user) {
+    try {
+        const previousUser = JSON.parse(localStorage.getItem("user") || "{}");
+        localStorage.setItem("user", JSON.stringify({ ...previousUser, ...user }));
+        window.dispatchEvent(new Event("tradenova:user-updated"));
+    } catch (error) {
+        console.error("Unable to save the updated profile for the topbar", error);
+    }
+}
+
 /* ==========================================
    LOAD SIDEBAR
 ========================================== */
@@ -48,11 +58,19 @@ return;
 }
 
 const user = data.user;
+saveUserProfile(user);
 
 /* Header */
 
 document.getElementById("profileName").innerText =
 user.full_name;
+
+const profileAvatar = document.getElementById("profileAvatar");
+if (profileAvatar) {
+    const initial = String(user.full_name || user.email || "U").trim().charAt(0).toLocaleUpperCase() || "U";
+    profileAvatar.textContent = initial;
+    profileAvatar.setAttribute("aria-label", `${user.full_name || "User"} profile`);
+}
 
 document.getElementById("profileEmail").innerText =
 user.email;
@@ -82,9 +100,9 @@ user.email;
 document.getElementById("editMobile").value =
 user.mobile || "";
 
-}catch(err){
+} catch (err) {
 
-console.log(err);
+console.error("Unable to load Profile", err);
 
 showToast("Unable to load Profile","error");
 
@@ -246,9 +264,11 @@ if(data.success){
 
 showToast("Profile Updated","success");
 
+saveUserProfile({ full_name, mobile });
+
 modal.style.display="none";
 
-loadProfile();
+await loadProfile();
 
 }else{
 
