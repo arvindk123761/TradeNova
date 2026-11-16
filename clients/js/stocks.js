@@ -503,7 +503,9 @@ document.getElementById("topGainers");
 
 box.innerHTML="";
 
-data.gainers.forEach(stock=>{
+(data.gainers || [])
+.filter(stock => Number(stock.change_percent) > 0)
+.forEach(stock=>{
 
 box.innerHTML +=`
 
@@ -533,6 +535,10 @@ box.innerHTML +=`
 
 });
 
+if (!box.children.length) {
+    box.innerHTML = `<p class="market-empty">No stocks are currently gaining.</p>`;
+}
+
 }
 catch(err){
 
@@ -561,7 +567,9 @@ document.getElementById("topLosers");
 
 box.innerHTML="";
 
-data.losers.forEach(stock=>{
+(data.losers || [])
+.filter(stock => Number(stock.change_percent) < 0)
+.forEach(stock=>{
 
 box.innerHTML +=`
 
@@ -590,6 +598,10 @@ box.innerHTML +=`
 `;
 
 });
+
+if (!box.children.length) {
+    box.innerHTML = `<p class="market-empty">No stocks are currently losing.</p>`;
+}
 
 }
 catch(err){

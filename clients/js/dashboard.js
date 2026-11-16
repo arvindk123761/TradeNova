@@ -237,7 +237,7 @@ async function loadTopGainers() {
 
         container.innerHTML = "";
 
-        data.gainers.forEach(stock => {
+        (data.gainers || []).filter(stock => Number(stock.change_percent) > 0).forEach(stock => {
 container.innerHTML += `
 
 <div class="market-item">
@@ -262,6 +262,10 @@ container.innerHTML += `
 
         });
 
+        if (!container.children.length) {
+            container.innerHTML = `<p class="market-empty">No stocks are currently gaining.</p>`;
+        }
+
     }
 
     catch(err){
@@ -285,7 +289,7 @@ async function loadTopLosers() {
 
         container.innerHTML = "";
 
-        data.losers.forEach(stock => {
+        (data.losers || []).filter(stock => Number(stock.change_percent) < 0).forEach(stock => {
 
            container.innerHTML += `
 
@@ -310,6 +314,10 @@ async function loadTopLosers() {
 `;
 
         });
+
+        if (!container.children.length) {
+            container.innerHTML = `<p class="market-empty">No stocks are currently losing.</p>`;
+        }
 
     }
 

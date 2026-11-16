@@ -143,6 +143,7 @@ exports.getTopGainers = async (req, res) => {
                 current_price,
                 percentage_change AS change_percent
             FROM stocks
+            WHERE percentage_change > 0
             ORDER BY percentage_change DESC
             LIMIT 5`
 
@@ -189,6 +190,7 @@ exports.getTopLosers = async (req, res) => {
                 current_price,
                 percentage_change AS change_percent
             FROM stocks
+            WHERE percentage_change < 0
             ORDER BY percentage_change ASC
             LIMIT 5`
 
