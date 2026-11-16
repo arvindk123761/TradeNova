@@ -10,6 +10,7 @@ let ipoList = [];
 let applications = [];
 let selectedIPO = null;
 let selectedStatus = "All";
+let refreshing = false;
 
 const escapeHTML = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({
     "&": "&amp;",
@@ -180,7 +181,7 @@ const renderApplications = () => {
 
     if (!applications.length) {
         applicationsList.innerHTML = token
-            ? '<p class="applications-empty">You have not applied to any IPO yet. Your applications will appear here.</p>'
+            ? '<p class="applications-empty">No applications for open or upcoming IPOs. Applications for closed IPOs are hidden; saved records are kept.</p>'
             : '<p class="applications-empty">Sign in to see and track your IPO applications.</p>';
         return;
     }
@@ -265,22 +266,30 @@ const submitApplication = async () => {
     }
 };
 
-const initializeIPOPage = async () => {
+const refreshIPOData = async () => {
+    if (refreshing) return;
+    refreshing = true;
     try {
-        await loadComponents();
         const response = await fetch(`${API}/ipo`);
         const data = await response.json();
         if (!response.ok || !data.success) throw new Error(data.message || "Unable to load IPOs");
         ipoList = Array.isArray(data.ipos) ? data.ipos : [];
-        try {
-            await loadApplications();
-        } catch (error) {
-            applications = [];
-            renderApplications();
-            console.error("Unable to load IPO applications", error);
-            showToast(error.message || "Unable to load your IPO applications", "error");
-        }
+        await loadApplications();
         renderIPO();
+    } finally {
+        refreshing = false;
+    }
+};
+
+const initializeIPOPage = async () => {
+    try {
+        await loadComponents();
+        try {
+            await refreshIPOData();
+        } catch (error) {
+            console.error("Unable to refresh IPO information", error);
+            showToast(error.message || "Unable to load IPO information", "error");
+        }
     } catch (error) {
         console.error("Unable to load IPO page", error);
         showToast(error.message || "Unable to load IPOs", "error");
@@ -310,4 +319,10 @@ ipoContainer.addEventListener("click", (event) => {
 });
 document.getElementById("lotCount").addEventListener("input", updateApplicationAmount);
 document.getElementById("submitApplication").addEventListener("click", submitApplication);
+window.addEventListener("focus", () => {
+    refreshIPOData().catch((error) => console.error("Unable to refresh IPO information", error));
+});
+window.setInterval(() => {
+    refreshIPOData().catch((error) => console.error("Unable to refresh IPO information", error));
+}, 60000);
 initializeIPOPage();

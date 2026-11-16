@@ -11,6 +11,9 @@ const demoIPOData = [
     { key: "prism-foods", company_name: "Prism Foods", sector: "Food & Beverages", price: 205, lot_size: 70, issue_size: 690, open_in: 46, close_in: 49, list_in: 54 }
 ];
 
+const demoScheduleStart = new Date();
+demoScheduleStart.setUTCHours(0, 0, 0, 0);
+
 const ensureDemoApplicationsTable = () => db.promise().query(`
     CREATE TABLE IF NOT EXISTS ipo_demo_applications (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,17 +32,17 @@ const ensureDemoApplicationsTable = () => db.promise().query(`
     )
 `);
 
-const addDays = (days) => {
-    const date = new Date();
+const addDays = (days, from = new Date()) => {
+    const date = new Date(from);
     date.setUTCHours(0, 0, 0, 0);
     date.setUTCDate(date.getUTCDate() + days);
     return date.toISOString().slice(0, 10);
 };
 
 const getDemoIPOs = () => demoIPOData.map((ipo) => {
-    const openDate = addDays(ipo.open_in);
-    const closeDate = addDays(ipo.close_in);
-    const listingDate = addDays(ipo.list_in);
+    const openDate = addDays(ipo.open_in, demoScheduleStart);
+    const closeDate = addDays(ipo.close_in, demoScheduleStart);
+    const listingDate = addDays(ipo.list_in, demoScheduleStart);
     const today = addDays(0);
     const status = today < openDate ? "Upcoming" : today > closeDate ? "Closed" : "Active";
 
@@ -68,10 +71,26 @@ const resolvePrice = (ipo) => {
     return Number(band[band.length - 1].replace(/,/g, ""));
 };
 
+const dateOnly = (value) => {
+    if (!value) return "";
+    if (value instanceof Date && !Number.isNaN(value.getTime())) {
+        const month = String(value.getMonth() + 1).padStart(2, "0");
+        const day = String(value.getDate()).padStart(2, "0");
+        return `${value.getFullYear()}-${month}-${day}`;
+    }
+
+    const text = String(value);
+    const datePrefix = text.match(/^(\d{4}-\d{2}-\d{2})/);
+    if (datePrefix) return datePrefix[1];
+
+    const parsedDate = new Date(value);
+    return Number.isNaN(parsedDate.getTime()) ? "" : parsedDate.toISOString().slice(0, 10);
+};
+
 const resolveStatus = (ipo) => {
     const today = addDays(0);
-    const openDate = ipo.open_date ? String(ipo.open_date).slice(0, 10) : "";
-    const closeDate = ipo.close_date ? String(ipo.close_date).slice(0, 10) : "";
+    const openDate = dateOnly(ipo.open_date);
+    const closeDate = dateOnly(ipo.close_date);
 
     if (closeDate && closeDate < today) return "Closed";
     if (openDate && openDate > today) return "Upcoming";
@@ -81,6 +100,14 @@ const resolveStatus = (ipo) => {
     if (status === "active" || status === "open") return "Active";
     if (status === "upcoming") return "Upcoming";
     return "Closed";
+};
+
+const isCurrentOrUpcomingIPO = (ipo) => {
+    const today = addDays(0);
+    const openDate = dateOnly(ipo.open_date);
+    const closeDate = dateOnly(ipo.close_date);
+
+    return Boolean(openDate && closeDate && closeDate >= today);
 };
 
 const getIPOs = async (req, res) => {
@@ -109,6 +136,7 @@ const getApplications = async (req, res) => {
         );
         const [ipoRows] = await db.promise().query("SELECT * FROM ipo");
         const iposById = new Map(ipoRows.map((ipo) => [String(ipo.id), ipo]));
+        const demoIPOsById = new Map(getDemoIPOs().map((ipo) => [String(ipo.id), ipo]));
         const [demoApplications] = await db.promise().query(
             `SELECT id AS application_id, ipo_id, company_name, sector, price, lot_size,
                     lots, amount, application_status, applied_at
@@ -118,24 +146,41 @@ const getApplications = async (req, res) => {
             [req.user.id]
         );
 
-        const applications = [
-            ...existingApplications.map((application) => {
-                const ipo = iposById.get(String(application.ipo_id));
-                return {
-                    ...application,
-                    company_name: ipo?.company_name || `IPO #${application.ipo_id}`,
-                    sector: ipo?.sector || null,
-                    price: ipo ? resolvePrice(ipo) : null,
-                    lot_size: ipo?.lot_size || null,
-                    open_date: ipo?.open_date || null,
-                    close_date: ipo?.close_date || null,
-                    listing_date: ipo?.listing_date || null,
-                    application_status: "Submitted",
-                    is_demo: false
-                };
-            }),
-            ...demoApplications.map((application) => ({ ...application, is_demo: true }))
-        ];
+        const visibleApplications = [];
+        const seenIPOIDs = new Set();
+        const addVisibleApplication = (application, ipo, isDemo) => {
+            const ipoId = String(application.ipo_id);
+            if (!ipo || !isCurrentOrUpcomingIPO(ipo) || seenIPOIDs.has(ipoId)) {
+                return;
+            }
+
+            seenIPOIDs.add(ipoId);
+            visibleApplications.push({
+                ...application,
+                company_name: application.company_name || ipo.company_name || `IPO #${ipoId}`,
+                sector: application.sector || ipo.sector || null,
+                price: application.price || resolvePrice(ipo) || null,
+                lot_size: application.lot_size || ipo.lot_size || null,
+                open_date: ipo.open_date || null,
+                close_date: ipo.close_date || null,
+                listing_date: ipo.listing_date || null,
+                ipo_status: resolveStatus(ipo),
+                application_status: application.application_status || "Submitted",
+                is_demo: isDemo
+            });
+        };
+
+        for (const application of existingApplications) {
+            const ipo = iposById.get(String(application.ipo_id));
+            addVisibleApplication(application, ipo, false);
+        }
+
+        for (const application of demoApplications) {
+            const ipo = demoIPOsById.get(String(application.ipo_id));
+            addVisibleApplication(application, ipo, true);
+        }
+
+        const applications = visibleApplications;
         res.json({ success: true, applications });
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });
