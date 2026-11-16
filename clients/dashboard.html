@@ -176,11 +176,20 @@ onclick="location.href='portfolio.html'">
 
 <div class="chart-card">
 
-<h2>
-
-📈 Portfolio Performance
-
-</h2>
+<div class="portfolio-chart-header">
+    <div>
+        <h2>📈 Portfolio Performance</h2>
+        <p>Track how your portfolio value changes over time.</p>
+        <strong class="portfolio-chart-current" id="portfolioChartCurrentValue">₹0.00</strong>
+        <small id="portfolioChartUpdated">Waiting for portfolio data</small>
+    </div>
+    <div class="portfolio-range-tabs" role="group" aria-label="Portfolio chart time range">
+        <button type="button" class="active" data-portfolio-range="day" aria-pressed="true">Day</button>
+        <button type="button" data-portfolio-range="week" aria-pressed="false">Week</button>
+        <button type="button" data-portfolio-range="month" aria-pressed="false">Month</button>
+        <button type="button" data-portfolio-range="year" aria-pressed="false">Year</button>
+    </div>
+</div>
 
 <canvas id="portfolioChart"></canvas>
 
@@ -243,44 +252,6 @@ Recent Orders
 </tbody>
 
 </table>
-
-<div class="market-overview">
-
-<h2>
-
-Market Overview
-
-</h2>
-
-<div class="market-cards">
-
-<button class="market-card" type="button" data-market-index="nifty">
-
-<h3>NIFTY 50</h3>
-
-<h2 id="nifty"></h2>
-
- </button>
-
-<button class="market-card" type="button" data-market-index="sensex">
-
-<h3>SENSEX</h3>
-
-<h2 id="sensex"></h2>
-
- </button>
-
-<button class="market-card" type="button" data-market-index="banknifty">
-
-<h3>BANK NIFTY</h3>
-
-<h2 id="banknifty"></h2>
-
-</button>
-
-</div>
-
-</div>
 
 </div>
 

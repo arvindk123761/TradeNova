@@ -36,11 +36,27 @@ const getPortfolioChart = (req, res) => {
 const getPortfolioHistory = (req, res) => {
 
     const user_id = req.user.id;
+    const rangeDays = {
+        day: 1,
+        week: 7,
+        month: 30,
+        year: 365
+    };
+    const range = req.query.range || "day";
+    const days = rangeDays[range];
+
+    if (!days) {
+        return res.status(400).json({
+            success: false,
+            message: "Choose a valid history range: day, week, month, or year."
+        });
+    }
 
     db.query(
         `SELECT portfolio_value, created_at
          FROM portfolio_history
          WHERE user_id = ?
+           AND created_at >= DATE_SUB(NOW(), INTERVAL ${days} DAY)
          ORDER BY created_at ASC`,
         [user_id],
         (err, result) => {
@@ -48,7 +64,7 @@ const getPortfolioHistory = (req, res) => {
                 return res.status(500).json({ success: false, message: err.message });
             }
 
-            res.json({ success: true, history: result });
+            res.json({ success: true, range, history: result });
         }
     );
 };

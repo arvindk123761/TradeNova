@@ -452,10 +452,63 @@ font-weight:700;
 
     font-size:24px;
 
-    margin-bottom:25px;
+    margin-bottom:6px;
 
     color:#1e293b;
 
+}
+
+.portfolio-chart-header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:20px;
+    margin-bottom:20px;
+}
+
+.portfolio-chart-header p{
+    margin:0 0 8px;
+    color:#64748b;
+    font-size:14px;
+}
+
+.portfolio-chart-current{
+    display:block;
+    color:#1e293b;
+    font-size:25px;
+}
+
+.portfolio-chart-header small{
+    display:block;
+    margin-top:3px;
+    color:#64748b;
+    font-size:12px;
+}
+
+.portfolio-range-tabs{
+    display:flex;
+    gap:6px;
+    padding:4px;
+    border-radius:10px;
+    background:#f1f5f9;
+}
+
+.portfolio-range-tabs button{
+    padding:8px 13px;
+    border:0;
+    border-radius:7px;
+    background:transparent;
+    color:#475569;
+    font:inherit;
+    font-size:13px;
+    cursor:pointer;
+}
+
+.portfolio-range-tabs button.active,
+.portfolio-range-tabs button:hover{
+    background:#fff;
+    color:#166b5b;
+    box-shadow:0 1px 4px rgba(15,23,42,.12);
 }
 
 #portfolioChart{
@@ -1028,6 +1081,19 @@ width:100%;
 
 padding:15px;
 
+}
+
+.portfolio-chart-header{
+    flex-direction:column;
+}
+
+.portfolio-range-tabs{
+    width:100%;
+}
+
+.portfolio-range-tabs button{
+    flex:1;
+    padding:8px 4px;
 }
 
 .hero{

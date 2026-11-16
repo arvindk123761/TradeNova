@@ -1,6 +1,13 @@
 const db = require("../config/db");
+const PORTFOLIO_HISTORY_INTERVAL_MS = 5 * 60 * 1000;
+let lastPortfolioHistoryAt = Date.now();
 
 function updatePrices() {
+    const now = Date.now();
+    if (now - lastPortfolioHistoryAt >= PORTFOLIO_HISTORY_INTERVAL_MS) {
+        lastPortfolioHistoryAt = now;
+        savePortfolioHistory();
+    }
 
     db.query("SELECT id, current_price FROM stocks", (err, stocks) => {
 
@@ -74,4 +81,3 @@ function savePortfolioHistory() {
 
 
 module.exports = updatePrices;
-

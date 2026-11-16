@@ -177,23 +177,6 @@ setInterval(loadDashboard, 5000);
 
 });
 
-/* ---------------- Market Overview ---------------- */
-
-function loadMarketOverview(){
-
-    document.getElementById("nifty").innerHTML =
-        "25,180 <span style='color:green'>+0.82%</span>";
-
-    document.getElementById("sensex").innerHTML =
-        "82,420 <span style='color:green'>+1.14%</span>";
-
-    document.getElementById("banknifty").innerHTML =
-        "56,800 <span style='color:red'>-0.25%</span>";
-
-}
-
-loadMarketOverview();
-
 async function loadUser() {
 
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -329,98 +312,176 @@ loadTopGainers();
 loadTopLosers();
 
 
-async function loadPortfolioChart() {
+let portfolioChart;
+let portfolioChartRange = "day";
+let currentPortfolioValue = 0;
+let portfolioHistoryRequest = 0;
 
+function formatPortfolioValue(value) {
+    return `₹${Number(value).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    })}`;
+}
+
+function refreshPortfolioChartValue() {
+    const valueElement = document.getElementById("portfolioChartCurrentValue");
+    const updatedElement = document.getElementById("portfolioChartUpdated");
+    if (valueElement) valueElement.textContent = formatPortfolioValue(currentPortfolioValue);
+    if (updatedElement) {
+        updatedElement.textContent = `Current portfolio value · updated ${new Date().toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        })}`;
+    }
+
+    if (portfolioChart) {
+        const values = portfolioChart.data.datasets[0].data;
+        if (values.length) {
+            values[values.length - 1] = currentPortfolioValue;
+            portfolioChart.update("none");
+        }
+    }
+}
+
+function formatPortfolioHistoryLabel(value, range) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return String(value);
+    if (range === "day") {
+        return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    }
+    if (range === "week") {
+        return date.toLocaleDateString([], { weekday: "short", hour: "2-digit" });
+    }
+    if (range === "month") {
+        return date.toLocaleDateString([], { day: "numeric", month: "short" });
+    }
+    return date.toLocaleDateString([], { month: "short", day: "numeric" });
+}
+
+function renderPortfolioChart(history, range) {
+    const validHistory = history
+        .map(item => ({
+            date: item.created_at,
+            value: Number(item.portfolio_value)
+        }))
+        .filter(item => Number.isFinite(item.value) && item.date);
+
+    const maxHistoricalPoints = 120;
+    const sampleEvery = Math.max(1, Math.ceil(validHistory.length / maxHistoricalPoints));
+    const sampledHistory = validHistory.filter((_, index) =>
+        index % sampleEvery === 0 || index === validHistory.length - 1
+    );
+    const labels = sampledHistory.map(item => formatPortfolioHistoryLabel(item.date, range));
+    const values = sampledHistory.map(item => item.value);
+    labels.push("Now");
+    values.push(currentPortfolioValue);
+
+    if (!portfolioChart) {
+        const context = document.getElementById("portfolioChart").getContext("2d");
+        portfolioChart = new Chart(context, {
+            type: "line",
+            data: {
+                labels,
+                datasets: [{
+                    label: "Portfolio value",
+                    data: values,
+                    borderColor: "#16806d",
+                    backgroundColor: (contextInfo) => {
+                        const chart = contextInfo.chart;
+                        const area = chart.chartArea;
+                        if (!area) return "rgba(22,128,109,0.12)";
+                        const gradient = chart.ctx.createLinearGradient(0, area.top, 0, area.bottom);
+                        gradient.addColorStop(0, "rgba(22,128,109,0.22)");
+                        gradient.addColorStop(1, "rgba(22,128,109,0.015)");
+                        return gradient;
+                    },
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 5,
+                    pointHitRadius: 12,
+                    fill: true,
+                    tension: 0.32
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: "index",
+                    intersect: false
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: context => `Portfolio value: ${formatPortfolioValue(context.parsed.y)}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { maxTicksLimit: 8, maxRotation: 0 }
+                    },
+                    y: {
+                        grace: "8%",
+                        ticks: {
+                            maxTicksLimit: 6,
+                            callback: value => `₹${Number(value).toLocaleString("en-IN")}`
+                        }
+                    }
+                }
+            }
+        });
+    } else {
+        portfolioChart.data.labels = labels;
+        portfolioChart.data.datasets[0].data = values;
+        portfolioChart.update("none");
+    }
+
+    const updatedElement = document.getElementById("portfolioChartUpdated");
+    if (!validHistory.length) {
+        updatedElement.textContent = "History is collecting now; past values appear as snapshots are recorded.";
+    } else if (validHistory.length === 1) {
+        updatedElement.textContent = "Building portfolio history · snapshots are saved every 5 minutes.";
+    } else {
+        updatedElement.textContent = `${sampledHistory.length} historical points · current value updates every 5 seconds`;
+    }
+}
+
+async function loadPortfolioChart(range = portfolioChartRange) {
+    const requestId = ++portfolioHistoryRequest;
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
     try {
-
-        const response = await fetch(`${API}/portfolio/history`, {
-
-            headers: {
-                Authorization: token
-            }
-
+        const response = await fetch(`${API}/portfolio/history?range=${encodeURIComponent(range)}`, {
+            headers: { Authorization: token }
         });
-
         const data = await response.json();
-
-        if (!data.success) {
-
-            console.log(data.message);
-            return;
-
+        if (!response.ok || !data.success || !Array.isArray(data.history)) {
+            throw new Error(data.message || `Unable to load portfolio history (${response.status})`);
         }
+        if (requestId !== portfolioHistoryRequest) return;
 
-        const labels = data.history.map(item => item.created_at);
-
-        const values = data.history.map(item =>
-            Number(item.portfolio_value)
-        );
-
-        const ctx = document
-            .getElementById("portfolioChart")
-            .getContext("2d");
-
-        new Chart(ctx, {
-
-            type: "line",
-
-            data: {
-
-                labels,
-
-                datasets: [
-
-                    {
-
-                        label: "Portfolio Value",
-
-                        data: values,
-
-                        borderColor: "#16a34a",
-
-                        backgroundColor: "rgba(22,163,74,0.15)",
-
-                        borderWidth: 3,
-
-                        fill: true,
-
-                        tension: 0.4
-
-                    }
-
-                ]
-
-            },
-
-            options: {
-
-                responsive: true,
-
-                plugins: {
-
-                    legend: {
-
-                        display: false
-
-                    }
-
-                }
-
-            }
-
+        portfolioChartRange = range;
+        renderPortfolioChart(data.history, range);
+        document.querySelectorAll("[data-portfolio-range]").forEach(button => {
+            const selected = button.dataset.portfolioRange === range;
+            button.classList.toggle("active", selected);
+            button.setAttribute("aria-pressed", String(selected));
         });
-
+    } catch (error) {
+        console.error("Unable to load portfolio performance history", error);
+        const updatedElement = document.getElementById("portfolioChartUpdated");
+        if (updatedElement) updatedElement.textContent = "Portfolio history could not be loaded. Please try again.";
     }
-
-    catch(err){
-
-        console.log(err);
-
-    }
-
 }
+
+document.querySelectorAll("[data-portfolio-range]").forEach(button => {
+    button.addEventListener("click", () => loadPortfolioChart(button.dataset.portfolioRange));
+});
 
 loadPortfolioChart();
 
@@ -440,11 +501,7 @@ async function loadAnalytics() {
 
         const data = await response.json();
 
-console.log("Analytics Response:", data);
-
-       
-
-        if (!data.success) {
+if (!data.success) {
 
             console.log(data.message);
             return;
@@ -460,6 +517,9 @@ console.log("Analytics Response:", data);
         document.getElementById("totalProfit").innerText =
             "₹" + Number(data.profit || 0).toLocaleString();
 
+        currentPortfolioValue = Number(data.currentValue) || 0;
+        refreshPortfolioChartValue();
+
     } catch (err) {
 
         console.log(err);
@@ -468,6 +528,7 @@ console.log("Analytics Response:", data);
 
 }
 loadAnalytics();
+setInterval(loadAnalytics, 5000);
 
 
 async function loadTicker() {
