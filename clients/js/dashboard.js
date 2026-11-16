@@ -513,42 +513,10 @@ loadTicker();
 
 setInterval(loadTicker,5000);
 
-/* ---------------- Market News Demo Briefings ---------------- */
+let marketNewsItems = [];
+let selectedNewsCategory = "All";
 
-const marketBriefings = [
-    {
-        category: "Markets",
-        title: "What can move a broad market index?",
-        summary: "Index moves reflect the combined performance of their constituent companies. A few heavily weighted stocks can influence the headline number more than others."
-    },
-    {
-        category: "Stocks",
-        title: "Reading an earnings announcement",
-        summary: "Compare reported revenue and profit with the same period last year, then look at management guidance and the risks described in the filing."
-    },
-    {
-        category: "Economy",
-        title: "Why interest rates matter to equity investors",
-        summary: "Rate changes can affect borrowing costs, consumer demand, and how investors value future company earnings. Their impact varies across industries."
-    },
-    {
-        category: "Trading",
-        title: "A quick guide to volatility",
-        summary: "Volatility describes how much a price fluctuates over time. It does not indicate direction, and sharp moves can increase the risk of a trade."
-    },
-    {
-        category: "Markets",
-        title: "How global markets can influence local shares",
-        summary: "Overseas market moves, currency changes, and commodity prices can shape sentiment, but local company and economic factors matter too."
-    },
-    {
-        category: "Stocks",
-        title: "Look beyond a stock's headline price",
-        summary: "A share price alone does not tell you whether a company is expensive or cheap. Investors often consider earnings, debt, cash flow, and business risks."
-    }
-];
-
-function renderMarketBriefings(category = "All") {
+function renderMarketNews(category = selectedNewsCategory) {
     const container = document.getElementById("marketNews");
 
     if (!container) {
@@ -557,41 +525,98 @@ function renderMarketBriefings(category = "All") {
 
     container.replaceChildren();
 
-    marketBriefings
-        .filter(briefing => category === "All" || briefing.category === category)
-        .forEach(briefing => {
-            const article = document.createElement("article");
-            article.className = "news-card";
+    const articles = marketNewsItems.filter(item =>
+        category === "All" || item.category === category
+    );
 
-            const label = document.createElement("span");
-            label.className = "news-category";
-            label.textContent = briefing.category;
+    if (articles.length === 0) {
+        const emptyState = document.createElement("p");
+        emptyState.className = "news-state";
+        emptyState.textContent = "No headlines are available in this category right now.";
+        container.appendChild(emptyState);
+        return;
+    }
 
-            const title = document.createElement("h3");
-            title.textContent = briefing.title;
+    articles.forEach(item => {
+        const article = document.createElement("article");
+        article.className = "news-card";
 
-            const summary = document.createElement("p");
-            summary.textContent = briefing.summary;
+        const label = document.createElement("span");
+        label.className = "news-category";
+        label.textContent = item.category;
 
-            const source = document.createElement("span");
-            source.className = "news-source";
-            source.textContent = "TradeNova learning brief";
+        const title = document.createElement("a");
+        title.className = "news-title";
+        title.href = item.url;
+        title.target = "_blank";
+        title.rel = "noopener noreferrer";
+        title.textContent = item.title;
 
-            article.append(label, title, summary, source);
-            container.appendChild(article);
-        });
+        const source = document.createElement("span");
+        source.className = "news-source";
+        source.textContent = item.source;
+
+        if (item.publishedAt) {
+            const published = new Date(item.publishedAt);
+            if (!Number.isNaN(published.getTime())) {
+                source.textContent += ` · ${published.toLocaleString()}`;
+            }
+        }
+
+        article.append(label, title, source);
+        container.appendChild(article);
+    });
 }
 
 document.querySelectorAll("[data-news-filter]").forEach(button => {
     button.addEventListener("click", () => {
+        selectedNewsCategory = button.dataset.newsFilter;
+
         document.querySelectorAll("[data-news-filter]").forEach(filter => {
             const isActive = filter === button;
             filter.classList.toggle("active", isActive);
             filter.setAttribute("aria-pressed", String(isActive));
         });
 
-        renderMarketBriefings(button.dataset.newsFilter);
+        renderMarketNews();
     });
 });
 
-renderMarketBriefings();
+async function loadMarketNews() {
+    const container = document.getElementById("marketNews");
+    if (!container) {
+        return;
+    }
+
+    container.replaceChildren();
+    const loading = document.createElement("p");
+    loading.className = "news-state";
+    loading.textContent = "Loading latest headlines...";
+    container.appendChild(loading);
+
+    try {
+        const response = await fetch(`${API}/dashboard/news`);
+        let data;
+
+        try {
+            data = await response.json();
+        } catch {
+            throw new Error("The news service returned an unreadable response. Open the dashboard through the TradeNova server and check its API settings.");
+        }
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Unable to load live news.");
+        }
+
+        marketNewsItems = data.news;
+        renderMarketNews();
+    } catch (error) {
+        const message = document.createElement("p");
+        message.className = "news-state news-error";
+        message.textContent = error.message || "Unable to load live news. Please try again later.";
+        container.replaceChildren(message);
+    }
+}
+
+loadMarketNews();
+setInterval(loadMarketNews, 60 * 60 * 1000);
