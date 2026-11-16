@@ -2,6 +2,7 @@ const API = `${window.location.origin}/api`;
 
 let stocks = [];
 let selectedStock = null;
+let detailsChart = null;
 
 /* ===================================
    LOAD COMMON COMPONENTS
@@ -382,6 +383,25 @@ stock.symbol;
 document.getElementById("detailPrice").innerText =
 "₹"+Number(stock.current_price).toFixed(2);
 
+document.getElementById("detailMarketCap").innerText =
+stock.market_cap ? `₹${Number(stock.market_cap).toLocaleString("en-IN")}` : "-";
+
+document.getElementById("detailSector").innerText =
+stock.sector || "-";
+
+if (detailsChart) {
+    detailsChart.update(stock);
+} else {
+    detailsChart = TradeNovaStockChart.create({
+        canvas: document.getElementById("stockDetailsChart"),
+        rangeButtons: document.querySelectorAll(".stock-chart-ranges button"),
+        lowElement: document.getElementById("chart52WeekLow"),
+        highElement: document.getElementById("chart52WeekHigh")
+    });
+    detailsChart.update(stock);
+}
+
+document.getElementById("detailsModal").setAttribute("aria-label", `${stock.company_name} stock details`);
 document.getElementById("detailsModal").style.display =
 "flex";
 

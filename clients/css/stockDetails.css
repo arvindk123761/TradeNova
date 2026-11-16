@@ -65,6 +65,64 @@
     box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
 
+.chart-heading{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:18px;
+}
+
+.chart-heading h2{
+    margin-bottom:5px;
+}
+
+.chart-heading p{
+    color:#64748b;
+    font-size:12px;
+}
+
+.chart .stock-chart-ranges{
+    display:flex;
+    gap:6px;
+}
+
+.chart .stock-chart-ranges button{
+    border:0;
+    border-radius:8px;
+    background:#f1f5f9;
+    color:#475569;
+    padding:8px 11px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.chart .stock-chart-ranges button.active{
+    background:#2563eb;
+    color:white;
+}
+
+.chart .stock-chart-canvas{
+    height:300px;
+    position:relative;
+}
+
+.chart .stock-chart-extremes{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    margin-top:14px;
+    color:#64748b;
+    font-size:13px;
+}
+
+.chart .stock-chart-extremes strong{
+    display:block;
+    color:#111827;
+    margin-top:4px;
+    font-size:15px;
+}
+
 .details{
     display:grid;
     grid-template-columns:repeat(2,1fr);
@@ -134,8 +192,19 @@
 
 canvas{
 
-    max-height:400px;
+    max-height:100%;
 
+}
+
+@media(max-width:600px){
+    .chart-heading{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .chart .stock-chart-canvas{
+        height:230px;
+    }
 }
 
 /* BUY MODAL */

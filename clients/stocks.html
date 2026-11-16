@@ -402,11 +402,7 @@ id="closeDetails">
 
 <span>Market Cap</span>
 
-<h3>
-
-₹1.5T
-
-</h3>
+<h3 id="detailMarketCap">-</h3>
 
 </div>
 
@@ -414,35 +410,7 @@ id="closeDetails">
 
 <span>Sector</span>
 
-<h3>
-
-Technology
-
-</h3>
-
-</div>
-
-<div class="detail-item">
-
-<span>52W High</span>
-
-<h3>
-
-₹0
-
-</h3>
-
-</div>
-
-<div class="detail-item">
-
-<span>52W Low</span>
-
-<h3>
-
-₹0
-
-</h3>
+<h3 id="detailSector">-</h3>
 
 </div>
 
@@ -458,6 +426,28 @@ Active
 
 </div>
 
+</div>
+
+<div class="stock-chart-panel">
+    <div class="stock-chart-heading">
+        <div>
+            <h3>Price history</h3>
+            <p>Illustrative history based on simulated stock prices</p>
+        </div>
+        <div class="stock-chart-ranges" role="group" aria-label="Chart time range">
+            <button type="button" class="active" data-range="day" aria-pressed="true">1D</button>
+            <button type="button" data-range="week" aria-pressed="false">1W</button>
+            <button type="button" data-range="month" aria-pressed="false">1M</button>
+            <button type="button" data-range="year" aria-pressed="false">1Y</button>
+        </div>
+    </div>
+    <div class="stock-chart-canvas">
+        <canvas id="stockDetailsChart" aria-label="Stock price history chart"></canvas>
+    </div>
+    <div class="stock-chart-extremes">
+        <span>52-week low <strong id="chart52WeekLow">-</strong></span>
+        <span>52-week high <strong id="chart52WeekHigh">-</strong></span>
+    </div>
 </div>
 
 <div class="details-actions">
@@ -513,6 +503,10 @@ onclick="window.scrollTo({top:0,behavior:'smooth'})">
 <script src="js/common.js"></script>
 
 <script src="js/toast.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="js/stockChart.js"></script>
 
 <script src="js/stocks.js"></script>
 

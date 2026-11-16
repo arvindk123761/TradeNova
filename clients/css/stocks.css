@@ -691,6 +691,8 @@ background:#15803d;
 .details-box{
 
 max-width:700px;
+max-height:calc(100vh - 40px);
+overflow-y:auto;
 
 }
 
@@ -726,6 +728,74 @@ font-size:20px;
 color:#111827;
 font-weight:700;
 
+}
+
+.stock-chart-panel{
+background:#fff;
+border:1px solid #e8edf5;
+border-radius:16px;
+padding:18px;
+margin:24px 0;
+}
+
+.stock-chart-heading{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:16px;
+margin-bottom:14px;
+}
+
+.stock-chart-heading h3{
+color:#111827;
+font-size:18px;
+margin-bottom:5px;
+}
+
+.stock-chart-heading p{
+color:#64748b;
+font-size:12px;
+}
+
+.stock-chart-ranges{
+display:flex;
+gap:6px;
+}
+
+.stock-chart-ranges button{
+border:0;
+border-radius:8px;
+background:#f1f5f9;
+color:#475569;
+padding:8px 11px;
+font-weight:700;
+cursor:pointer;
+}
+
+.stock-chart-ranges button.active{
+background:#2563eb;
+color:#fff;
+}
+
+.stock-chart-canvas{
+height:220px;
+position:relative;
+}
+
+.stock-chart-extremes{
+display:flex;
+justify-content:space-between;
+gap:12px;
+margin-top:12px;
+color:#64748b;
+font-size:13px;
+}
+
+.stock-chart-extremes strong{
+display:block;
+color:#111827;
+margin-top:4px;
+font-size:15px;
 }
 
 .details-actions{

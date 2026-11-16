@@ -5,6 +5,7 @@ const API = `${window.location.origin}/api`;
 // Read stock ID from URL
 const params = new URLSearchParams(window.location.search);
 const stockId = params.get("id");
+let stockChart = null;
 
 // Load stock details
 async function loadStock() {
@@ -34,7 +35,15 @@ currentPrice = Number(stock.current_price);
         document.getElementById("currentPrice").innerText =
             "₹" + stock.current_price;
 
-            loadChart(Number(stock.current_price));
+            if (!stockChart) {
+                stockChart = TradeNovaStockChart.create({
+                    canvas: document.getElementById("priceChart"),
+                    rangeButtons: document.querySelectorAll(".chart .stock-chart-ranges button"),
+                    lowElement: document.getElementById("chart52WeekLow"),
+                    highElement: document.getElementById("chart52WeekHigh")
+                });
+            }
+            stockChart.update(stock);
 
         // Change today's values if your table has these columns
         document.getElementById("openPrice").innerText =
@@ -69,74 +78,6 @@ showToast("Server Error","error");
 
 loadStock();
 
-
-function loadChart(currentPrice) {
-
-    const ctx = document.getElementById("priceChart");
-
-    new Chart(ctx, {
-
-        type: "line",
-
-        data: {
-
-            labels: [
-                "9 AM",
-                "10 AM",
-                "11 AM",
-                "12 PM",
-                "1 PM",
-                "2 PM",
-                "3 PM"
-            ],
-
-            datasets: [{
-
-                label: "Price",
-
-                data: [
-
-                    currentPrice - 18,
-                    currentPrice - 10,
-                    currentPrice - 6,
-                    currentPrice - 3,
-                    currentPrice + 2,
-                    currentPrice + 8,
-                    currentPrice
-
-                ],
-
-                borderColor: "#2e7d32",
-
-                backgroundColor: "rgba(46,125,50,.1)",
-
-                fill: true,
-
-                tension: .4
-
-            }]
-
-        },
-
-        options: {
-
-            responsive: true,
-
-            plugins: {
-
-                legend: {
-
-                    display: false
-
-                }
-
-            }
-
-        }
-
-    });
-
-}
 
 function openBuyModal() {
 
