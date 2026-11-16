@@ -17,7 +17,7 @@ const email = document.getElementById("email").value.trim();
 
 const password = document.getElementById("password").value;
 
-const rememberMe = document.getElementById("rememberMe").checked;
+
 
 if(email==="" || password===""){
 
@@ -56,14 +56,7 @@ if(data.success){
 
 showToast("Login Successful","success");
 
-localStorage.removeItem("token");
-sessionStorage.removeItem("token");
-
-if(rememberMe){
-   localStorage.setItem("token",data.token);
-}else{
-   sessionStorage.setItem("token",data.token);
-}
+sessionStorage.setItem("token",data.token);
 
 localStorage.setItem("user",JSON.stringify(data.user));
 
