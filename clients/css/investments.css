@@ -602,68 +602,6 @@
     cursor: not-allowed;
 }
 
-body.dark-mode .investment-page {
-    color: #e2e8f0;
-}
-
-body.dark-mode .fund-portfolio,
-body.dark-mode .my-investments,
-body.dark-mode .investment-card {
-    border-color: #334155;
-    background: #1e293b;
-}
-
-body.dark-mode .investment-header h1,
-body.dark-mode .portfolio-heading h2,
-body.dark-mode .holdings-heading h2,
-body.dark-mode .fund-section-heading h2,
-body.dark-mode .investment-card h3,
-body.dark-mode .fund-nav-row > div > strong,
-body.dark-mode .holding-fund strong {
-    color: #f1f5f9;
-}
-
-body.dark-mode .portfolio-stat,
-body.dark-mode .holding-row,
-body.dark-mode .fund-empty {
-    border-color: #334155;
-    background: #172235;
-}
-
-body.dark-mode .portfolio-stat > strong,
-body.dark-mode .fund-card-footer strong,
-body.dark-mode .holding-metric > strong {
-    color: #e2e8f0;
-}
-
-body.dark-mode .fund-search {
-    border-color: #334155;
-    background: #172235;
-}
-
-body.dark-mode .fund-search input {
-    color: #e2e8f0;
-}
-
-body.dark-mode .fund-trade-dialog {
-    border-color: #334155;
-    background: #1e293b;
-    color: #e2e8f0;
-}
-
-body.dark-mode .fund-trade-dialog h2,
-body.dark-mode .trade-nav-quote strong,
-body.dark-mode .trade-estimate strong {
-    color: #f1f5f9;
-}
-
-body.dark-mode .trade-nav-quote > span,
-body.dark-mode .trade-input {
-    border-color: #334155;
-    background: #172235;
-    color: #e2e8f0;
-}
-
 @media (max-width: 1180px) {
     .holding-row {
         grid-template-columns: repeat(3, minmax(0, 1fr));

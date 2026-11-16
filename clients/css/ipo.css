@@ -609,59 +609,6 @@
     to { transform: rotate(360deg); }
 }
 
-body.dark-mode .main {
-    background: #0f172a;
-}
-
-body.dark-mode .ipo-card,
-body.dark-mode .summary-card,
-body.dark-mode .applications-section,
-body.dark-mode .apply-dialog {
-    border-color: #334155;
-    background: #1e293b;
-    color: #e5e7eb;
-}
-
-body.dark-mode .ipo-header h1,
-body.dark-mode .summary-card h2,
-body.dark-mode .company-name,
-body.dark-mode .fact-box strong,
-body.dark-mode .detail-row strong,
-body.dark-mode .section-heading h2,
-body.dark-mode .application-company strong,
-body.dark-mode .application-meta strong,
-body.dark-mode .apply-dialog h2,
-body.dark-mode .dialog-summary strong,
-body.dark-mode .application-amount strong {
-    color: #f1f5f9;
-}
-
-body.dark-mode .ipo-search,
-body.dark-mode .filter-chip,
-body.dark-mode .fact-box,
-body.dark-mode .application-row,
-body.dark-mode .applications-empty,
-body.dark-mode .dialog-summary span,
-body.dark-mode .lots-field input {
-    border-color: #334155;
-    background: #172235;
-    color: #e5e7eb;
-}
-
-body.dark-mode .ipo-search input,
-body.dark-mode .lots-field input {
-    color: #e5e7eb;
-}
-
-body.dark-mode .detail-row {
-    border-color: #334155;
-}
-
-body.dark-mode .filter-chip.active {
-    border-color: #2563eb;
-    background: #2563eb;
-}
-
 @media (max-width: 1100px) {
     .ipo-summary {
         grid-template-columns: repeat(2, minmax(0, 1fr));
