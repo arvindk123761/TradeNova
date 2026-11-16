@@ -3,7 +3,6 @@ const { secret } = require("../config/jwt");
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
 
 // Register User
 const registerUser = async (req, res) => {
@@ -128,14 +127,11 @@ const isValidEmail = email =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 const createResetMailer = () => {
-    const host = process.env.SMTP_HOST;
-    const user = process.env.SMTP_USER;
-    const password = process.env.SMTP_PASSWORD;
-    const from = process.env.SMTP_FROM;
-    const port = Number(process.env.SMTP_PORT || 587);
+    const apiKey = process.env.RESEND_API_KEY;
+    const from = process.env.EMAIL_FROM;
     const appUrl = process.env.PUBLIC_APP_URL;
 
-    if (!host || !user || !password || !from || !appUrl || !Number.isInteger(port) || port < 1 || port > 65535) {
+    if (!apiKey || !from || !appUrl) {
         return null;
     }
 
@@ -152,15 +148,42 @@ const createResetMailer = () => {
     }
 
     return {
+        apiKey,
         from,
-        appUrl: parsedAppUrl.origin,
-        transporter: nodemailer.createTransport({
-            host,
-            port,
-            secure: process.env.SMTP_SECURE === "true",
-            auth: { user, pass: password }
-        })
+        appUrl: parsedAppUrl.origin
     };
+};
+
+const sendPasswordResetEmail = async ({ apiKey, from, to, resetUrl }) => {
+    const response = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            from,
+            to: [to],
+            subject: "Reset your TradeNova password",
+            text: `We received a request to reset your TradeNova password. Use this link within 15 minutes:\n\n${resetUrl}\n\nIf you did not request this, you can ignore this email.`,
+            html: `<p>We received a request to reset your TradeNova password.</p><p><a href="${resetUrl}">Set a new password</a></p><p>This link expires in 15 minutes. If you did not request this, you can ignore this email.</p>`
+        }),
+        signal: AbortSignal.timeout(15000)
+    });
+
+    let result;
+    try {
+        result = await response.json();
+    } catch {
+        throw new Error(`Email provider returned an unreadable response (HTTP ${response.status}).`);
+    }
+
+    if (!response.ok) {
+        const detail = typeof result.message === "string"
+            ? result.message
+            : typeof result.name === "string" ? result.name : `HTTP ${response.status}`;
+        throw new Error(`Email provider rejected the reset email: ${detail}`);
+    }
 };
 
 const requestPasswordReset = async (req, res) => {
@@ -175,7 +198,7 @@ const requestPasswordReset = async (req, res) => {
 
     const mailer = createResetMailer();
     if (!mailer) {
-        console.error("Password reset email configuration is incomplete.");
+        console.error("Password reset email configuration is incomplete; RESEND_API_KEY, EMAIL_FROM, and PUBLIC_APP_URL are required.");
         return res.status(503).json({
             success: false,
             message: "Password reset email is not configured. Please contact support."
@@ -203,12 +226,10 @@ const requestPasswordReset = async (req, res) => {
             const resetUrl = new URL("/reset-password.html", mailer.appUrl);
             resetUrl.searchParams.set("token", token);
 
-            await mailer.transporter.sendMail({
-                from: mailer.from,
+            await sendPasswordResetEmail({
+                ...mailer,
                 to: user.email,
-                subject: "Reset your TradeNova password",
-                text: `We received a request to reset your TradeNova password. Use this link within 15 minutes:\n\n${resetUrl.href}\n\nIf you did not request this, you can ignore this email.`,
-                html: `<p>We received a request to reset your TradeNova password.</p><p><a href="${resetUrl.href}">Set a new password</a></p><p>This link expires in 15 minutes. If you did not request this, you can ignore this email.</p>`
+                resetUrl: resetUrl.href
             });
         }
 
@@ -220,7 +241,7 @@ const requestPasswordReset = async (req, res) => {
         console.error("Password reset email could not be sent:", error.message);
         return res.status(503).json({
             success: false,
-            message: "Password reset email could not be sent right now. Please try again later."
+            message: "The email provider could not send the reset link. Check its API key, verified sender/domain, and account logs, then try again."
         });
     }
 };

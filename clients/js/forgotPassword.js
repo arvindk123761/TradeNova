@@ -13,9 +13,15 @@ document.getElementById("forgotPasswordForm").addEventListener("submit", async e
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 email: document.getElementById("email").value.trim()
-            })
+            }),
+            signal: AbortSignal.timeout(90000)
         });
-        const data = await response.json();
+        let data;
+        try {
+            data = await response.json();
+        } catch {
+            throw new Error("The server returned an unreadable response. Please check the Render service and try again.");
+        }
 
         if (!response.ok || !data.success) {
             throw new Error(data.message || "Unable to send a password reset link.");
@@ -24,7 +30,10 @@ document.getElementById("forgotPasswordForm").addEventListener("submit", async e
         showToast(data.message, "success");
         document.getElementById("forgotPasswordForm").reset();
     } catch (error) {
-        showToast(error.message || "Server Error", "error");
+        const message = error.name === "TimeoutError"
+            ? "The request timed out. Render may still be waking up; wait a minute and try again."
+            : error.message || "Server Error";
+        showToast(message, "error");
     } finally {
         button.disabled = false;
         button.textContent = "Send Reset Link";

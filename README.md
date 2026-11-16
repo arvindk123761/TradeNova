@@ -30,7 +30,7 @@ TradeNova is a full-stack stock trading and investment dashboard built with a va
    npm install
    ```
 
-2. Copy `server/.env.example` to `server/.env` and set your local MySQL credentials, a long random `JWT_SECRET`, `PUBLIC_APP_URL`, and your SMTP settings. Password recovery requires an SMTP account; use the SMTP host, port, username, password/app password, and verified sender address from your email provider. Never commit SMTP credentials.
+2. Copy `server/.env.example` to `server/.env` and set your local MySQL credentials, a long random `JWT_SECRET`, `PUBLIC_APP_URL`, and your Resend API key and verified sender address (`RESEND_API_KEY` and `EMAIL_FROM`). Never commit API keys.
 
 3. Make sure the MySQL database `tradenova_db` exists and contains the tables used by the application.
 
@@ -70,7 +70,7 @@ The repository includes a Render Blueprint in `render.yaml`. It deploys the Expr
 1. Push the deployment changes to GitHub and sign in to [Render](https://dashboard.render.com/).
 2. Create a free [TiDB Cloud Starter](https://tidbcloud.com/free-trial) cluster. Copy the connection host, port, username, password, and database name from its connection details; TiDB requires TLS.
 3. In Render, select **New > Blueprint** and choose this GitHub repository. Review the `tradenova` web service and choose the Free plan.
-4. Set the service variables `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` to the TiDB connection values, and set `DB_SSL=true`. Also configure `PUBLIC_APP_URL` to your HTTPS Render site URL and set `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD`, and `SMTP_FROM` to your email provider's SMTP settings. Keep `NODE_ENV=production`; Render generates `JWT_SECRET` for the service.
+4. Set the service variables `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` to the TiDB connection values, and set `DB_SSL=true`. Also configure `PUBLIC_APP_URL` to your HTTPS Render site URL, and set `RESEND_API_KEY` and `EMAIL_FROM` using your Resend API key and verified sender address. Use an HTTP email API because Render Free blocks outbound SMTP ports. Keep `NODE_ENV=production`; Render generates `JWT_SECRET` for the service.
 5. Export your local `tradenova_db` schema/data and import it into TiDB. This repository does not contain a usable SQL schema or dump, so database-backed features will not work until your tables are imported.
 6. Open the Render service URL and verify `/api/health` returns success. The first request after an idle period may take about a minute while the free service wakes.
 
