@@ -1,1 +1,113 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TradeNova | Mutual Funds</title><link rel="stylesheet" href="css/sidebar.css"><link rel="stylesheet" href="css/topbar.css"><link rel="stylesheet" href="css/common.css"><link rel="stylesheet" href="css/investments.css"></head><body data-category="mutualfunds" data-title="Mutual Funds"><div id="sidebar"></div><main class="main"><div id="topbar"></div><section class="investment-page"><header class="investment-header"><div><h1 id="pageTitle"></h1><p id="pageDescription"></p></div><input id="investmentSearch" placeholder="Search products..."></header><div id="investmentGrid" class="investment-grid">Loading...</div><section class="my-investments"><h2>My Mutual Fund Investments</h2><div id="myInvestments">Loading...</div></section></section></main><script src="js/investments.js"></script><script src="js/topbar.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeNova | Mutual Funds</title>
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/topbar.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/investments.css">
+</head>
+<body data-category="mutualfunds" data-title="Mutual Funds">
+    <div id="sidebar"></div>
+    <main class="main">
+        <div id="topbar"></div>
+        <section class="investment-page">
+            <header class="investment-header">
+                <div>
+                    <span class="page-eyebrow">INVEST · TRACK · GROW</span>
+                    <h1 id="pageTitle">Mutual Funds</h1>
+                    <p id="pageDescription">Explore funds and track your simulated investments.</p>
+                </div>
+                <label class="fund-search">
+                    <span aria-hidden="true">⌕</span>
+                    <input id="investmentSearch" type="search" placeholder="Search funds..." aria-label="Search Mutual Funds">
+                </label>
+            </header>
+
+            <div class="simulation-note">
+                <span aria-hidden="true">ⓘ</span>
+                Simulated NAVs update during the day for demonstration. They are not live market data or investment advice.
+            </div>
+
+            <section class="fund-portfolio" aria-labelledby="portfolioHeading">
+                <div class="portfolio-heading">
+                    <div>
+                        <span class="page-eyebrow">YOUR PORTFOLIO</span>
+                        <h2 id="portfolioHeading">Mutual Fund investments</h2>
+                    </div>
+                    <span class="live-indicator"><i></i> Simulated value</span>
+                </div>
+                <div class="portfolio-summary">
+                    <article class="portfolio-stat">
+                        <span>Current value</span>
+                        <strong id="portfolioCurrent">₹0.00</strong>
+                    </article>
+                    <article class="portfolio-stat">
+                        <span>Invested</span>
+                        <strong id="portfolioInvested">₹0.00</strong>
+                    </article>
+                    <article class="portfolio-stat">
+                        <span>Total returns</span>
+                        <strong id="portfolioReturns">₹0.00</strong>
+                        <small id="portfolioReturnPercent">0.00%</small>
+                    </article>
+                    <article class="portfolio-stat">
+                        <span>Funds held</span>
+                        <strong id="portfolioFundCount">0</strong>
+                    </article>
+                </div>
+            </section>
+
+            <div class="fund-section-heading">
+                <div>
+                    <h2>Explore Mutual Funds</h2>
+                    <p>Prices, NAV changes and returns shown here are simulated.</p>
+                </div>
+                <span class="refresh-label">NAV refreshes periodically</span>
+            </div>
+            <div id="investmentGrid" class="investment-grid" aria-live="polite">
+                <p class="fund-empty">Loading funds...</p>
+            </div>
+
+            <section class="my-investments">
+                <div class="holdings-heading">
+                    <div>
+                        <h2>My Funds</h2>
+                        <p>Your units, current value and available sell actions.</p>
+                    </div>
+                    <span id="holdingsUpdated">Loading holdings...</span>
+                </div>
+                <div id="myInvestments" class="holdings-list" aria-live="polite">
+                    <p class="fund-empty">Loading your holdings...</p>
+                </div>
+            </section>
+
+            <div class="trade-feedback" id="tradeFeedback" role="status" aria-live="polite"></div>
+        </section>
+    </main>
+    <dialog class="fund-trade-dialog" id="fundTradeDialog" aria-labelledby="tradeTitle">
+        <form method="dialog" class="trade-dialog-close-form">
+            <button type="submit" class="trade-dialog-close" aria-label="Close dialog">×</button>
+        </form>
+        <span class="page-eyebrow" id="tradeEyebrow">MUTUAL FUND</span>
+        <h2 id="tradeTitle">Invest in fund</h2>
+        <p id="tradeFundName" class="trade-fund-name"></p>
+        <div class="trade-nav-quote">
+            <span>Simulated NAV<strong id="tradeNav">—</strong></span>
+            <span id="tradeAvailableLabel">Minimum investment<strong id="tradeAvailable">—</strong></span>
+        </div>
+        <label class="trade-input-label" id="tradeInputLabel" for="tradeInput">Investment amount (₹)</label>
+        <input id="tradeInput" class="trade-input" type="number" min="0" step="0.01" inputmode="decimal">
+        <div class="trade-estimate">
+            <span id="tradeEstimateLabel">Estimated units</span>
+            <strong id="tradeEstimate">—</strong>
+        </div>
+        <p class="trade-disclaimer">NAV and proceeds are simulated. No live market price or external brokerage is connected.</p>
+        <button id="tradeSubmit" class="fund-buy-button" type="button">Confirm investment</button>
+    </dialog>
+    <script src="js/investments.js"></script>
+    <script src="js/topbar.js"></script>
+</body>
+</html>
