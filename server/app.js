@@ -17,6 +17,7 @@ const profileRoutes = require("./routes/profileRoutes");
 const ipoRoutes = require("./routes/ipoRoutes");
 const activityRoutes = require("./routes/activityRoutes");
 const investmentRoutes = require("./routes/investmentRoutes");
+const assistantRoutes = require("./routes/assistantRoutes");
 setInterval(updatePrices, 5000);
 app.use(cors());
 app.use(express.json());
@@ -40,6 +41,7 @@ app.use("/api/activity", activityRoutes);
 app.use("/api/investments", investmentRoutes);
 
 app.use("/api/ipo", ipoRoutes);
+app.use("/api/assistant", assistantRoutes);
 
 app.get("/api/health", (req, res) => {
     res.json({ success: true, message: "TradeNova API is running" });

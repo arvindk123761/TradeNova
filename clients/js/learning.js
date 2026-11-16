@@ -358,6 +358,8 @@
     let activeQuizQuestions = [];
     let activeQuestionIndex = 0;
     let questionAnswered = false;
+    const assistantHistory = [];
+    let assistantRequestPending = false;
 
     const $ = (id) => document.getElementById(id);
     const formatCurrency = (amount) => `₹${Number(amount).toLocaleString("en-IN", {
@@ -573,102 +575,9 @@
         $("tradeMessage").classList.toggle("error-message", isError);
     }
 
-    const ASSISTANT_STOP_WORDS = new Set([
-        "about", "after", "also", "and", "are", "can", "could", "does", "for", "from",
-        "give", "help", "how", "into", "like", "mean", "more", "please", "tell", "that",
-        "the", "their", "them", "there", "this", "what", "when", "where", "which", "who",
-        "why", "with", "would", "your", "explain", "simple", "words"
-    ]);
-
-    function normalizeAssistantText(value) {
-        return value.toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
-    }
-
-    function findRelevantModules(question) {
-        const normalizedQuestion = normalizeAssistantText(question);
-        const words = [...new Set(normalizedQuestion.split(" ").filter((word) =>
-            word.length > 2 && !ASSISTANT_STOP_WORDS.has(word)
-        ))];
-        if (!words.length) return [];
-
-        return MODULES.map((module) => {
-            const details = LESSON_DETAILS[module.id];
-            const title = normalizeAssistantText(module.title);
-            const summary = normalizeAssistantText(module.summary);
-            const explanation = normalizeAssistantText(details.simple);
-            const topics = normalizeAssistantText(module.topics.map(([topic, text]) => `${topic} ${text}`).join(" "));
-            const vocabulary = normalizeAssistantText(details.vocabulary.map(([term, definition]) => `${term} ${definition}`).join(" "));
-            let score = 0;
-            words.forEach((word) => {
-                if (title.includes(word)) score += 4;
-                if (summary.includes(word)) score += 2;
-                if (topics.includes(word)) score += 1;
-                if (vocabulary.includes(word)) score += 2;
-                if (explanation.includes(word)) score += 1;
-            });
-            if (normalizedQuestion.includes(title)) score += 8;
-            return { module, details, score };
-        }).filter((result) => result.score > 0)
-            .sort((first, second) => second.score - first.score)
-            .slice(0, 2);
-    }
-
-    function getAssistantReply(question) {
-        const normalized = normalizeAssistantText(question);
-
-        if (/\b(should i (buy|sell|invest)|which .{0,30}(stock|share|company)|what .{0,30}(stock|share) .{0,30}(buy|invest)|best .{0,20}(stock|share|company)|recommend|choose.{0,25}(stocks?|shares?)|pick.{0,25}(stocks?|shares?)|stock picks?|target price|price target|worth buying)\b/.test(normalized)) {
-            return {
-                text: "I can’t tell you which stock to buy or sell, or predict a target price. That depends on your personal goals and financial situation, and no market outcome is guaranteed.\n\nFor learning, start by understanding the business, reading its official financial reports, checking valuation and risks, and comparing it with similar companies. The “Fundamental analysis” and “Risk, return and diversification” modules can help you learn those ideas. You can practise with virtual money, but the practice prices are fictional.",
-                source: "Learning only — not personal financial advice."
-            };
-        }
-
-        if (/\b(live|latest|current|today|right now|real time|news|price|quote|trading at)\b/.test(normalized)) {
-            return {
-                text: "I don’t have live prices, current company news, or real-time market data. The paper-trading instruments use fictional names and fixed example prices.\n\nFor current information, check your broker’s live quote and the company’s official exchange filings. I can still explain how to read a quote, what bid and ask mean, or how to think about market risk.",
-                source: "This helper uses course material only."
-            };
-        }
-
-        if (/\b(paper trading|paper trade|virtual money|practice account|simulation|simulated trade)\b/.test(normalized)) {
-            return {
-                text: "Paper trading lets you practise order steps without using real money. In TradeNova’s lab, you start with ₹1,00,000 in virtual cash and use fictional instruments at fixed illustrative prices. A practice trade does not reach an exchange.\n\nChoose an instrument, enter a whole-number quantity and select “Buy with virtual cash”. Your holdings and virtual cash update on this device. “Sell holding” can sell only units already held. “Reset simulation” clears practice holdings and orders and returns the virtual cash to ₹1,00,000.\n\nA simulation cannot fully reproduce real-world price changes, execution delays, fees, or emotions.",
-                source: "Paper Trading Lab — practice only."
-            };
-        }
-
-        if (/^(hi|hello|hey|good morning|good afternoon|good evening)$/.test(normalized)) {
-            return {
-                text: "Hello! Ask me to explain a course topic, define a market word, or help you understand the paper-trading lab. For example: “What is a share?”",
-                source: "TradeNova Learning Helper"
-            };
-        }
-
-        const matches = findRelevantModules(question);
-        if (!matches.length) {
-            return {
-                text: "I couldn’t find a close match in the course yet. Try asking about shares, exchanges, stock quotes, order types, investing, risk, company financials, valuation, charts, portfolios, derivatives, margin, trading strategies, costs, or paper trading.\n\nI can explain learning topics, but I don’t provide live stock data or personalised buy/sell advice.",
-                source: "TradeNova course material"
-            };
-        }
-
-        const result = matches[0];
-        const { module, details } = result;
-        const keyIdeas = module.topics.slice(0, 2)
-            .map(([title, text]) => `${title}: ${text}`)
-            .join("\n\n");
-        const vocabulary = details.vocabulary.slice(0, 2)
-            .map(([term, definition]) => `${term}: ${definition}`)
-            .join("\n");
-        return {
-            text: `Here’s a simple explanation of ${module.title}:\n\n${details.simple}\n\nA simple example:\n${details.example}\n\nKey ideas:\n${keyIdeas}\n\nUseful words:\n${vocabulary}\n\nTry this: ${details.practice}`,
-            source: `From the ${module.level.toLowerCase()} module: ${module.title}`
-        };
-    }
-
-    function appendAssistantMessage(message, isUser = false) {
+    function appendAssistantMessage(message, isUser = false, isError = false) {
         const article = document.createElement("article");
-        article.className = `chat-message ${isUser ? "user-message" : "assistant-message"}`;
+        article.className = `chat-message ${isUser ? "user-message" : "assistant-message"}${isError ? " assistant-error-message" : ""}`;
 
         const avatar = document.createElement("span");
         avatar.className = "chat-avatar";
@@ -679,7 +588,7 @@
         bubble.className = "chat-bubble";
 
         const label = document.createElement("strong");
-        label.textContent = isUser ? "You" : "TradeNova Learning Helper";
+        label.textContent = isUser ? "You" : "TradeNova AI Assistant";
         bubble.appendChild(label);
 
         const text = document.createElement("p");
@@ -698,18 +607,65 @@
         $("assistantChat").scrollTop = $("assistantChat").scrollHeight;
     }
 
-    function submitAssistantQuestion(question) {
+    async function submitAssistantQuestion(question) {
         const trimmedQuestion = question.trim();
         if (!trimmedQuestion) {
             $("assistantStatus").textContent = "Type a question first.";
             $("assistantStatus").classList.add("assistant-error");
-            return;
+            return false;
+        }
+
+        if (assistantRequestPending) return false;
+        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        if (!token) {
+            $("assistantStatus").textContent = "Please log in to use the AI Assistant.";
+            $("assistantStatus").classList.add("assistant-error");
+            appendAssistantMessage({ text: "Your session has ended. Please log in again, then return to the AI Assistant." }, false, true);
+            return false;
         }
 
         appendAssistantMessage({ text: trimmedQuestion }, true);
-        appendAssistantMessage(getAssistantReply(trimmedQuestion));
-        $("assistantStatus").textContent = "Questions stay in this browser and are not sent to an AI service.";
+        assistantHistory.push({ role: "user", content: trimmedQuestion });
+        assistantRequestPending = true;
+        $("assistantSend").disabled = true;
+        $("assistantStatus").textContent = "Gemini is preparing an answer...";
         $("assistantStatus").classList.remove("assistant-error");
+
+        try {
+            const response = await fetch(`${window.location.origin}/api/assistant/chat`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    question: trimmedQuestion,
+                    history: assistantHistory.slice(-11, -1)
+                }),
+                signal: AbortSignal.timeout(35000)
+            });
+            const data = await response.json();
+            if (!response.ok || !data.success || typeof data.answer !== "string" || !data.answer.trim()) {
+                throw new Error(data.message || `The AI request failed (${response.status}).`);
+            }
+            appendAssistantMessage({ text: data.answer.trim() });
+            assistantHistory.push({ role: "model", content: data.answer.trim() });
+            if (assistantHistory.length > 12) assistantHistory.splice(0, assistantHistory.length - 12);
+            $("assistantStatus").textContent = "AI-generated answer. Verify important information with reliable sources.";
+            return true;
+        } catch (error) {
+            const message = error.name === "TimeoutError" || error.name === "AbortError"
+                ? "The answer took too long. Please try again."
+                : error.message || "Unable to get an AI response. Please try again.";
+            appendAssistantMessage({ text: message }, false, true);
+            $("assistantStatus").textContent = message;
+            $("assistantStatus").classList.add("assistant-error");
+            if (assistantHistory[assistantHistory.length - 1]?.role === "user") assistantHistory.pop();
+            return false;
+        } finally {
+            assistantRequestPending = false;
+            $("assistantSend").disabled = false;
+        }
     }
 
     function executePaperTrade(side) {
@@ -765,8 +721,8 @@
             })
             .then((html) => {
                 $("sidebar").innerHTML = html;
-                const active = window.location.hash === "#learningAssistant"
-                    ? $("learningAssistantLink")
+                const active = window.location.hash === "#aiAssistant"
+                    ? $("aiAssistantLink")
                     : [...document.querySelectorAll(".sidebar li")].find((item) => item.textContent.includes("Learn & Practice"));
                 if (active) active.classList.add("active");
             })
@@ -786,16 +742,19 @@
             `<option value="${item.symbol}">${item.symbol} — ${item.name}</option>`
         ).join("");
         updateSelectedQuote();
-        $("assistantForm").addEventListener("submit", (event) => {
+        $("assistantForm").addEventListener("submit", async (event) => {
             event.preventDefault();
             const input = $("assistantInput");
-            submitAssistantQuestion(input.value);
+            const question = input.value;
             input.value = "";
-            input.focus();
+            await submitAssistantQuestion(question);
+            if (!assistantRequestPending) input.focus();
         });
         $("assistantInput").addEventListener("input", () => {
-            $("assistantStatus").textContent = `${500 - $("assistantInput").value.length} characters remaining`;
-            $("assistantStatus").classList.remove("assistant-error");
+            if (!assistantRequestPending) {
+                $("assistantStatus").textContent = `${1000 - $("assistantInput").value.length} characters remaining`;
+                $("assistantStatus").classList.remove("assistant-error");
+            }
         });
         $("assistantInput").addEventListener("keydown", (event) => {
             if (event.key === "Enter" && !event.shiftKey) {
@@ -810,8 +769,8 @@
             });
         });
 
-        if (window.location.hash === "#learningAssistant") {
-            window.setTimeout(() => $("learningAssistant").scrollIntoView({ behavior: "smooth" }), 300);
+        if (window.location.hash === "#aiAssistant") {
+            window.setTimeout(() => $("aiAssistant").scrollIntoView({ behavior: "smooth" }), 300);
         }
     }
 

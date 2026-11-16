@@ -367,6 +367,15 @@
     color: #a33838 !important;
 }
 
+.assistant-error-message .chat-bubble {
+    border-color: #f0c8c3;
+    background: #fff7f6;
+}
+
+.assistant-error-message .chat-bubble p {
+    color: #923e2e;
+}
+
 .assistant-loading {
     color: #64748b;
     font-size: 12px;

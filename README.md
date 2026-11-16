@@ -14,6 +14,7 @@ TradeNova is a full-stack stock trading and investment dashboard built with a va
 - Mutual Funds, ETFs, Bonds, and F&O investment catalogs with wallet-backed demo investments
 - Profile, password change, settings, dark mode, compact view, and animation preferences
 - Authenticated admin stock management routes
+- Authenticated Google Gemini assistant for stock-market education and learning questions
 
 ## Requirements
 
@@ -30,6 +31,7 @@ TradeNova is a full-stack stock trading and investment dashboard built with a va
    ```
 
 2. Copy `server/.env.example` to `server/.env` and set your local MySQL credentials and a long random `JWT_SECRET`.
+   Add a Google Gemini API key as `GEMINI_API_KEY` to enable the AI assistant. Create a key in [Google AI Studio](https://aistudio.google.com/apikey); keep it only in the server environment and never in frontend code.
 
 3. Make sure the MySQL database `tradenova_db` exists and contains the tables used by the application.
 
@@ -71,6 +73,8 @@ The repository includes a Render Blueprint in `render.yaml`. It deploys the Expr
 6. Open the Render service URL and verify `/api/health` returns success. The first request after an idle period may take about a minute while the free service wakes.
 
 Free-tier details can change; check the providers' [Render free-instance limits](https://render.com/docs/free) and [TiDB Cloud pricing](https://www.pingcap.com/tidb-cloud-pricing/) before using them. This demo simulates prices and trades and is not suitable for real investments or payments.
+
+The AI assistant requires `GEMINI_API_KEY` in the Render service environment. In Render, open the `tradenova` service, go to **Environment**, add `GEMINI_API_KEY` with your Google AI Studio key, save, and redeploy. The assistant sends the question and recent conversation context to Google Gemini; TradeNova does not save chat messages, and Google handles API data under its own policies. The assistant has no live market-data feed and does not provide personalized financial, tax, or legal advice. Google API usage may be subject to its quotas, pricing, and data policies.
 
 Use only a disposable/demo database for this prototype. It simulates prices and trades and is not suitable for handling real investments or payments.
 
