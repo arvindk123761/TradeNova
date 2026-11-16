@@ -102,15 +102,13 @@ const getApplications = async (req, res) => {
     try {
         await ensureDemoApplicationsTable();
         const [existingApplications] = await db.promise().query(
-            `SELECT applications.*, ipo.company_name AS company_name, ipo.sector AS sector,
-                    ipo.price AS price, ipo.lot_size AS lot_size, ipo.open_date AS open_date,
-                    ipo.close_date AS close_date, ipo.status AS ipo_status
-             FROM ipo_applications AS applications
-             INNER JOIN ipo ON ipo.id = applications.ipo_id
-             WHERE applications.user_id = ?
-             ORDER BY applications.id DESC`,
+            `SELECT * FROM ipo_applications
+             WHERE user_id = ?
+             ORDER BY id DESC`,
             [req.user.id]
         );
+        const [ipoRows] = await db.promise().query("SELECT * FROM ipo");
+        const iposById = new Map(ipoRows.map((ipo) => [String(ipo.id), ipo]));
         const [demoApplications] = await db.promise().query(
             `SELECT id AS application_id, ipo_id, company_name, sector, price, lot_size,
                     lots, amount, application_status, applied_at
@@ -121,11 +119,21 @@ const getApplications = async (req, res) => {
         );
 
         const applications = [
-            ...existingApplications.map((application) => ({
-                ...application,
-                application_status: "Submitted",
-                is_demo: false
-            })),
+            ...existingApplications.map((application) => {
+                const ipo = iposById.get(String(application.ipo_id));
+                return {
+                    ...application,
+                    company_name: ipo?.company_name || `IPO #${application.ipo_id}`,
+                    sector: ipo?.sector || null,
+                    price: ipo ? resolvePrice(ipo) : null,
+                    lot_size: ipo?.lot_size || null,
+                    open_date: ipo?.open_date || null,
+                    close_date: ipo?.close_date || null,
+                    listing_date: ipo?.listing_date || null,
+                    application_status: "Submitted",
+                    is_demo: false
+                };
+            }),
             ...demoApplications.map((application) => ({ ...application, is_demo: true }))
         ];
         res.json({ success: true, applications });
