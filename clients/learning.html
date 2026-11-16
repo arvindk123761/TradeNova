@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TradeNova | Learn & Practice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/topbar.css">
     <link rel="stylesheet" href="css/common.css">
@@ -42,6 +45,14 @@
                     </div>
                     <span class="module-count" id="moduleCount">16 modules</span>
                 </div>
+                <div class="study-guide-actions">
+                    <p>Want to study offline? Open the printable guide and choose <strong>Save as PDF</strong>, or download the guide to keep it.</p>
+                    <div>
+                        <button class="guide-button" id="printStudyGuide" type="button">Print / Save guide as PDF</button>
+                        <button class="guide-button guide-download" id="downloadStudyGuide" type="button">Download study guide</button>
+                    </div>
+                    <p class="resource-status" id="resourceStatus" role="status" aria-live="polite"></p>
+                </div>
                 <div class="level-filters" role="group" aria-label="Filter modules by learning level">
                     <button class="level-filter active" type="button" data-level="all" aria-pressed="true">All levels</button>
                     <button class="level-filter" type="button" data-level="Beginner" aria-pressed="false">Beginner</button>
@@ -49,6 +60,31 @@
                     <button class="level-filter" type="button" data-level="Advanced" aria-pressed="false">Advanced</button>
                 </div>
                 <div class="module-grid" id="moduleGrid"></div>
+            </section>
+
+            <section class="resource-section" aria-labelledby="resourceTitle">
+                <div>
+                    <span class="eyebrow">KEEP LEARNING</span>
+                    <h2 id="resourceTitle">Free resources from SEBI</h2>
+                    <p>Continue learning from official investor-education material. These links open the SEBI website or its YouTube channel.</p>
+                </div>
+                <div class="resource-grid">
+                    <a class="resource-card" href="https://investor.sebi.gov.in/personalsecurities.html" target="_blank" rel="noopener noreferrer">
+                        <span class="resource-icon" aria-hidden="true">📚</span>
+                        <span><strong>SEBI securities-market guide</strong><small>Plain-language reading about shares, funds, bonds, derivatives and investor protection.</small></span>
+                        <span aria-hidden="true">↗</span>
+                    </a>
+                    <a class="resource-card" href="https://investor.sebi.gov.in/" target="_blank" rel="noopener noreferrer">
+                        <span class="resource-icon" aria-hidden="true">🛡️</span>
+                        <span><strong>SEBI Investor website</strong><small>Money basics, investing, investor awareness and ways to spot common scams.</small></span>
+                        <span aria-hidden="true">↗</span>
+                    </a>
+                    <a class="resource-card" href="https://www.youtube.com/@SEBI_India/videos" target="_blank" rel="noopener noreferrer">
+                        <span class="resource-icon" aria-hidden="true">▶️</span>
+                        <span><strong>SEBI videos on YouTube</strong><small>Official investor-awareness videos. Choose a language you understand and verify the channel before following advice.</small></span>
+                        <span aria-hidden="true">↗</span>
+                    </a>
+                </div>
             </section>
 
             <section class="lesson-panel" id="lessonPanel" hidden aria-live="polite">

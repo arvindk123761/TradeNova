@@ -2,6 +2,13 @@
     max-width: 1440px;
     margin: 0 auto;
     color: #172033;
+    font-family: 'Inter', sans-serif;
+}
+
+.learning-page button,
+.learning-page input,
+.learning-page select {
+    font: inherit;
 }
 
 .learning-hero {
@@ -284,6 +291,127 @@
     font-size: 12px;
 }
 
+.study-guide-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px 20px;
+    margin: 18px 0;
+    padding: 16px 18px;
+    border: 1px solid #dfe9e6;
+    border-radius: 13px;
+    background: #f7fbfa;
+}
+
+.study-guide-actions > p:first-child {
+    margin: 0;
+    color: #536477;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.study-guide-actions > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.guide-button {
+    padding: 10px 13px;
+    border: 0;
+    border-radius: 8px;
+    color: white;
+    background: #176e5c;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.guide-download {
+    color: #176e5c;
+    background: #e4f2ee;
+}
+
+.resource-status {
+    grid-column: 1 / -1;
+    min-height: 0;
+    margin: 0;
+    color: #176e5c;
+    font-size: 12px;
+}
+
+.resource-status:empty {
+    display: none;
+}
+
+.resource-section {
+    margin-top: 38px;
+    padding: 23px;
+    border: 1px solid #e0e7ef;
+    border-radius: 18px;
+    background: white;
+}
+
+.resource-section h2 {
+    margin: 6px 0;
+    color: #172033;
+    font-size: 23px;
+}
+
+.resource-section > div:first-child > p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.resource-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 11px;
+    padding: 15px;
+    border: 1px solid #e3eaf0;
+    border-radius: 12px;
+    color: #263445;
+    background: #fbfcfe;
+    text-decoration: none;
+}
+
+.resource-card:hover,
+.resource-card:focus-visible {
+    border-color: #9cc9d7;
+    background: #f4faf9;
+}
+
+.resource-icon {
+    font-size: 20px;
+}
+
+.resource-card strong,
+.resource-card small {
+    display: block;
+}
+
+.resource-card strong {
+    color: #204d68;
+    font-size: 13px;
+}
+
+.resource-card small {
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
 .lesson-panel {
     margin-top: 24px;
     padding: 26px;
@@ -325,9 +453,37 @@
 
 .lesson-content {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
     padding: 20px 0;
+}
+
+.simple-explanation,
+.worked-example {
+    padding: 19px;
+    border: 1px solid #dcebe6;
+    border-radius: 13px;
+    background: #f2faf7;
+}
+
+.content-label {
+    color: #176e5c;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.simple-explanation p,
+.worked-example p {
+    margin: 9px 0 0;
+    color: #33475b;
+    font-size: 15px;
+    line-height: 1.75;
+}
+
+.lesson-topics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
 }
 
 .lesson-topic {
@@ -345,7 +501,71 @@
 .lesson-topic p {
     margin: 0;
     color: #526174;
+    font-size: 14px;
+    line-height: 1.75;
+}
+
+.lesson-vocabulary {
+    padding: 18px;
+    border: 1px solid #e3eaf0;
+    border-radius: 13px;
+}
+
+.lesson-vocabulary h3,
+.try-it-yourself h3 {
+    margin: 0 0 12px;
+    color: #204d68;
+    font-size: 15px;
+}
+
+.lesson-vocabulary dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0;
+}
+
+.lesson-vocabulary dl > div {
+    padding: 12px;
+    border-radius: 9px;
+    background: #f7f9fc;
+}
+
+.lesson-vocabulary dt {
+    color: #334155;
     font-size: 13px;
+    font-weight: 750;
+}
+
+.lesson-vocabulary dd {
+    margin: 4px 0 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.try-it-yourself {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 17px;
+    border-radius: 12px;
+    background: #fff8e9;
+}
+
+.try-it-yourself > span {
+    font-size: 20px;
+}
+
+.try-it-yourself h3 {
+    margin-bottom: 5px;
+    color: #805317;
+}
+
+.try-it-yourself p {
+    margin: 0;
+    color: #624f32;
+    font-size: 14px;
     line-height: 1.65;
 }
 
@@ -356,16 +576,48 @@
 }
 
 .knowledge-check h3 {
-    margin: 0 0 12px;
+    margin: 0;
     color: #174e43;
-    font-size: 15px;
+    font-size: 17px;
+}
+
+.quiz-heading {
+    display: grid;
+    grid-template-columns: auto minmax(90px, 1fr);
+    align-items: center;
+    gap: 18px;
+}
+
+.quiz-count {
+    display: block;
+    margin-top: 4px;
+    color: #5a766f;
+    font-size: 12px;
+}
+
+.quiz-progress-track,
+.quiz-progress-track span {
+    display: block;
+    height: 7px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.quiz-progress-track {
+    background: #d8e9e3;
+}
+
+.quiz-progress-track span {
+    background: #23866e;
+    transition: width .2s ease;
 }
 
 .quiz-question {
-    margin: 0 0 12px;
+    margin: 18px 0 12px;
     color: #25364a;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 650;
+    line-height: 1.6;
 }
 
 .quiz-options {
@@ -374,18 +626,24 @@
 }
 
 .quiz-option {
-    padding: 10px 12px;
+    padding: 12px 14px;
     border: 1px solid #d7e5e2;
     border-radius: 9px;
     color: #334155;
     background: white;
     cursor: pointer;
     text-align: left;
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 .quiz-option:hover:not(:disabled) {
     border-color: #3b8c79;
+}
+
+.quiz-option.selected {
+    border-color: #23866e;
+    background: #e8f5f0;
 }
 
 .quiz-option.correct {
@@ -404,8 +662,40 @@
     min-height: 18px;
     margin: 11px 0 0;
     color: #526174;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.quiz-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.quiz-action {
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 8px;
+    color: white;
+    background: #176e5c;
+    cursor: pointer;
     font-size: 13px;
-    line-height: 1.5;
+    font-weight: 700;
+}
+
+.quiz-action:disabled {
+    background: #94a3b8;
+    cursor: default;
+}
+
+.quiz-next {
+    background: #1d5e80;
+}
+
+.quiz-retry {
+    color: #176e5c;
+    background: #dcefe8;
 }
 
 .lesson-actions {
@@ -685,11 +975,51 @@ body.dark-mode .module-meta {
 
 body.dark-mode .lesson-topic,
 body.dark-mode .practice-stat,
-body.dark-mode .history-row {
+body.dark-mode .history-row,
+body.dark-mode .resource-section,
+body.dark-mode .study-guide-actions,
+body.dark-mode .lesson-vocabulary dl > div {
     background: #263449;
 }
 
+body.dark-mode .resource-section,
+body.dark-mode .study-guide-actions,
+body.dark-mode .lesson-vocabulary {
+    border-color: #334155;
+    background: #1e293b;
+}
+
+body.dark-mode .resource-card {
+    border-color: #334155;
+    background: #1e293b;
+}
+
+body.dark-mode .resource-section h2,
+body.dark-mode .resource-card strong {
+    color: #e5e7eb;
+}
+
+body.dark-mode .resource-section p,
+body.dark-mode .resource-card small,
+body.dark-mode .study-guide-actions > p:first-child {
+    color: #aab8ca;
+}
+
+body.dark-mode .resource-card {
+    background: #1e293b;
+}
+
+body.dark-mode .simple-explanation,
+body.dark-mode .worked-example {
+    border-color: #31534c;
+    background: #203b38;
+}
+
 body.dark-mode .lesson-topic p,
+body.dark-mode .simple-explanation p,
+body.dark-mode .worked-example p,
+body.dark-mode .lesson-vocabulary dd,
+body.dark-mode .lesson-vocabulary dt,
 body.dark-mode .quiz-question,
 body.dark-mode .quiz-feedback,
 body.dark-mode .paper-positions td {
@@ -717,6 +1047,10 @@ body.dark-mode .paper-positions th {
     .practice-summary {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .resource-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 768px) {
@@ -733,8 +1067,12 @@ body.dark-mode .paper-positions th {
         grid-template-columns: 1fr;
     }
 
-    .lesson-content,
+    .lesson-topics,
     .practice-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lesson-vocabulary dl {
         grid-template-columns: 1fr;
     }
 
@@ -750,6 +1088,14 @@ body.dark-mode .paper-positions th {
 
     .lesson-panel {
         padding: 18px;
+    }
+
+    .study-guide-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .study-guide-actions > div {
+        display: grid;
     }
 
     .lesson-actions {

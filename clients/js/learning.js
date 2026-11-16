@@ -162,6 +162,188 @@
         }
     ];
 
+    const LESSON_DETAILS = {
+        "market-basics": {
+            simple: "Think of a company like a large bakery. It can divide ownership into many small pieces called shares. Buying one share means owning a tiny piece of that company. The share price can rise or fall, so this ownership can make money or lose money.",
+            example: "If a company has 1,000 shares and you own 10, you own 1% of its shares. If the share price is ₹100, your 10 shares are worth ₹1,000 at that quoted price. If the price falls to ₹80, they are worth ₹800. Neither price is guaranteed.",
+            vocabulary: [["Share", "A small unit of ownership in a company."], ["Exchange", "An organised market where buyers and sellers can trade."], ["Dividend", "A portion of company profits that may be paid to shareholders; companies are not required to pay one every time."]],
+            practice: "Explain in your own words what you own when you buy a share. Then name one reason its price could go down."
+        },
+        "market-participants": {
+            simple: "A stock market is like a regulated marketplace. The exchange provides the marketplace and its rules. A broker connects your account to that marketplace. Buyers and sellers send orders, and a trade happens only when the order terms match.",
+            example: "Imagine you want to buy a book listed for ₹200. You place an order through a shop (the broker). The marketplace matches you with a seller willing to accept your order. The shop helps with the transaction but cannot promise the book will become more valuable.",
+            vocabulary: [["Broker", "A firm that provides access to market services and routes customer orders."], ["Regulator", "An authority that sets and enforces rules to help keep markets fair."], ["Order", "An instruction to buy or sell, usually with a quantity and price condition."]],
+            practice: "Draw three boxes labelled you, broker and exchange. Draw an arrow showing how your order reaches the market."
+        },
+        "quotes-and-tickers": {
+            simple: "A stock quote is a small information card for a share. It may show the share's short name, a recent trade price, the number of shares traded, and the prices buyers and sellers are currently offering.",
+            example: "Suppose buyers are offering ₹99 and sellers are asking ₹101. The gap is ₹2. A last-traded price of ₹100 only tells you about the most recent matched trade. A new trade could happen at a different price.",
+            vocabulary: [["Ticker", "A short code used to identify a listed share."], ["Bid", "The price a buyer is currently offering."], ["Ask", "The price a seller is currently asking."], ["Volume", "The number of units traded during a chosen period."]],
+            practice: "On a pretend quote, point to the buyer's price, the seller's price and the gap between them."
+        },
+        "order-types": {
+            simple: "An order is your instruction to buy or sell. Different instructions make different trade-offs. A market order prioritises getting a trade; a limit order prioritises staying within your chosen price. Neither type guarantees a profit.",
+            example: "A share is shown near ₹100. A limit buy at ₹95 means you will not pay more than ₹95, but the order may never be filled. A market buy may fill sooner, but the actual price may be higher than ₹100 if prices move or sellers are scarce.",
+            vocabulary: [["Market order", "An instruction that prioritises execution at available prices."], ["Limit order", "An instruction with a maximum buy price or minimum sell price."], ["Settlement", "The process of completing the exchange of money and securities after a trade."]],
+            practice: "Write down which matters more in each pretend situation: getting a trade quickly or refusing to pay above a chosen price."
+        },
+        "investing-vs-trading": {
+            simple: "Investing and trading both involve buying and selling financial products, but often use different time periods. Investing commonly looks at goals over years. Trading often tries to respond to shorter price changes. Both can lose money.",
+            example: "Two people buy the same share. One plans to study the company and hold it for several years. Another hopes to sell it later today. They face different questions, costs and risks even though the share is the same.",
+            vocabulary: [["Time horizon", "How long you expect to keep money invested before needing it."], ["Goal", "The reason you are saving or investing, such as a future expense."], ["Trading", "Buying and selling to act on expected price changes, often over shorter periods."]],
+            practice: "For learning only, write one pretend goal and when the money would be needed. Notice why money needed soon should not be treated like spare practice money."
+        },
+        "risk-and-diversification": {
+            simple: "Risk means that the result is uncertain and you could lose money. Putting all your eggs in one basket means one company can strongly affect your savings. Spreading investments can reduce dependence on one company, but cannot stop every loss.",
+            example: "Imagine one basket has 10 eggs and it falls: all 10 may break. If the eggs are split among several baskets, one dropped basket may not ruin everything. In markets, different investments can still fall together, so spreading is helpful but not a promise.",
+            vocabulary: [["Risk", "The possibility that the result differs from what you hoped, including a loss."], ["Diversification", "Spreading investments instead of relying on only one."], ["Volatility", "How much and how quickly a price moves up and down."]],
+            practice: "Compare a pretend portfolio with one company against one spread across different kinds of businesses. Ask what could still make both lose value."
+        },
+        "fundamental-analysis": {
+            simple: "Fundamental analysis means learning how a company works and checking its published financial information. It is like checking a shop's sales, bills, debts and cash before deciding whether the shop is healthy. It helps you ask questions; it cannot predict the future.",
+            example: "A shop may report ₹10 lakh in sales but also owe ₹9 lakh and have very little cash. Sales alone do not tell the whole story. For a company, read its income statement, balance sheet and cash-flow statement together.",
+            vocabulary: [["Revenue", "Money a business earns from selling goods or services before expenses."], ["Debt", "Money a company owes and may need to repay with interest."], ["Cash flow", "Money moving into and out of a business."]],
+            practice: "Choose a public company's official report and find its revenue, debt and cash-flow sections. Do not treat any single number as a buy signal."
+        },
+        "valuation": {
+            simple: "Valuation is an attempt to compare a company's price with information about its business. A number can help you ask whether a price seems high or low compared with something else, but no ratio can tell you the perfect price on its own.",
+            example: "Two fruit stalls each sell a basket for ₹100. One earns ₹10 profit per basket and the other ₹2. The same price means something different for each stall. A P/E ratio makes a simplified price-to-earnings comparison for a company.",
+            vocabulary: [["Earnings", "Profit measured after relevant expenses, using the company's reported accounting rules."], ["P/E ratio", "Share price compared with earnings per share; it needs context."], ["Valuation", "An estimate or comparison of what something may be worth."]],
+            practice: "If two companies have different P/E ratios, list three other facts you would check before comparing them."
+        },
+        "technical-analysis": {
+            simple: "A price chart is a picture of how a price moved in the past. Some people use patterns to plan a trade. A chart shows history, not the future, and a pattern can fail even when it looks convincing.",
+            example: "A daily candle may show that a share opened at ₹100, reached ₹105, fell to ₹98 and closed at ₹102. It tells you what happened in that day, not what tomorrow's price must be.",
+            vocabulary: [["Timeframe", "The length of time represented by one chart bar or candle."], ["Trend", "A general direction prices have moved over a chosen period."], ["Indicator", "A calculation based on past prices or volume, not a guarantee of future direction."]],
+            practice: "Look at a pretend chart and describe only what it already shows. Avoid saying that a past pattern proves what happens next."
+        },
+        "portfolio-construction": {
+            simple: "A portfolio is the collection of investments someone owns. Portfolio construction means deciding what to include and how much to place in each part. Rebalancing means reviewing those amounts and, if appropriate, bringing them back toward a planned mix.",
+            example: "A pretend portfolio starts with half in one type of investment and half in another. If one grows more, the mix changes. Rebalancing is a planned review, not a promise to sell winners or buy losers at the perfect time.",
+            vocabulary: [["Portfolio", "All the investments held together."], ["Allocation", "How the portfolio is divided among investments or asset types."], ["Rebalancing", "Adjusting a portfolio toward a chosen allocation."]],
+            practice: "Use paper to sketch a pretend portfolio split into three categories. Ask what might happen if one category grows much faster than the others."
+        },
+        "derivatives-basics": {
+            simple: "A derivative is a contract whose value depends on something else, such as a share or index. Futures and options have rules, dates and obligations. They can be complicated, and borrowed or leveraged exposure can make losses grow quickly.",
+            example: "A futures contract is more like agreeing to a deal for a later date than buying a small piece of a company. An option is a contract that gives a right to act under its terms. A small upfront amount does not mean the risk is small.",
+            vocabulary: [["Derivative", "A contract whose value depends on another price or asset."], ["Expiry", "The date when a contract ends or must be settled under its rules."], ["Leverage", "Using a smaller amount of money to control a larger exposure, which magnifies gains and losses."]],
+            practice: "Before considering any derivative, write down the contract size, expiry, required margin and the worst loss you could face. If you cannot explain them, do not trade it."
+        },
+        "options-risk": {
+            simple: "An option is a contract with detailed rules. The person who buys an option pays a premium for a right. The person who sells or writes an option takes on an obligation. The possible loss depends on the exact strategy and can be very large.",
+            example: "Suppose an option costs ₹10 per unit. That ₹10 is the buyer's starting cost per unit, not proof that the trade is safe or that the buyer will profit. The share price, time remaining and other factors affect the result.",
+            vocabulary: [["Premium", "The price paid to buy an option."], ["Call", "An option that gives the buyer a right to buy under the contract terms."], ["Put", "An option that gives the buyer a right to sell under the contract terms."], ["Breakeven", "A calculated price where a simplified outcome is neither profit nor loss before some costs."]],
+            practice: "Draw a small table of possible ending prices and calculate the outcome using the actual contract terms. Include fees and the maximum possible loss."
+        },
+        "margin-short-selling": {
+            simple: "Margin is money kept as security for certain trades. Leverage means your trade is larger than the cash you put down. Borrowing or short selling can create extra obligations. If the price moves the wrong way, you may need more money or your position may be closed.",
+            example: "If you control ₹1,000 worth of exposure with ₹100 of your own money, a ₹100 price drop in the exposure is a ₹100 loss—your entire ₹100 stake. The exact rules differ by product, and some losses can exceed the initial deposit.",
+            vocabulary: [["Margin", "Money or assets kept as security for a position."], ["Margin call", "A request to add money or reduce a position when required security is insufficient."], ["Short selling", "Taking a position designed to benefit if a price falls; a rising price can create large losses."]],
+            practice: "Use paper to calculate how a 5% move against a leveraged position changes your own money. Include the possibility that the broker closes it."
+        },
+        "systematic-strategies": {
+            simple: "A trading strategy is a set of written rules. Testing it on old prices can help you explore how those rules might have behaved. But old information is not the future, and a computer test can look good for the wrong reasons.",
+            example: "If you keep changing rules until they fit last year's prices, you may have memorised last year's pattern rather than found a useful method. A fair test also considers fees and whether a real order could have filled at that price.",
+            vocabulary: [["Backtest", "A test of rules using historical data."], ["Overfitting", "Making rules fit old data so closely they may fail on new data."], ["Slippage", "The difference between the price you expected and the price you actually get."]],
+            practice: "Write one simple rule before looking at results. Test it on a separate time period and record fees, missed trades and losing periods."
+        },
+        "risk-management": {
+            simple: "Risk management means deciding in advance how you will limit harm if an idea goes wrong. A plan can help you avoid panic, but it cannot make a risky trade safe or guarantee that an exit order fills at the price you want.",
+            example: "Before a pretend trade, write down why you are entering, what would show the idea is wrong, how much you can accept losing and when you will review it. Compare the plan with what you actually did afterward.",
+            vocabulary: [["Position size", "How much of an investment you buy or sell."], ["Stop order", "An order triggered after a chosen price is reached; the final execution price can differ."], ["Trading journal", "A record of decisions, reasons, results and mistakes."]],
+            practice: "Complete a pretend trade-journal entry without using real money. Write the reason, planned exit, possible loss and what you learned."
+        },
+        "tax-regulation": {
+            simple: "The result you keep may be less than the price change because charges, taxes and other costs can apply. Rules depend on the product and can change. Use official sources and qualified professionals for decisions about your own taxes.",
+            example: "If a pretend trade gains ₹100 but costs ₹15 in charges, the amount before any applicable tax is ₹85, not ₹100. Real costs and tax rules vary, so check the current documents for your account and product.",
+            vocabulary: [["Brokerage", "A fee charged for certain broker services or trades."], ["Disclosure", "Official information a company or service must provide."], ["Investor grievance", "A complaint or problem an investor raises with a financial service provider or authority."]],
+            practice: "Find the current official fee schedule and a sample contract note from your broker. Identify the trade price, charges and where to raise a complaint."
+        }
+    };
+
+    const EXTRA_QUESTIONS = {
+        "market-basics": [
+            { question: "If a share price falls from ₹100 to ₹80, what happens to the quoted value of one share?", options: ["It falls to ₹80", "It stays guaranteed at ₹100", "It becomes a bank deposit"], answer: 0, explanation: "At that quoted price one share is worth ₹80, though the price can change again." },
+            { question: "Does owning a share guarantee that the company will pay you a dividend?", options: ["Yes, every month", "No, dividends are not guaranteed", "Only if the share price falls"], answer: 1, explanation: "A company may choose whether to declare dividends, subject to applicable rules." },
+            { question: "What is a sensible way to think about a share?", options: ["A small ownership stake with risk", "A guaranteed savings account", "A fixed loan repayment"], answer: 0, explanation: "A share is ownership and its value can rise or fall." }
+        ],
+        "market-participants": [
+            { question: "Who sets the market rules and supervises market conduct?", options: ["A market regulator", "Each buyer individually", "A company's customers"], answer: 0, explanation: "Regulators oversee markets and enforce applicable rules." },
+            { question: "When does a trade usually happen?", options: ["When matching buy and sell orders meet", "Whenever a buyer opens an app", "Whenever a broker promises a profit"], answer: 0, explanation: "A trade occurs when order conditions match under the market's rules." },
+            { question: "Can a broker promise that your investment will make money?", options: ["Yes, if the app looks modern", "No, market returns are uncertain", "Yes, for every first-time investor"], answer: 1, explanation: "A broker can provide services but cannot guarantee market outcomes." }
+        ],
+        "quotes-and-tickers": [
+            { question: "If the best bid is ₹99 and the ask is ₹101, what is the spread?", options: ["₹2", "₹99", "₹200"], answer: 0, explanation: "The spread is ask minus bid: ₹101 - ₹99 = ₹2." },
+            { question: "Does the last traded price promise the price of your next trade?", options: ["Yes", "No", "Only when volume is high"], answer: 1, explanation: "The next trade may occur at a different price as orders change." },
+            { question: "What does volume usually count?", options: ["Units traded in a period", "Number of company employees", "The company's debt"], answer: 0, explanation: "Volume is the number of units traded during the selected period." }
+        ],
+        "order-types": [
+            { question: "What is the main trade-off with a market order?", options: ["Execution is prioritised, but price can vary", "Price is fixed and execution guaranteed", "There are no buyers or sellers"], answer: 0, explanation: "A market order prioritises execution at the available prices, which may change." },
+            { question: "You place a limit buy at ₹95. The price never reaches ₹95. What may happen?", options: ["The order may remain unfilled", "It must execute at ₹100", "You automatically earn a profit"], answer: 0, explanation: "A limit order may not fill if no seller accepts the limit price." },
+            { question: "What is settlement?", options: ["Completing the exchange of money and securities after a trade", "Guessing tomorrow's price", "Choosing a company name"], answer: 0, explanation: "Settlement completes the transfer of funds and securities under market rules." }
+        ],
+        "investing-vs-trading": [
+            { question: "Which approach often has a longer time horizon?", options: ["Investing", "A same-day trade", "Neither ever has a time horizon"], answer: 0, explanation: "Investing often focuses on goals over longer periods, though approaches vary." },
+            { question: "Why should you avoid investing money needed for an urgent expense?", options: ["You may need it while its value is down", "It guarantees a higher return", "Urgent expenses cannot be paid"], answer: 0, explanation: "Market values can fall at the time you need the money." },
+            { question: "Does holding longer guarantee that an investment will recover?", options: ["Yes, always", "No, recovery is not guaranteed", "Only for every listed company"], answer: 1, explanation: "A longer horizon does not guarantee recovery or a profit." }
+        ],
+        "risk-and-diversification": [
+            { question: "What is concentration risk?", options: ["Relying heavily on one investment or area", "Owning several kinds of investments", "Reading a company report"], answer: 0, explanation: "Concentration means too much of a portfolio depends on one holding or risk." },
+            { question: "Can diversification prevent every loss?", options: ["Yes", "No, many investments can fall together", "Only during market hours"], answer: 1, explanation: "Diversification may reduce some specific risks, not broad market risk." },
+            { question: "What does volatility describe?", options: ["How much prices move up and down", "A guaranteed yearly profit", "A broker's customer count"], answer: 0, explanation: "Volatility describes the size and frequency of price movements." }
+        ],
+        "fundamental-analysis": [
+            { question: "Which report helps show what a company owns and owes?", options: ["Balance sheet", "A share ticker", "A price chart only"], answer: 0, explanation: "A balance sheet lists assets, liabilities and equity at a point in time." },
+            { question: "If sales rise, does that automatically prove a company is healthy?", options: ["Yes", "No, expenses, debt and cash also matter", "Only if the share is popular"], answer: 1, explanation: "Sales alone do not show profitability, debt burden or cash generation." },
+            { question: "Where should you look for company-reported financial information?", options: ["Official filings and reports", "Anonymous promises in a chat", "A guaranteed-return advertisement"], answer: 0, explanation: "Official reports and disclosures are a better starting point for research." }
+        ],
+        "valuation": [
+            { question: "What does a P/E ratio compare?", options: ["Price with earnings per share", "Debt with employee count", "Volume with the number of exchanges"], answer: 0, explanation: "P/E compares a share price with earnings per share." },
+            { question: "Does a lower P/E always mean a share is cheap?", options: ["Yes", "No, the business and risks need context", "Only if it fell today"], answer: 1, explanation: "Low earnings quality, risk or business changes may explain a low ratio." },
+            { question: "What is a useful comparison when reviewing a ratio?", options: ["Company history and comparable businesses", "A random social-media post", "Only the highest price ever"], answer: 0, explanation: "Peers and historical context can help, though they do not prove fair value." }
+        ],
+        "technical-analysis": [
+            { question: "What information does a candle usually show for its timeframe?", options: ["Open, high, low and close", "Next week's guaranteed price", "Company tax return"], answer: 0, explanation: "A candle summarises those four prices for its chosen time interval." },
+            { question: "Can a support area guarantee that price will stop falling?", options: ["Yes", "No, price can move through it", "Only if a chart is colourful"], answer: 1, explanation: "Support is a historical reference area, not a guaranteed barrier." },
+            { question: "What are most chart indicators based on?", options: ["Past prices or volume", "Guaranteed future news", "A company's private plans"], answer: 0, explanation: "Indicators calculate patterns from past market data and can give false signals." }
+        ],
+        "portfolio-construction": [
+            { question: "What is an allocation?", options: ["How a portfolio is divided", "The next share price", "A broker password"], answer: 0, explanation: "Allocation describes how much is assigned to different investments or asset types." },
+            { question: "Why consider position size before a trade?", options: ["To control how much one idea can affect you", "To guarantee a winning result", "To avoid reading the order details"], answer: 0, explanation: "Position sizing can limit concentration and the effect of one position." },
+            { question: "What should be considered before rebalancing?", options: ["Your plan, costs and possible taxes", "Only today's most popular stock", "A promise that prices will rise"], answer: 0, explanation: "Rebalancing should be deliberate and account for costs and applicable taxes." }
+        ],
+        "derivatives-basics": [
+            { question: "What gives a derivative its value?", options: ["Another price or asset it is linked to", "A fixed guarantee from the exchange", "The investor's age"], answer: 0, explanation: "A derivative's value depends on an underlying asset, rate or other reference." },
+            { question: "Why can leverage be dangerous?", options: ["It can magnify losses as well as gains", "It removes all price changes", "It guarantees a small loss only"], answer: 0, explanation: "Leverage increases exposure, so an adverse move can cause a large loss." },
+            { question: "What should you understand before entering a derivatives contract?", options: ["Size, expiry, obligations and worst-case risk", "Only the contract nickname", "Only how to open the app"], answer: 0, explanation: "Contract terms and exposure determine how the product can behave." }
+        ],
+        "options-risk": [
+            { question: "What does the option buyer generally pay?", options: ["A premium", "A guaranteed dividend", "No amount under any circumstances"], answer: 0, explanation: "The option buyer pays a premium for the rights in the contract." },
+            { question: "Does paying a small premium make every options strategy low-risk?", options: ["Yes", "No, the seller's obligations and full strategy matter", "Only before expiry"], answer: 1, explanation: "Risk depends on the entire position; option writers can face very large losses." },
+            { question: "Why calculate a breakeven?", options: ["To understand where a simplified payoff reaches zero", "To know the guaranteed future price", "To avoid knowing the premium"], answer: 0, explanation: "Breakeven is a calculation, not a prediction or guarantee." }
+        ],
+        "margin-short-selling": [
+            { question: "What is margin used for?", options: ["Security for certain positions", "A guaranteed bonus", "A way to remove market risk"], answer: 0, explanation: "Margin is collateral required to support certain positions." },
+            { question: "What can a broker do if you do not meet a margin requirement?", options: ["Close some or all of the position", "Cancel all losses", "Guarantee the price will recover"], answer: 0, explanation: "The broker may liquidate the position, possibly at an unfavourable price." },
+            { question: "Why can a short position lose a lot?", options: ["The price can keep rising", "The price cannot change", "The company must pay the short seller"], answer: 0, explanation: "A rising price moves against a short, and losses can grow substantially." }
+        ],
+        "systematic-strategies": [
+            { question: "What should a strategy's written rules specify?", options: ["Entry, exit and position size", "Only the name of the strategy", "A guaranteed target return"], answer: 0, explanation: "Clear rules make a test meaningful and repeatable." },
+            { question: "What is a common backtest problem?", options: ["Rules fit past data too closely", "It uses any written rules", "It records a date"], answer: 0, explanation: "Overfitting makes past results look good but may not work on new data." },
+            { question: "Why might a paper trade differ from a real fill?", options: ["A simulation may not reproduce liquidity and execution", "Paper trades always include real buyers", "The market never changes"], answer: 0, explanation: "Simulations often simplify fills, slippage and market conditions." }
+        ],
+        "risk-management": [
+            { question: "When should you decide the amount you can risk?", options: ["Before entering the trade", "Only after a large loss", "Whenever someone online says so"], answer: 0, explanation: "Setting limits beforehand helps avoid emotional decisions." },
+            { question: "Does a stop order guarantee the exact trigger price?", options: ["Yes", "No, execution can differ", "Only for a fast-moving share"], answer: 1, explanation: "A stop trigger does not guarantee the final execution price." },
+            { question: "What can a trading journal help you review?", options: ["Your decisions and repeated mistakes", "Tomorrow's guaranteed price", "A company's private information"], answer: 0, explanation: "A journal helps you review your process, not predict the market." }
+        ],
+        "tax-regulation": [
+            { question: "Can fees and taxes change your final result?", options: ["Yes, they may reduce what you keep", "No, only price matters", "Only for paper trading"], answer: 0, explanation: "Costs and applicable taxes affect net results." },
+            { question: "Where should you check current tax rules?", options: ["Official sources or a qualified tax professional", "An anonymous guaranteed-tip message", "A year-old screenshot"], answer: 0, explanation: "Rules can change and depend on your situation; check authoritative current guidance." },
+            { question: "Which is a warning sign of a possible investment scam?", options: ["A promise of guaranteed high returns and pressure to act", "A clear official fee schedule", "Reading a company filing"], answer: 0, explanation: "Guaranteed returns and urgency are common warning signs. Verify before sharing money or details." }
+        ]
+    };
+
     const INSTRUMENTS = [
         { symbol: "ALFA", name: "Alpha Learning Co.", price: 250 },
         { symbol: "BETA", name: "Beta Sample Bank", price: 480 },
@@ -173,6 +355,9 @@
     const PAPER_KEY = "tradenovaPaperTrading";
     let activeModuleId = null;
     let selectedQuizAnswer = null;
+    let activeQuizQuestions = [];
+    let activeQuestionIndex = 0;
+    let questionAnswered = false;
 
     const $ = (id) => document.getElementById(id);
     const formatCurrency = (amount) => `₹${Number(amount).toLocaleString("en-IN", {
@@ -231,35 +416,91 @@
             return `<button type="button" class="module-card${done ? " is-complete" : ""}" data-module-id="${module.id}">
                 <span class="module-card-top"><span class="module-level ${levelClass}">${module.level}</span><span class="module-complete">${done ? "✓ Completed" : ""}</span></span>
                 <span class="module-card-content"><span class="module-title">${moduleNumber}. ${module.title}</span><span class="module-summary">${module.summary}</span></span>
-                <span class="module-meta">${module.duration} · 3 learning points · Knowledge check</span>
+                <span class="module-meta">${module.duration} · Lesson, example &amp; 4 questions</span>
             </button>`;
         }).join("");
+    }
+
+    function getModuleQuestions(module) {
+        return [
+            module.quiz,
+            ...(EXTRA_QUESTIONS[module.id] || [])
+        ];
+    }
+
+    function renderQuizQuestion() {
+        const question = activeQuizQuestions[activeQuestionIndex];
+        const complete = activeQuestionIndex >= activeQuizQuestions.length;
+        if (complete) {
+            $("knowledgeCheck").innerHTML = `<h3>Knowledge check complete</h3>
+                <p class="quiz-feedback">Well done. You answered all ${activeQuizQuestions.length} questions correctly. You can now mark this module complete.</p>`;
+            const alreadyDone = getCompletedModules().includes(activeModuleId);
+            $("completeLesson").disabled = alreadyDone;
+            $("lessonStatus").textContent = alreadyDone
+                ? "You have already completed this module."
+                : "All questions answered correctly. Mark the module complete to save your progress.";
+            return;
+        }
+
+        selectedQuizAnswer = null;
+        questionAnswered = false;
+        $("knowledgeCheck").innerHTML = `<div class="quiz-heading">
+                <div><h3>Check what you learned</h3><span class="quiz-count">Question ${activeQuestionIndex + 1} of ${activeQuizQuestions.length}</span></div>
+                <span class="quiz-progress-track"><span style="width:${activeQuestionIndex / activeQuizQuestions.length * 100}%"></span></span>
+            </div>
+            <p class="quiz-question" tabindex="-1">${question.question}</p>
+            <div class="quiz-options" role="group" aria-label="Choose one answer">${question.options.map((option, index) =>
+                `<button type="button" class="quiz-option" data-answer="${index}" aria-pressed="false">${option}</button>`
+            ).join("")}</div>
+            <div class="quiz-controls">
+                <button type="button" class="quiz-action" id="checkAnswer" disabled>Check my answer</button>
+                <button type="button" class="quiz-action quiz-next" id="nextQuestion" hidden>${activeQuestionIndex === activeQuizQuestions.length - 1 ? "Finish questions" : "Next question"}</button>
+                <button type="button" class="quiz-action quiz-retry" id="retryQuestion" hidden>Try this question again</button>
+            </div>
+            <p class="quiz-feedback" id="quizFeedback" role="status" aria-live="polite"></p>`;
+        $("completeLesson").disabled = true;
+        $("lessonStatus").textContent = "Answer all four questions correctly to finish this module. You can retry any question.";
     }
 
     function openModule(moduleId) {
         const module = MODULES.find((item) => item.id === moduleId);
         if (!module) return;
         activeModuleId = module.id;
-        selectedQuizAnswer = null;
+        activeQuizQuestions = getModuleQuestions(module);
+        activeQuestionIndex = 0;
+        questionAnswered = false;
+        const details = LESSON_DETAILS[module.id];
         $("lessonLevel").textContent = module.level;
         $("lessonLevel").className = `lesson-level ${module.level.toLowerCase()}`;
         $("lessonTitle").textContent = module.title;
-        $("lessonContent").innerHTML = module.topics.map(([title, text]) =>
-            `<article class="lesson-topic"><h3>${title}</h3><p>${text}</p></article>`
-        ).join("");
-        $("knowledgeCheck").innerHTML = `<h3>Quick knowledge check</h3>
-            <p class="quiz-question">${module.quiz.question}</p>
-            <div class="quiz-options">${module.quiz.options.map((option, index) =>
-                `<button type="button" class="quiz-option" data-answer="${index}">${option}</button>`
+        $("lessonContent").innerHTML = `<article class="simple-explanation">
+                <span class="content-label">START HERE · PLAIN LANGUAGE</span>
+                <p>${details.simple}</p>
+            </article>
+            <div class="lesson-topics">${module.topics.map(([title, text]) =>
+                `<article class="lesson-topic"><h3>${title}</h3><p>${text}</p></article>`
             ).join("")}</div>
-            <p class="quiz-feedback" id="quizFeedback" role="status" aria-live="polite"></p>`;
+            <article class="worked-example">
+                <span class="content-label">A SIMPLE EXAMPLE</span>
+                <p>${details.example}</p>
+            </article>
+            <section class="lesson-vocabulary" aria-label="Key words">
+                <h3>Important words, explained</h3>
+                <dl>${details.vocabulary.map(([term, definition]) => `<div><dt>${term}</dt><dd>${definition}</dd></div>`).join("")}</dl>
+            </section>
+            <article class="try-it-yourself">
+                <span aria-hidden="true">✏️</span><div><h3>Try it yourself</h3><p>${details.practice}</p></div>
+            </article>`;
         const done = getCompletedModules().includes(module.id);
-        $("completeLesson").disabled = done || selectedQuizAnswer === null;
+        $("completeLesson").disabled = true;
         $("completeLesson").textContent = done ? "Module completed" : "Mark module complete";
-        $("lessonStatus").textContent = done
-            ? "You've completed this module. Revisit it anytime."
-            : "Answer the knowledge check to unlock module completion.";
         $("lessonPanel").hidden = false;
+        renderQuizQuestion();
+        if (done) {
+            $("completeLesson").disabled = true;
+            $("completeLesson").textContent = "Module completed";
+            $("lessonStatus").textContent = "You've completed this module. Revisit it anytime; the questions are available to practise again.";
+        }
         $("lessonPanel").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
@@ -413,6 +654,80 @@
             : "";
     }
 
+    function escapeHTML(value) {
+        return String(value).replace(/[&<>"']/g, (character) => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        })[character]);
+    }
+
+    function createStudyGuide() {
+        const modules = MODULES.map((module, index) => {
+            const details = LESSON_DETAILS[module.id];
+            const questions = getModuleQuestions(module);
+            return `<article class="module">
+                <p class="level">MODULE ${index + 1} · ${escapeHTML(module.level)}</p>
+                <h2>${escapeHTML(module.title)}</h2>
+                <p class="summary">${escapeHTML(module.summary)}</p>
+                <h3>In simple words</h3><p>${escapeHTML(details.simple)}</p>
+                ${module.topics.map(([title, text]) => `<h3>${escapeHTML(title)}</h3><p>${escapeHTML(text)}</p>`).join("")}
+                <h3>A simple example</h3><p>${escapeHTML(details.example)}</p>
+                <h3>Important words</h3><dl>${details.vocabulary.map(([term, definition]) => `<dt>${escapeHTML(term)}</dt><dd>${escapeHTML(definition)}</dd>`).join("")}</dl>
+                <h3>Try it yourself</h3><p>${escapeHTML(details.practice)}</p>
+                <h3>Questions and explanations</h3>
+                <ol>${questions.map((question) => `<li><strong>${escapeHTML(question.question)}</strong><ul>${question.options.map((option, optionIndex) =>
+                    `<li${optionIndex === question.answer ? ' class="answer"' : ""}>${escapeHTML(option)}${optionIndex === question.answer ? " — Correct answer" : ""}</li>`
+                ).join("")}</ul><p class="explanation">${escapeHTML(question.explanation)}</p></li>`).join("")}</ol>
+            </article>`;
+        }).join("");
+
+        return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>TradeNova Stock Learning Study Guide</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+            <style>
+                *{box-sizing:border-box}body{max-width:850px;margin:32px auto;padding:0 24px;color:#243244;font:16px/1.7 Inter,Arial,sans-serif}
+                h1{color:#143d55;font-size:34px;line-height:1.2}h2{margin:8px 0;color:#153f58;font-size:25px}h3{margin:22px 0 5px;color:#176e5c;font-size:18px}
+                p{margin:7px 0}li{margin:6px 0}.level,.label{color:#176e5c;font-size:12px;font-weight:800;letter-spacing:1px}
+                .intro,.simple,.example{padding:16px;border-radius:10px;background:#f0f7f5}.module{padding:18px 0 30px;border-bottom:2px solid #e5edf1}
+                dt{margin-top:8px;font-weight:700}dd{margin-left:0}.answer{font-weight:700;color:#176e5c}.explanation{color:#526174}
+                .toolbar{position:sticky;top:8px;padding:12px;background:white;border:1px solid #dce5ef;border-radius:10px}
+                button{padding:10px 14px;border:0;border-radius:8px;background:#176e5c;color:white;font:inherit;cursor:pointer}
+                @media print{body{max-width:none;margin:0;padding:0;font-size:11pt}.toolbar{display:none}.module{break-inside:avoid-page}h2,h3{break-after:avoid}}
+            </style></head><body>
+            <div class="toolbar"><button onclick="window.print()">Print / Save as PDF</button> <span>In the print window, choose “Save as PDF” to create a PDF file.</span></div>
+            <h1>TradeNova Stock Market Learning Guide</h1>
+            <div class="intro"><p>This original guide is for learning only, not personal financial advice. It uses simple explanations and examples. Market prices can go up or down; no result is guaranteed. The examples are not real recommendations.</p>
+            <p>Work through the modules in order. Pause to explain each idea in your own words. Use the questions to check understanding, not to make investment decisions.</p></div>
+            ${modules}
+            </body></html>`;
+    }
+
+    function printStudyGuide() {
+        const guideWindow = window.open("", "_blank");
+        if (!guideWindow) {
+            $("resourceStatus").textContent = "Your browser blocked the new tab. Allow pop-ups for this site, then try again.";
+            return;
+        }
+        guideWindow.document.open();
+        guideWindow.document.write(createStudyGuide());
+        guideWindow.document.close();
+        guideWindow.focus();
+        $("resourceStatus").textContent = "Study guide opened in a new tab. Use its Print / Save as PDF button, then choose “Save as PDF”.";
+    }
+
+    function downloadStudyGuide() {
+        const guide = createStudyGuide();
+        const downloadUrl = URL.createObjectURL(new Blob([guide], { type: "text/html;charset=utf-8" }));
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = "TradeNova-Stock-Learning-Guide.html";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+        $("resourceStatus").textContent = "Study guide downloaded as an HTML file. Open it and choose “Print / Save as PDF” to create a PDF.";
+    }
+
     document.addEventListener("click", (event) => {
         const card = event.target.closest(".module-card");
         if (card) openModule(card.dataset.moduleId);
@@ -428,24 +743,57 @@
         }
 
         const answerButton = event.target.closest(".quiz-option");
-        if (answerButton && activeModuleId) {
-            const module = MODULES.find((item) => item.id === activeModuleId);
-            const answer = Number(answerButton.dataset.answer);
-            selectedQuizAnswer = answer;
+        if (answerButton && !questionAnswered) {
+            selectedQuizAnswer = Number(answerButton.dataset.answer);
             document.querySelectorAll(".quiz-option").forEach((button) => {
-                button.disabled = true;
-                if (Number(button.dataset.answer) === module.quiz.answer) button.classList.add("correct");
+                button.classList.toggle("selected", button === answerButton);
+                button.setAttribute("aria-pressed", String(button === answerButton));
             });
-            const correct = answer === module.quiz.answer;
-            if (!correct) answerButton.classList.add("incorrect");
-            $("quizFeedback").textContent = `${correct ? "Correct. " : "Not quite. "}${module.quiz.explanation}`;
-            if (!getCompletedModules().includes(module.id)) $("completeLesson").disabled = false;
+            $("checkAnswer").disabled = false;
+        }
+
+        if (event.target.closest("#checkAnswer") && selectedQuizAnswer !== null && activeModuleId) {
+            const question = activeQuizQuestions[activeQuestionIndex];
+            const correct = selectedQuizAnswer === question.answer;
+            questionAnswered = correct;
+            $("quizFeedback").textContent = `${correct ? "That's right! " : "Not quite yet. "}${question.explanation}`;
+            if (correct) {
+                document.querySelectorAll(".quiz-option").forEach((button) => {
+                    button.disabled = true;
+                    if (Number(button.dataset.answer) === question.answer) button.classList.add("correct");
+                });
+                $("checkAnswer").hidden = true;
+                $("nextQuestion").hidden = false;
+            } else {
+                const selectedButton = document.querySelector(`.quiz-option[data-answer="${selectedQuizAnswer}"]`);
+                if (selectedButton) selectedButton.classList.add("incorrect");
+                document.querySelectorAll(".quiz-option").forEach((button) => { button.disabled = true; });
+                $("checkAnswer").hidden = true;
+                $("retryQuestion").hidden = false;
+            }
+        }
+
+        if (event.target.closest("#retryQuestion")) {
+            renderQuizQuestion();
+            const firstOption = document.querySelector(".quiz-option");
+            if (firstOption) firstOption.focus();
+        }
+
+        if (event.target.closest("#nextQuestion")) {
+            activeQuestionIndex += 1;
+            renderQuizQuestion();
+            const question = document.querySelector(".quiz-question");
+            if (question) question.focus();
         }
     });
 
     $("closeLesson").addEventListener("click", () => { $("lessonPanel").hidden = true; });
     $("completeLesson").addEventListener("click", () => {
         if (!activeModuleId) return;
+        if (activeQuestionIndex < activeQuizQuestions.length) {
+            $("lessonStatus").textContent = "Please answer every question correctly before completing this module.";
+            return;
+        }
         const completed = getCompletedModules();
         if (!completed.includes(activeModuleId)) {
             completed.push(activeModuleId);
@@ -466,6 +814,8 @@
     });
     $("sellPaper").addEventListener("click", () => executePaperTrade("SELL"));
     $("paperSymbol").addEventListener("change", updateSelectedQuote);
+    $("printStudyGuide").addEventListener("click", printStudyGuide);
+    $("downloadStudyGuide").addEventListener("click", downloadStudyGuide);
     $("resetSimulation").addEventListener("click", () => {
         if (!window.confirm("Reset your paper account to ₹1,00,000 and clear simulated holdings and orders?")) return;
         paperAccount = { cash: STARTING_CASH, holdings: {}, history: [] };
