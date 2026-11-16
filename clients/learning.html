@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeNova | Learn & Practice</title>
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/topbar.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/learning.css">
+</head>
+<body>
+    <div id="sidebar"></div>
+    <main class="main">
+        <div id="topbar"></div>
+        <div class="learning-page">
+            <section class="learning-hero">
+                <div>
+                    <span class="eyebrow">TRADE NOVA ACADEMY</span>
+                    <h1>Learn the markets. Practice without risk.</h1>
+                    <p>Build your knowledge from the first market basics to advanced strategies, then try the concepts with a simulated portfolio.</p>
+                    <a class="learning-hero-button" href="#courseCatalog">Explore learning path <span aria-hidden="true">↓</span></a>
+                </div>
+                <div class="hero-progress" aria-label="Course progress">
+                    <span class="hero-progress-icon" aria-hidden="true">🎓</span>
+                    <strong id="progressSummary">0 / 16</strong>
+                    <span>modules completed</span>
+                    <div class="progress-track"><span id="overallProgress"></span></div>
+                </div>
+            </section>
+
+            <section class="learning-disclaimer" aria-label="Educational disclaimer">
+                <span aria-hidden="true">ⓘ</span>
+                <p><strong>Learning only:</strong> This content is educational, not investment advice. The practice area uses virtual money and illustrative prices; it does not place real orders or show live market data.</p>
+            </section>
+
+            <section class="course-section" id="courseCatalog">
+                <div class="section-heading">
+                    <div>
+                        <span class="eyebrow">YOUR LEARNING PATH</span>
+                        <h2>Start with the basics, build toward advanced</h2>
+                    </div>
+                    <span class="module-count" id="moduleCount">16 modules</span>
+                </div>
+                <div class="level-filters" role="group" aria-label="Filter modules by learning level">
+                    <button class="level-filter active" type="button" data-level="all" aria-pressed="true">All levels</button>
+                    <button class="level-filter" type="button" data-level="Beginner" aria-pressed="false">Beginner</button>
+                    <button class="level-filter" type="button" data-level="Intermediate" aria-pressed="false">Intermediate</button>
+                    <button class="level-filter" type="button" data-level="Advanced" aria-pressed="false">Advanced</button>
+                </div>
+                <div class="module-grid" id="moduleGrid"></div>
+            </section>
+
+            <section class="lesson-panel" id="lessonPanel" hidden aria-live="polite">
+                <div class="lesson-topline">
+                    <div>
+                        <span class="lesson-level" id="lessonLevel"></span>
+                        <h2 id="lessonTitle"></h2>
+                    </div>
+                    <button class="close-lesson" id="closeLesson" type="button" aria-label="Close lesson">×</button>
+                </div>
+                <div class="lesson-content" id="lessonContent"></div>
+                <div class="knowledge-check" id="knowledgeCheck"></div>
+                <div class="lesson-actions">
+                    <span id="lessonStatus" role="status"></span>
+                    <button class="complete-lesson" id="completeLesson" type="button">Mark module complete</button>
+                </div>
+            </section>
+
+            <section class="practice-section" id="paperPractice">
+                <div class="section-heading practice-heading">
+                    <div>
+                        <span class="eyebrow">PAPER TRADING LAB</span>
+                        <h2>Practice with ₹1,00,000 in virtual cash</h2>
+                        <p>Learn how order quantity, available cash and portfolio value work in a safe simulation.</p>
+                    </div>
+                    <button class="reset-simulation" id="resetSimulation" type="button">Reset simulation</button>
+                </div>
+                <div class="practice-note"><span aria-hidden="true">⚠</span> Sample instruments and prices below are illustrative and do not represent real companies or current quotes.</div>
+                <div class="practice-summary">
+                    <article class="practice-stat">
+                        <span>Virtual cash</span>
+                        <strong id="paperCash">₹1,00,000</strong>
+                    </article>
+                    <article class="practice-stat">
+                        <span>Holdings value</span>
+                        <strong id="paperHoldingsValue">₹0</strong>
+                    </article>
+                    <article class="practice-stat">
+                        <span>Portfolio value</span>
+                        <strong id="paperPortfolioValue">₹1,00,000</strong>
+                    </article>
+                    <article class="practice-stat">
+                        <span>Unrealised P&amp;L</span>
+                        <strong id="paperPnl">₹0</strong>
+                    </article>
+                </div>
+                <div class="practice-grid">
+                    <form class="trade-ticket" id="paperTradeForm">
+                        <h3>Place a practice order</h3>
+                        <label for="paperSymbol">Illustrative instrument</label>
+                        <select id="paperSymbol"></select>
+                        <p class="selected-quote" id="selectedQuote"></p>
+                        <label for="paperQuantity">Quantity</label>
+                        <input id="paperQuantity" type="number" min="1" step="1" value="1" required>
+                        <div class="trade-buttons">
+                            <button class="buy-paper" type="submit" data-side="buy">Buy with virtual cash</button>
+                            <button class="sell-paper" type="button" id="sellPaper">Sell holding</button>
+                        </div>
+                        <p class="trade-message" id="tradeMessage" role="status"></p>
+                    </form>
+                    <div class="paper-positions">
+                        <h3>Your simulated holdings</h3>
+                        <div class="table-scroll">
+                            <table>
+                                <thead><tr><th>Instrument</th><th>Qty</th><th>Avg. cost</th><th>Value</th><th>P&amp;L</th></tr></thead>
+                                <tbody id="paperPositions"></tbody>
+                            </table>
+                        </div>
+                        <p class="empty-positions" id="emptyPositions">No practice holdings yet. Place a simulated buy to get started.</p>
+                    </div>
+                </div>
+                <div class="trade-history">
+                    <h3>Recent practice orders</h3>
+                    <div id="paperHistory"><p>No simulated orders yet.</p></div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script src="js/learning.js"></script>
+    <script src="js/topbar.js"></script>
+</body>
+</html>
