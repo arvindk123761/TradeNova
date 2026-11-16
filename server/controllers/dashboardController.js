@@ -222,121 +222,24 @@ exports.getTopLosers = async (req, res) => {
    MARKET NEWS
 ========================================== */
 
-const NEWS_CACHE_TTL_MS = 60 * 60 * 1000;
-let newsCache = {
-    expiresAt: 0,
-    news: null
-};
-let newsRequest = null;
-
 exports.getLatestNews = async (req, res) => {
 
-    const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
-
-    if (!apiKey) {
-        return res.status(503).json({
-            success: false,
-            message: "Live news is not configured. Set ALPHA_VANTAGE_API_KEY on the server."
-        });
-    }
-
-    if (newsCache.news && Date.now() < newsCache.expiresAt) {
-        res.set("Cache-Control", "public, max-age=300");
-        return res.json({ success: true, news: newsCache.news });
-    }
-
     try {
-        if (!newsRequest) {
-            newsRequest = (async () => {
-                const url = new URL("https://www.alphavantage.co/query");
-                url.searchParams.set("function", "NEWS_SENTIMENT");
-                url.searchParams.set("sort", "LATEST");
-                url.searchParams.set("limit", "50");
-                url.searchParams.set("apikey", apiKey);
-
-                const response = await fetch(url, {
-                    headers: { Accept: "application/json" },
-                    signal: AbortSignal.timeout(10000)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`News provider returned HTTP ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (data["Error Message"] || data.Note || data.Information || !Array.isArray(data.feed)) {
-                    throw new Error("News provider returned an invalid response or API limit message");
-                }
-
-                const news = data.feed
-                    .filter(item => item && typeof item === "object")
-                    .map(item => {
-                        const articleUrl = typeof item.url === "string" ? item.url : "";
-                        let parsedUrl;
-
-                        try {
-                            parsedUrl = new URL(articleUrl);
-                        } catch {
-                            return null;
-                        }
-
-                        if (!["http:", "https:"].includes(parsedUrl.protocol) || !item.title) {
-                            return null;
-                        }
-
-                        const topics = Array.isArray(item.topics)
-                            ? item.topics.map(topic => String(topic && topic.topic || "").toLowerCase())
-                            : [];
-                        const isTechnology = topics.includes("technology");
-                        const isFinancialMarket = topics.includes("financial_markets");
-
-                        if (!isTechnology && !isFinancialMarket) {
-                            return null;
-                        }
-
-                        const publishedAt = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})$/.exec(item.time_published || "");
-
-                        return {
-                            title: String(item.title),
-                            source: String(item.source || "Publisher"),
-                            url: parsedUrl.href,
-                            publishedAt: publishedAt
-                                ? `${publishedAt[1]}-${publishedAt[2]}-${publishedAt[3]}T${publishedAt[4]}:${publishedAt[5]}:${publishedAt[6]}Z`
-                                : null,
-                            category: isTechnology ? "Tech" : "Stocks"
-                        };
-                    })
-                    .filter(Boolean);
-
-                if (news.length === 0) {
-                    throw new Error("News provider returned no technology or financial-market headlines");
-                }
-
-                newsCache = {
-                    expiresAt: Date.now() + NEWS_CACHE_TTL_MS,
-                    news
-                };
-
-                return news;
-            })();
-        }
-
-        const news = await newsRequest;
-
-        res.set("Cache-Control", "public, max-age=300");
-        return res.json({ success: true, news });
-    } catch (err) {
-        console.error("Live news request failed:", err.message);
-
-        return res.status(502).json({
-            success: false,
-            message: err.message.includes("no technology or financial-market headlines")
-                ? "The news provider returned no recent tech or stock headlines. Check the API key and plan, or try again later."
-                : "Live news is temporarily unavailable. Check the API key and provider quota, then try again."
+        res.json({
+            success: true,
+            news: [
+                { title: "Nifty closes higher on strong banking stocks.", source: "TradeNova News" },
+                { title: "Reliance Industries announces expansion plans.", source: "TradeNova News" },
+                { title: "TCS reports strong quarterly earnings.", source: "TradeNova News" },
+                { title: "FIIs continue buying Indian equities.", source: "TradeNova News" }
+            ]
         });
-    } finally {
-        newsRequest = null;
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "News Error"
+        });
     }
 
 };

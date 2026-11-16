@@ -7,7 +7,6 @@ TradeNova is a full-stack stock trading and investment dashboard built with a va
 - User registration and login with JWT authentication
 - Wallet funding and balance tracking
 - Stock browsing, search, filters, simulated price updates, and percentage changes
-- Dashboard tech and stock headlines from Alpha Vantage with publisher links and category filters
 - Stock buy and sell flow with portfolio updates
 - Portfolio summary, holdings, profit/loss, and chart
 - Orders, watchlist, and activity history
@@ -30,7 +29,7 @@ TradeNova is a full-stack stock trading and investment dashboard built with a va
    npm install
    ```
 
-2. Copy `server/.env.example` to `server/.env` and set your local MySQL credentials, a long random `JWT_SECRET`, and an Alpha Vantage API key. You can get a key from [Alpha Vantage](https://www.alphavantage.co/support/#api-key). Keep the key server-side; never add it to frontend code or commit it.
+2. Copy `server/.env.example` to `server/.env` and set your local MySQL credentials and a long random `JWT_SECRET`.
 
 3. Make sure the MySQL database `tradenova_db` exists and contains the tables used by the application.
 
@@ -45,7 +44,6 @@ TradeNova is a full-stack stock trading and investment dashboard built with a va
 
 5. Open `http://localhost:5000` in a browser. The Express server serves the frontend and API from the same origin.
 
-The dashboard fetches current technology and financial-market headlines through the server-side `/api/dashboard/news` endpoint. Results are cached for up to one hour to limit API usage. If `ALPHA_VANTAGE_API_KEY` is missing or the provider quota is reached, the dashboard displays an explanatory error instead of sample headlines.
 
 ## Development
 
@@ -69,7 +67,7 @@ The repository includes a Render Blueprint in `render.yaml`. It deploys the Expr
 1. Push the deployment changes to GitHub and sign in to [Render](https://dashboard.render.com/).
 2. Create a free [TiDB Cloud Starter](https://tidbcloud.com/free-trial) cluster. Copy the connection host, port, username, password, and database name from its connection details; TiDB requires TLS.
 3. In Render, select **New > Blueprint** and choose this GitHub repository. Review the `tradenova` web service and choose the Free plan.
-4. Set the service variables `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` to the TiDB connection values, and set `DB_SSL=true`. Also add `ALPHA_VANTAGE_API_KEY` using your key from [Alpha Vantage](https://www.alphavantage.co/support/#api-key). Keep `NODE_ENV=production`; Render generates `JWT_SECRET` for the service.
+4. Set the service variables `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` to the TiDB connection values, and set `DB_SSL=true`. Keep `NODE_ENV=production`; Render generates `JWT_SECRET` for the service.
 5. Export your local `tradenova_db` schema/data and import it into TiDB. This repository does not contain a usable SQL schema or dump, so database-backed features will not work until your tables are imported.
 6. Open the Render service URL and verify `/api/health` returns success. The first request after an idle period may take about a minute while the free service wakes.
 
