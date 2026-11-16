@@ -250,7 +250,6 @@ exports.getLatestNews = async (req, res) => {
             newsRequest = (async () => {
                 const url = new URL("https://www.alphavantage.co/query");
                 url.searchParams.set("function", "NEWS_SENTIMENT");
-                url.searchParams.set("topics", "technology,financial_markets");
                 url.searchParams.set("sort", "LATEST");
                 url.searchParams.set("limit", "50");
                 url.searchParams.set("apikey", apiKey);
@@ -289,6 +288,13 @@ exports.getLatestNews = async (req, res) => {
                         const topics = Array.isArray(item.topics)
                             ? item.topics.map(topic => String(topic && topic.topic || "").toLowerCase())
                             : [];
+                        const isTechnology = topics.includes("technology");
+                        const isFinancialMarket = topics.includes("financial_markets");
+
+                        if (!isTechnology && !isFinancialMarket) {
+                            return null;
+                        }
+
                         const publishedAt = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})$/.exec(item.time_published || "");
 
                         return {
@@ -298,10 +304,14 @@ exports.getLatestNews = async (req, res) => {
                             publishedAt: publishedAt
                                 ? `${publishedAt[1]}-${publishedAt[2]}-${publishedAt[3]}T${publishedAt[4]}:${publishedAt[5]}:${publishedAt[6]}Z`
                                 : null,
-                            category: topics.includes("technology") ? "Tech" : "Stocks"
+                            category: isTechnology ? "Tech" : "Stocks"
                         };
                     })
                     .filter(Boolean);
+
+                if (news.length === 0) {
+                    throw new Error("News provider returned no technology or financial-market headlines");
+                }
 
                 newsCache = {
                     expiresAt: Date.now() + NEWS_CACHE_TTL_MS,
@@ -321,7 +331,9 @@ exports.getLatestNews = async (req, res) => {
 
         return res.status(502).json({
             success: false,
-            message: "Live news is temporarily unavailable. Check the API key and provider quota, then try again."
+            message: err.message.includes("no technology or financial-market headlines")
+                ? "The news provider returned no recent tech or stock headlines. Check the API key and plan, or try again later."
+                : "Live news is temporarily unavailable. Check the API key and provider quota, then try again."
         });
     } finally {
         newsRequest = null;
