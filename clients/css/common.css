@@ -221,8 +221,7 @@ body.dark-mode .card,
 body.dark-mode table,
 body.dark-mode .summary-card,
 body.dark-mode .chart-card,
-body.dark-mode .table-card,
-body.dark-mode .settings-card{
+body.dark-mode .table-card{
     background:#1e293b;
     color:#e5e7eb;
 }
@@ -235,23 +234,4 @@ body.dark-mode p,
 body.dark-mode span,
 body.dark-mode td{
     color:inherit;
-}
-
-body.compact-view .main{
-    padding-top:15px;
-}
-
-body.compact-view .card,
-body.compact-view .summary-card,
-body.compact-view .chart-card,
-body.compact-view .table-card{
-    padding:15px;
-}
-
-body.reduced-motion *,
-body.reduced-motion *::before,
-body.reduced-motion *::after{
-    animation-duration:0s !important;
-    transition-duration:0s !important;
-    scroll-behavior:auto !important;
 }
