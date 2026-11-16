@@ -23,6 +23,21 @@ document.getElementById("topbar").innerHTML=data;
 });
 const API = `${window.location.origin}/api`;
 
+function updateTodayDate() {
+    const dateElement = document.getElementById("todayDate");
+
+    if (dateElement) {
+        dateElement.textContent = new Intl.DateTimeFormat(undefined, {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }).format(new Date());
+    }
+}
+
+updateTodayDate();
+setInterval(updateTodayDate, 60 * 1000);
+
 async function loadDashboard() {
 
     try {
