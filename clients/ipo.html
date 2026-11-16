@@ -45,25 +45,24 @@ HEADER
 
 <h1>
 
-🚀 IPO Investments
+🚀 IPO Centre
 
 </h1>
 
 <p>
 
-Apply for the latest Initial Public Offerings before listing.
+Explore offer details, dates, lot sizes and your submitted applications.
 
 </p>
 
+<span class="demo-disclaimer">Demo listings are simulated for learning and are not real IPO offers.</span>
+
 </div>
 
-<input
-
-type="text"
-
-id="searchIPO"
-
-placeholder="Search IPO...">
+<label class="ipo-search">
+<span aria-hidden="true">⌕</span>
+<input type="search" id="searchIPO" placeholder="Search IPO or sector..." aria-label="Search IPOs">
+</label>
 
 </div>
 
@@ -139,17 +138,56 @@ My Applications
 
 </div>
 
+<nav class="ipo-filters" aria-label="Filter IPOs">
+    <button type="button" class="filter-chip active" data-status="All">All IPOs</button>
+    <button type="button" class="filter-chip" data-status="Active">Open</button>
+    <button type="button" class="filter-chip" data-status="Upcoming">Upcoming</button>
+    <button type="button" class="filter-chip" data-status="Closed">Closed</button>
+</nav>
+
 <!-- =========================
 IPO GRID
 ========================= -->
 
 <div
-
 class="ipo-grid"
-
 id="ipoContainer">
-
 </div>
+
+<section class="applications-section" aria-labelledby="applicationsHeading">
+    <div class="section-heading">
+        <div>
+            <h2 id="applicationsHeading">My Applications</h2>
+            <p>Track applications you have submitted.</p>
+        </div>
+        <span class="applications-count" id="applicationCount">0 applications</span>
+    </div>
+    <div class="applications-list" id="applicationsList">
+        <p class="applications-empty">Your submitted IPO applications will appear here.</p>
+    </div>
+</section>
+
+<dialog class="apply-dialog" id="applyDialog" aria-labelledby="applyDialogTitle">
+    <form method="dialog" class="dialog-close-form">
+        <button class="dialog-close" aria-label="Close dialog">×</button>
+    </form>
+    <span class="dialog-eyebrow">IPO APPLICATION</span>
+    <h2 id="applyDialogTitle">Apply for IPO</h2>
+    <p class="dialog-company" id="dialogCompany"></p>
+    <div class="dialog-summary">
+        <span>Price per share<strong id="dialogPrice">—</strong></span>
+        <span>Shares per lot<strong id="dialogLotSize">—</strong></span>
+    </div>
+    <label class="lots-field" for="lotCount">Number of lots
+        <input type="number" id="lotCount" min="1" step="1" value="1" inputmode="numeric">
+    </label>
+    <div class="application-amount">
+        <span>Application amount</span>
+        <strong id="applicationAmount">—</strong>
+    </div>
+    <p class="application-note">This is a simulated application. No money is blocked or transferred.</p>
+    <button type="button" class="apply-btn" id="submitApplication">Submit application</button>
+</dialog>
 
 <!-- =========================
 EMPTY STATE
@@ -162,12 +200,6 @@ id="emptyIPO"
 class="empty-state"
 
 style="display:none;">
-
-<img
-
-src="images/empty-ipo.svg"
-
-alt="IPO">
 
 <h2>
 

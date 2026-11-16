@@ -1,532 +1,732 @@
-/* ==========================================
-   GLOBAL
-========================================== */
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
+* {
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+
+.main {
+    min-height: 100vh;
+    margin-left: 260px;
+    padding: 32px;
+    background: #f5f7fb;
+}
+
+.ipo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 26px;
+}
+
+.ipo-header h1 {
+    margin: 0 0 8px;
+    color: #172033;
+    font-size: clamp(28px, 3vw, 36px);
+    letter-spacing: -1px;
+}
+
+.ipo-header p,
+.section-heading p {
+    margin: 0;
+    color: #6b778c;
+    font-size: 15px;
+}
+
+.demo-disclaimer {
+    display: inline-flex;
+    margin-top: 14px;
+    padding: 8px 11px;
+    border: 1px solid #f5d58b;
+    border-radius: 9px;
+    background: #fff8e6;
+    color: #815700;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.ipo-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: min(100%, 360px);
+    min-height: 52px;
+    padding: 0 16px;
+    border: 1px solid #e8edf5;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 6px 20px rgba(31, 45, 70, .05);
+    color: #8490a3;
+    font-size: 24px;
+}
+
+.ipo-search:focus-within {
+    border-color: #9ab8ff;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, .09);
+}
+
+.ipo-search input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #172033;
+    font-size: 14px;
+}
+
+.ipo-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.summary-card {
+    min-height: 118px;
+    padding: 22px 24px;
+    border: 1px solid #e9edf4;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 7px 22px rgba(31, 45, 70, .045);
+}
+
+.summary-card h4 {
+    margin: 0 0 12px;
+    color: #6b778c;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.summary-card h2 {
+    margin: 0;
+    color: #172033;
+    font-size: 30px;
+    line-height: 1;
+}
+
+.ipo-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin: 0 0 20px;
+}
+
+.filter-chip {
+    padding: 9px 16px;
+    border: 1px solid #e5eaf2;
+    border-radius: 999px;
+    background: #fff;
+    color: #59667b;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: .2s ease;
+}
+
+.filter-chip:hover,
+.filter-chip.active {
+    border-color: #2563eb;
+    background: #2563eb;
+    color: #fff;
+}
+
+.ipo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr));
+    align-items: stretch;
+    gap: 18px;
 }
-
-body{
-background:#f5f7fb;
+
+.ipo-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid #e8edf4;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(31, 45, 70, .05);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.ipo-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(31, 45, 70, .09);
+}
+
+.ipo-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
-.main{
-margin-left:260px;
-padding:30px;
-min-height:100vh;
+.ipo-logo,
+.application-icon {
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    background: #edf3ff;
+    color: #245bd3;
+    font-size: 19px;
+    font-weight: 700;
 }
-
-/* ==========================================
-   HEADER
-========================================== */
-
-.ipo-header{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
-gap:20px;
 
+.company-name {
+    margin: 0 0 5px;
+    color: #172033;
+    font-size: 20px;
+    font-weight: 700;
 }
 
-.ipo-header h1{
-
-font-size:36px;
-font-weight:700;
-color:#111827;
-margin-bottom:8px;
-
+.company-sector {
+    margin: 0;
+    color: #738096;
+    font-size: 13px;
 }
-
-.ipo-header p{
 
-font-size:15px;
-color:#64748b;
-
+.demo-tag {
+    align-self: flex-start;
+    margin-top: 12px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    background: #f1f5ff;
+    color: #355db0;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
 }
-
-.ipo-header input{
-
-width:340px;
-height:52px;
-padding:0 18px;
-border:none;
-outline:none;
-border-radius:14px;
-background:#ffffff;
-font-size:15px;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-transition:.3s;
 
+.badge {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
-.ipo-header input:focus{
-
-box-shadow:0 15px 35px rgba(37,99,235,.18);
-
+.badge.active {
+    background: #e7f8ef;
+    color: #16834a;
 }
-
-/* ==========================================
-   SUMMARY
-========================================== */
 
-.ipo-summary{
-
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:22px;
-margin-bottom:35px;
-
+.badge.upcoming {
+    background: #eaf1ff;
+    color: #285dc8;
 }
-
-.summary-card{
 
-background:#ffffff;
-padding:28px;
-border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-border:1px solid #edf2f7;
-transition:.35s;
-
+.badge.closed {
+    background: #f0f2f5;
+    color: #687386;
 }
-
-.summary-card:hover{
-
-transform:translateY(-6px);
-box-shadow:0 20px 40px rgba(0,0,0,.12);
 
+.ipo-key-facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 18px 0 12px;
 }
 
-.summary-card h4{
-
-font-size:15px;
-color:#64748b;
-margin-bottom:12px;
-
+.fact-box {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+    padding: 13px;
+    border-radius: 12px;
+    background: #f7f9fc;
 }
-
-.summary-card h2{
 
-font-size:32px;
-font-weight:700;
-color:#111827;
-
+.fact-box span,
+.detail-row span,
+.application-meta > span {
+    color: #778398;
+    font-size: 12px;
 }
-
-/* ==========================================
-   IPO GRID
-========================================== */
 
-.ipo-grid{
-
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-gap:25px;
-
+.fact-box strong {
+    overflow-wrap: anywhere;
+    color: #172033;
+    font-size: 16px;
 }
-
-/* ==========================================
-   IPO CARD
-========================================== */
 
-.ipo-card{
-
-background:#ffffff;
-border-radius:22px;
-padding:28px;
-box-shadow:0 12px 28px rgba(0,0,0,.08);
-border:1px solid #edf2f7;
-transition:.35s;
-position:relative;
-overflow:hidden;
-
+.ipo-details {
+    margin-top: 4px;
 }
-
-.ipo-card:hover{
 
-transform:translateY(-8px);
-box-shadow:0 22px 45px rgba(0,0,0,.12);
-
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #edf0f5;
 }
-
-.ipo-card::before{
-
-content:"";
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:5px;
-background:#2563eb;
 
+.detail-row:last-child {
+    border-bottom: 0;
 }
 
-/* ==========================================
-   COMPANY
-========================================== */
-
-.company-name{
-
-font-size:24px;
-font-weight:700;
-color:#111827;
-margin-bottom:6px;
-
+.detail-row strong {
+    color: #253149;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: right;
 }
 
-.company-sector{
-
-font-size:14px;
-color:#64748b;
-margin-bottom:22px;
-
+.apply-btn {
+    width: 100%;
+    min-height: 46px;
+    margin-top: auto;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 11px;
+    background: #2563eb;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition: background .2s ease, transform .2s ease;
 }
-
-/* ==========================================
-   PRICE BAND
-========================================== */
 
-.price-band{
-
-display:flex;
-justify-content:space-between;
-margin-bottom:18px;
-
+.ipo-card .apply-btn {
+    margin-top: 14px;
 }
-
-.price-box{
 
-flex:1;
-background:#f8fafc;
-padding:14px;
-border-radius:14px;
-text-align:center;
-
+.apply-btn:not(:disabled):hover {
+    transform: translateY(-1px);
+    background: #1d4ed8;
 }
-
-.price-box:first-child{
-
-margin-right:10px;
 
+.apply-btn:disabled {
+    background: #e9edf3;
+    color: #758096;
+    cursor: not-allowed;
 }
 
-.price-box h5{
-
-font-size:13px;
-color:#64748b;
-margin-bottom:6px;
-
+.applications-section {
+    margin-top: 34px;
+    padding: 22px;
+    border: 1px solid #e8edf4;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(31, 45, 70, .045);
 }
 
-.price-box h3{
-
-font-size:22px;
-font-weight:700;
-color:#111827;
-
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
 }
-
-/* ==========================================
-   IPO DETAILS
-========================================== */
 
-.ipo-details{
-
-margin-top:18px;
-
+.section-heading h2 {
+    margin: 0 0 5px;
+    color: #172033;
+    font-size: 20px;
 }
-
-.detail-row{
 
-display:flex;
-justify-content:space-between;
-padding:12px 0;
-border-bottom:1px solid #eef2f7;
-
+.section-heading p {
+    font-size: 13px;
 }
-
-.detail-row:last-child{
-
-border-bottom:none;
 
+.applications-count {
+    color: #68758a;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
-.detail-row span:first-child{
-
-color:#64748b;
-font-size:14px;
-
+.applications-list {
+    display: grid;
+    gap: 10px;
 }
-
-.detail-row span:last-child{
 
-font-weight:600;
-color:#111827;
-
+.application-row {
+    display: grid;
+    grid-template-columns: minmax(180px, 1.4fr) repeat(3, minmax(100px, 1fr)) auto;
+    align-items: center;
+    gap: 18px;
+    padding: 15px;
+    border: 1px solid #edf0f5;
+    border-radius: 13px;
+    background: #fbfcfe;
 }
-
-/* ==========================================
-   STATUS BADGES
-========================================== */
-
-.badge{
 
-display:inline-block;
-padding:7px 15px;
-border-radius:30px;
-font-size:13px;
-font-weight:700;
-margin-top:18px;
-
+.application-company {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
 }
-
-.badge.active{
-
-background:#dcfce7;
-color:#15803d;
 
+.application-company > div {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
 }
 
-.badge.upcoming{
-
-background:#dbeafe;
-color:#2563eb;
-
+.application-company strong {
+    overflow: hidden;
+    color: #172033;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-
-.badge.closed{
 
-background:#fee2e2;
-color:#dc2626;
-
+.application-company > div > span {
+    color: #778398;
+    font-size: 11px;
 }
-
-/* ==========================================
-   APPLY BUTTON
-========================================== */
-
-.apply-btn{
 
-width:100%;
-margin-top:22px;
-height:50px;
-border:none;
-border-radius:14px;
-background:#2563eb;
-color:#ffffff;
-font-size:15px;
-font-weight:600;
-cursor:pointer;
-transition:.3s;
-
+.application-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 16px;
 }
 
-.apply-btn:hover{
-
-background:#1d4ed8;
-transform:translateY(-3px);
+.application-meta {
+    display: grid;
+    gap: 5px;
+}
 
+.application-meta strong {
+    color: #27344a;
+    font-size: 12px;
+    font-weight: 600;
 }
 
-/* ==========================================
-   IPO TIMELINE
-========================================== */
+.application-status {
+    padding: 6px 9px;
+    border-radius: 999px;
+    background: #e8f7ef;
+    color: #18824b;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+}
 
-.ipo-timeline{
-margin-top:18px;
-padding-top:18px;
-border-top:1px solid #eef2f7;
+.applications-empty {
+    margin: 0;
+    padding: 18px;
+    border-radius: 12px;
+    background: #f7f9fc;
+    color: #6b778c;
+    font-size: 13px;
+    text-align: center;
 }
 
-.timeline-item{
-display:flex;
-justify-content:space-between;
-padding:10px 0;
-font-size:14px;
+.apply-dialog {
+    width: min(92vw, 450px);
+    padding: 28px;
+    border: 1px solid #e5eaf2;
+    border-radius: 20px;
+    background: #fff;
+    color: #172033;
+    box-shadow: 0 24px 80px rgba(15, 23, 42, .25);
 }
 
-.timeline-item span:first-child{
-color:#64748b;
-font-weight:500;
+.apply-dialog::backdrop {
+    background: rgba(15, 23, 42, .55);
+    backdrop-filter: blur(3px);
 }
 
-.timeline-item span:last-child{
-font-weight:600;
-color:#111827;
+.dialog-close-form {
+    display: flex;
+    justify-content: flex-end;
+    margin: -12px -12px 12px;
 }
 
-/* ==========================================
-   EMPTY STATE
-========================================== */
+.dialog-close {
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 50%;
+    background: #f1f4f8;
+    color: #526075;
+    cursor: pointer;
+    font-size: 23px;
+}
 
-.empty-state{
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-padding:90px 20px;
-text-align:center;
+.dialog-eyebrow {
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
 }
 
-.empty-state img{
-width:260px;
-margin-bottom:25px;
+.apply-dialog h2 {
+    margin: 7px 0 5px;
+    font-size: 23px;
 }
 
-.empty-state h2{
-font-size:34px;
-font-weight:700;
-color:#111827;
-margin-bottom:12px;
+.dialog-company {
+    margin: 0;
+    color: #6b778c;
+    font-size: 13px;
 }
 
-.empty-state p{
-font-size:16px;
-color:#64748b;
-line-height:1.7;
-max-width:420px;
+.dialog-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 21px 0;
 }
 
-/* ==========================================
-   LOADING SCREEN
-========================================== */
+.dialog-summary span {
+    display: grid;
+    gap: 7px;
+    padding: 13px;
+    border-radius: 11px;
+    background: #f6f8fb;
+    color: #738096;
+    font-size: 11px;
+}
 
-.loading-screen{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#ffffff;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-z-index:99999;
+.dialog-summary strong {
+    color: #172033;
+    font-size: 14px;
 }
 
-.loader{
-width:60px;
-height:60px;
-border:6px solid #e5e7eb;
-border-top:6px solid #2563eb;
-border-radius:50%;
-animation:spin 1s linear infinite;
+.lots-field {
+    display: grid;
+    gap: 8px;
+    color: #435068;
+    font-size: 13px;
+    font-weight: 600;
 }
 
-@keyframes spin{
+.lots-field input {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 12px;
+    border: 1px solid #dfe5ee;
+    border-radius: 10px;
+    background: #fff;
+    color: #172033;
+    font-size: 15px;
+}
 
-100%{
-transform:rotate(360deg);
+.application-amount {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+    padding: 15px 0;
+    border-top: 1px solid #edf0f5;
+    color: #647188;
+    font-size: 13px;
 }
 
+.application-amount strong {
+    color: #172033;
+    font-size: 16px;
 }
 
-.loading-screen p{
-margin-top:20px;
-font-size:17px;
-font-weight:600;
-color:#64748b;
+.application-note {
+    margin: 0 0 16px;
+    color: #8791a2;
+    font-size: 11px;
+    line-height: 1.5;
 }
 
-/* ==========================================
-   FLOATING BUTTON
-========================================== */
+.apply-dialog .apply-btn {
+    margin-top: 0;
+}
 
-.fab{
-position:fixed;
-bottom:25px;
-right:25px;
-width:58px;
-height:58px;
-border:none;
-border-radius:50%;
-background:#2563eb;
-color:#ffffff;
-font-size:22px;
-cursor:pointer;
-box-shadow:0 15px 30px rgba(37,99,235,.35);
-transition:.3s;
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    text-align: center;
 }
 
-.fab:hover{
-background:#1d4ed8;
-transform:translateY(-5px);
+.empty-state img {
+    display: none;
 }
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
+.empty-state h2 {
+    margin: 0 0 9px;
+    color: #172033;
+    font-size: 22px;
+}
 
-@media(max-width:1100px){
+.empty-state p {
+    margin: 0;
+    color: #758096;
+    font-size: 14px;
+}
 
-.ipo-summary{
-grid-template-columns:repeat(2,1fr);
+.loading-screen {
+    position: fixed;
+    z-index: 99999;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
 }
 
+.loader {
+    width: 44px;
+    height: 44px;
+    border: 4px solid #e5eaf2;
+    border-top-color: #2563eb;
+    border-radius: 50%;
+    animation: ipo-spin .8s linear infinite;
 }
 
-@media(max-width:768px){
+.loading-screen p {
+    margin-top: 14px;
+    color: #6b778c;
+    font-size: 14px;
+}
 
-.main{
-margin-left:0;
-padding:20px;
+.fab {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 50%;
+    background: #2563eb;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, .25);
+    color: #fff;
+    cursor: pointer;
+    font-size: 21px;
 }
 
-.ipo-header{
-flex-direction:column;
-align-items:flex-start;
+@keyframes ipo-spin {
+    to { transform: rotate(360deg); }
 }
 
-.ipo-header input{
-width:100%;
+body.dark-mode .main {
+    background: #0f172a;
 }
 
-.ipo-summary{
-grid-template-columns:1fr;
+body.dark-mode .ipo-card,
+body.dark-mode .summary-card,
+body.dark-mode .applications-section,
+body.dark-mode .apply-dialog {
+    border-color: #334155;
+    background: #1e293b;
+    color: #e5e7eb;
 }
 
-.ipo-grid{
-grid-template-columns:1fr;
+body.dark-mode .ipo-header h1,
+body.dark-mode .summary-card h2,
+body.dark-mode .company-name,
+body.dark-mode .fact-box strong,
+body.dark-mode .detail-row strong,
+body.dark-mode .section-heading h2,
+body.dark-mode .application-company strong,
+body.dark-mode .application-meta strong,
+body.dark-mode .apply-dialog h2,
+body.dark-mode .dialog-summary strong,
+body.dark-mode .application-amount strong {
+    color: #f1f5f9;
 }
 
-.company-name{
-font-size:22px;
+body.dark-mode .ipo-search,
+body.dark-mode .filter-chip,
+body.dark-mode .fact-box,
+body.dark-mode .application-row,
+body.dark-mode .applications-empty,
+body.dark-mode .dialog-summary span,
+body.dark-mode .lots-field input {
+    border-color: #334155;
+    background: #172235;
+    color: #e5e7eb;
 }
 
-.price-band{
-flex-direction:column;
-gap:12px;
+body.dark-mode .ipo-search input,
+body.dark-mode .lots-field input {
+    color: #e5e7eb;
 }
 
-.price-box:first-child{
-margin-right:0;
+body.dark-mode .detail-row {
+    border-color: #334155;
 }
 
+body.dark-mode .filter-chip.active {
+    border-color: #2563eb;
+    background: #2563eb;
 }
 
-/* ==========================================
-   ANIMATION
-========================================== */
+@media (max-width: 1100px) {
+    .ipo-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
-.ipo-card{
-animation:fadeUp .45s ease;
+    .application-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
-@keyframes fadeUp{
+@media (max-width: 768px) {
+    .main {
+        margin-left: 0;
+        padding: 20px 16px;
+    }
 
-from{
-opacity:0;
-transform:translateY(20px);
-}
+    .ipo-header {
+        flex-direction: column;
+    }
+
+    .ipo-search {
+        width: 100%;
+    }
+
+    .ipo-summary {
+        gap: 10px;
+    }
+
+    .summary-card {
+        min-height: 100px;
+        padding: 17px;
+    }
 
-to{
-opacity:1;
-transform:translateY(0);
+    .summary-card h2 {
+        font-size: 25px;
+    }
+
+    .ipo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .applications-section {
+        padding: 16px;
+    }
+
+    .application-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+
+    .application-company {
+        grid-column: 1 / -1;
+    }
 }
+
+@media (max-width: 420px) {
+    .ipo-summary {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .application-row {
+        grid-template-columns: 1fr;
+    }
 
+    .application-company {
+        grid-column: auto;
+    }
 }

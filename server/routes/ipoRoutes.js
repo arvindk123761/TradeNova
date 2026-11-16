@@ -6,10 +6,13 @@ const auth = require("../middleware/auth");
 
 const {
     getIPOs,
+    getApplications,
     applyIPO
 } = require("../controllers/ipoController");
 
 router.get("/", getIPOs);
+
+router.get("/applications", auth, getApplications);
 
 router.post("/apply", auth, applyIPO);
 
