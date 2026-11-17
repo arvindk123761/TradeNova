@@ -143,6 +143,63 @@
         };
     }
 
+    function analyzePrices(values, range) {
+        const thresholds = { day: 0.15, week: 0.35, month: 0.75 };
+        if (!Object.prototype.hasOwnProperty.call(thresholds, range)) {
+            throw new RangeError("Choose day, week, or month for stock signal analysis.");
+        }
+        if (!Array.isArray(values) || values.length < 2 ||
+            values.some(value => !Number.isFinite(Number(value)) || Number(value) <= 0)) {
+            throw new TypeError("At least two positive chart prices are required for signal analysis.");
+        }
+
+        const prices = values.map(Number);
+        const currentPrice = prices[prices.length - 1];
+        const firstPrice = prices[0];
+        const averageWindow = Math.min(5, prices.length);
+        const movingAverage = prices.slice(-averageWindow).reduce((sum, price) => sum + price, 0) / averageWindow;
+        const changePercent = ((currentPrice - firstPrice) / firstPrice) * 100;
+        let risingCount = 0;
+        let fallingCount = 0;
+
+        for (let index = 1; index < prices.length; index += 1) {
+            if (prices[index] > prices[index - 1]) risingCount += 1;
+            if (prices[index] < prices[index - 1]) fallingCount += 1;
+        }
+
+        const momentumDirection = changePercent >= thresholds[range]
+            ? 1
+            : changePercent <= -thresholds[range] ? -1 : 0;
+        const averageDirection = currentPrice > movingAverage ? 1 : currentPrice < movingAverage ? -1 : 0;
+        const intervalDirection = risingCount > fallingCount ? 1 : fallingCount > risingCount ? -1 : 0;
+        const bullishConfirmations = [averageDirection, intervalDirection]
+            .filter(direction => direction > 0).length;
+        const bearishConfirmations = [averageDirection, intervalDirection]
+            .filter(direction => direction < 0).length;
+        const signal = momentumDirection > 0 && bullishConfirmations >= 1
+            ? "bullish"
+            : momentumDirection < 0 && bearishConfirmations >= 1 ? "bearish" : "neutral";
+
+        return {
+            signal,
+            changePercent,
+            thresholdPercent: thresholds[range],
+            momentumDirection,
+            currentPrice,
+            movingAverage,
+            averageWindow,
+            risingCount,
+            fallingCount,
+            bullishConfirmations,
+            bearishConfirmations,
+            prices
+        };
+    }
+
+    function analyze(stock, range) {
+        return analyzePrices(getSeries(stock, range).values, range);
+    }
+
     function create(options) {
         const canvas = options.canvas;
         const chart = new Chart(canvas, {
@@ -245,5 +302,5 @@
         };
     }
 
-    window.TradeNovaStockChart = { create, formatMarketCap, getSector };
+    window.TradeNovaStockChart = { create, formatMarketCap, getSector, getSeries, analyze, analyzePrices };
 })();

@@ -10,7 +10,8 @@ window.addEventListener("load", () => {
         "watchlist.html":"watchlistLink",
         "orders.html":"ordersLink",
         "profile.html":"profileLink",
-        "ipo.html":"ipoLink"
+        "ipo.html":"ipoLink",
+        "recommendations.html":"marketSignalsLink"
     };
 
     const id = map[page];

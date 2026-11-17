@@ -10,6 +10,7 @@ TradeNova is a full-stack stock trading and investment dashboard built with a va
 - Stock buy and sell flow with portfolio updates
 - Portfolio summary, holdings, profit/loss, and a Day/Week/Month/Year performance chart with five-minute history snapshots and five-second current-value refreshes
 - Orders, watchlist, and activity history
+- Market Signals section with day/week/month simulated-chart trend indicators, transparent signal criteria, and a neutral option when signals conflict
 - IPO listings with offer dates, lot sizes, simulated demo applications, and per-user application history
 - Mutual Fund simulated NAVs, wallet-backed unit purchases, portfolio valuation, and partial/full unit selling
 - Learning academy with 16 lessons and quizzes, chart and indicator exercises, candle replay, market scenarios, virtual trading journal, performance-based recommendations, and per-user progress sync
@@ -63,6 +64,8 @@ Signed-in learning progress and virtual-trading accounts sync to the authenticat
 The learning replay can load daily historical candles through `GET /api/learning/market-history` from Yahoo Finance's free chart endpoint; no API key is required. Enter a Yahoo ticker such as `RELIANCE.NS`, `TCS.NS`, or `AAPL`, choose a period, and load the most recent candles. The provider endpoint is unofficial, may be delayed or rate-limited, and can change without notice; this is for education, not live trading or investment decisions. The last 22 candles are cached in the browser. On another device, load the same symbol and period again to resume. The built-in synthetic replay remains available when the provider is unreachable.
 
 Paper-trading prices and sample instruments remain illustrative simulations. The learning lab does not provide live quotes or broker connectivity.
+
+The Market Signals page analyzes the same illustrative price series shown in stock details. Its bullish/bearish labels are educational, rule-based signals—not live market analysis, investment advice, or a promise of future performance.
 
 Never commit `server/.env`, credentials, access tokens, or other secrets. The credentials previously embedded in source code should be considered exposed and rotated.
 

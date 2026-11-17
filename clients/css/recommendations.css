@@ -1,0 +1,360 @@
+.signals-page {
+    max-width: 1440px;
+    margin: 0 auto;
+    color: #172033;
+}
+
+.signals-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 22px;
+}
+
+.signals-eyebrow {
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+}
+
+.signals-header h1 {
+    margin: 8px 0;
+    font-size: clamp(28px, 4vw, 38px);
+}
+
+.signals-header p,
+.signals-method {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.signals-view-stocks {
+    flex: 0 0 auto;
+    padding: 12px 17px;
+    border-radius: 11px;
+    background: #2563eb;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.signals-view-stocks:hover,
+.signals-view-stocks:focus-visible {
+    background: #1d4ed8;
+}
+
+.signals-disclaimer {
+    margin-bottom: 22px;
+    padding: 17px 20px;
+    border: 1px solid #bfdbfe;
+    border-left: 5px solid #2563eb;
+    border-radius: 13px;
+    background: #eff6ff;
+    color: #1e3a8a;
+}
+
+.signals-disclaimer strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.signals-disclaimer p {
+    margin: 0;
+    line-height: 1.55;
+}
+
+.signals-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.signals-range-buttons {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.signals-range-buttons button {
+    min-width: 84px;
+    padding: 10px 17px;
+    border: 1px solid #dbe3ef;
+    border-radius: 10px;
+    background: #fff;
+    color: #334155;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+.signals-range-buttons button.active {
+    border-color: #2563eb;
+    background: #2563eb;
+    color: #fff;
+}
+
+.signals-range-buttons button:focus-visible,
+.signals-view-stocks:focus-visible,
+.signal-card a:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+}
+
+#signalsStatus {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    text-align: right;
+}
+
+.signals-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.signals-count {
+    padding: 16px 18px;
+    border: 1px solid #e2e8f0;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: 0 5px 16px rgba(15, 23, 42, .04);
+}
+
+.signals-count span,
+.signals-count strong {
+    display: block;
+}
+
+.signals-count span {
+    margin-bottom: 7px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.signals-count strong {
+    font-size: 24px;
+}
+
+.signals-count--bullish strong {
+    color: #15803d;
+}
+
+.signals-count--bearish strong {
+    color: #b91c1c;
+}
+
+.signals-count--neutral strong {
+    color: #475569;
+}
+
+.signals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: 18px;
+}
+
+.signal-card {
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, .05);
+}
+
+.signal-card__header,
+.signal-card__price-row,
+.signal-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.signal-card__name {
+    overflow: hidden;
+}
+
+.signal-card__name h2 {
+    overflow: hidden;
+    margin: 0 0 4px;
+    color: #172033;
+    font-size: 18px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.signal-card__name p,
+.signal-card__price-row p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.signal-badge {
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .3px;
+}
+
+.signal-badge--bullish {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.signal-badge--bearish {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.signal-badge--neutral {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.signal-card__price-row {
+    margin-top: 17px;
+}
+
+.signal-card__price {
+    color: #0f172a !important;
+    font-size: 21px !important;
+    font-weight: 800;
+}
+
+.signal-card__change {
+    font-size: 14px !important;
+    font-weight: 800;
+}
+
+.signal-card__change--up {
+    color: #15803d !important;
+}
+
+.signal-card__change--down {
+    color: #b91c1c !important;
+}
+
+.signal-card__change--flat {
+    color: #64748b !important;
+}
+
+.signal-chart {
+    display: block;
+    width: 100%;
+    height: 82px;
+    margin: 14px 0;
+    overflow: visible;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.signal-chart__line {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.signal-chart__line--bullish {
+    stroke: #16a34a;
+}
+
+.signal-chart__line--bearish {
+    stroke: #dc2626;
+}
+
+.signal-chart__line--neutral {
+    stroke: #64748b;
+}
+
+.signal-card__basis-title {
+    margin: 0 0 8px;
+    color: #334155;
+    font-size: 13px;
+}
+
+.signal-card__basis {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding-left: 18px;
+    color: #475569;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.signal-card__footer {
+    margin-top: 16px;
+    padding-top: 13px;
+    border-top: 1px solid #eef2f7;
+}
+
+.signal-card__footer span {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.signal-card__footer a {
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.signal-card__footer a:hover {
+    text-decoration: underline;
+}
+
+.signals-empty {
+    grid-column: 1 / -1;
+    padding: 34px 20px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 14px;
+    background: #fff;
+    color: #64748b;
+    text-align: center;
+}
+
+.signals-method {
+    margin: 18px 0 8px;
+    font-size: 12px;
+}
+
+@media (max-width: 720px) {
+    .signals-header,
+    .signals-controls {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    #signalsStatus {
+        text-align: left;
+    }
+
+    .signals-summary {
+        gap: 9px;
+    }
+
+    .signals-count {
+        padding: 13px;
+    }
+
+    .signals-count span {
+        font-size: 11px;
+    }
+
+    .signals-count strong {
+        font-size: 20px;
+    }
+}

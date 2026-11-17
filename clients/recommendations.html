@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeNova | Market Signals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/topbar.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/recommendations.css">
+</head>
+<body>
+    <div id="sidebar"></div>
+    <main class="main">
+        <div id="topbar"></div>
+        <div class="signals-page">
+            <header class="signals-header">
+                <div>
+                    <span class="signals-eyebrow">MARKET ANALYSIS</span>
+                    <h1>Stock trend signals</h1>
+                    <p>Review the chart trend for every stock in your TradeNova catalog.</p>
+                </div>
+                <a class="signals-view-stocks" href="stocks.html">View all stocks</a>
+            </header>
+
+            <aside class="signals-disclaimer" aria-label="Important simulation notice">
+                <strong>Educational demo only</strong>
+                <p>These signals use TradeNova's simulated chart history, not live market prices. They are rule-based learning indicators, not investment advice or a guarantee of future performance.</p>
+            </aside>
+
+            <section class="signals-controls" aria-label="Signal timeframe">
+                <div class="signals-range-buttons" role="group" aria-label="Choose chart timeframe">
+                    <button type="button" class="active" data-signal-range="day" aria-pressed="true">Day</button>
+                    <button type="button" data-signal-range="week" aria-pressed="false">Week</button>
+                    <button type="button" data-signal-range="month" aria-pressed="false">Month</button>
+                </div>
+                <p id="signalsStatus" role="status" aria-live="polite">Loading your stock catalog...</p>
+            </section>
+
+            <section id="signalsSummary" class="signals-summary" aria-label="Signal summary" aria-live="polite"></section>
+            <section id="signalsGrid" class="signals-grid" aria-label="Stock trend analysis" aria-live="polite"></section>
+
+            <p class="signals-method">
+                Signal method: selected-period momentum must cross its threshold (Day ±0.15%, Week ±0.35%, Month ±0.75%) and at least one of two confirmations must agree: latest price versus a 5-point simple moving average, or rising versus falling chart intervals. Otherwise the result is Mixed / Wait.
+            </p>
+        </div>
+    </main>
+
+    <script src="js/common.js"></script>
+    <script src="js/topbar.js"></script>
+    <script src="js/stockChart.js"></script>
+    <script src="js/recommendations.js"></script>
+</body>
+</html>
