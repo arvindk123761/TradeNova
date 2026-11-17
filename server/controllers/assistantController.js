@@ -1,4 +1,4 @@
-const GEMINI_MODEL = "gemini-4-hydrogen";
+const GEMINI_MODEL = "gemini-3.8-flash";
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 const MAX_QUESTION_LENGTH = 1000;
 const MAX_HISTORY_MESSAGES = 10;
