@@ -12,9 +12,9 @@ TradeNova is a full-stack stock trading and investment dashboard built with a va
 - Orders, watchlist, and activity history
 - IPO listings with offer dates, lot sizes, simulated demo applications, and per-user application history
 - Mutual Fund simulated NAVs, wallet-backed unit purchases, portfolio valuation, and partial/full unit selling
+- Learning academy with 16 lessons and quizzes, chart and indicator exercises, candle replay, market scenarios, virtual trading journal, performance-based recommendations, and per-user progress sync
 - Profile and password change
 - Authenticated admin stock management routes
-- Authenticated Google Gemini assistant for stock-market education and learning questions
 
 ## Requirements
 
@@ -31,9 +31,8 @@ TradeNova is a full-stack stock trading and investment dashboard built with a va
    ```
 
 2. Copy `server/.env.example` to `server/.env` and set your local MySQL credentials and a long random `JWT_SECRET`.
-   Add a Google Gemini API key as `GEMINI_API_KEY` to enable the AI assistant. Create a key in [Google AI Studio](https://aistudio.google.com/apikey); keep it only in the server environment and never in frontend code.
 
-3. Make sure the MySQL database `tradenova_db` exists and contains the tables used by the application.
+3. Make sure the MySQL database `tradenova_db` exists. On startup, the server creates the required tables and adds a small demo stock catalog only when the stocks table is empty.
 
 4. Start the backend:
 
@@ -59,24 +58,28 @@ Do not run npm commands from the repository root; the package file is inside `se
 
 This is a final-year project prototype. Stock prices are simulated, and the investment categories are demo catalog data. It is not connected to a live exchange, broker, payment gateway, or production settlement system.
 
+Signed-in learning progress and virtual-trading accounts sync to the authenticated user through `GET`/`PUT /api/learning/state`; the `learning_lab_state` table is created automatically on first use. A browser-local copy remains available if the API is temporarily unreachable. Guest progress stays in that browser.
+
+The learning replay can load daily historical candles through `GET /api/learning/market-history` from Yahoo Finance's free chart endpoint; no API key is required. Enter a Yahoo ticker such as `RELIANCE.NS`, `TCS.NS`, or `AAPL`, choose a period, and load the most recent candles. The provider endpoint is unofficial, may be delayed or rate-limited, and can change without notice; this is for education, not live trading or investment decisions. The last 22 candles are cached in the browser. On another device, load the same symbol and period again to resume. The built-in synthetic replay remains available when the provider is unreachable.
+
+Paper-trading prices and sample instruments remain illustrative simulations. The learning lab does not provide live quotes or broker connectivity.
+
 Never commit `server/.env`, credentials, access tokens, or other secrets. The credentials previously embedded in source code should be considered exposed and rotated.
 
-## Free deployment (Render + TiDB Cloud Starter)
+## Render deployment
 
-The repository includes a Render Blueprint in `render.yaml`. It deploys the Express app and static frontend as one free web service. For a free MySQL-compatible database, TiDB Cloud Starter currently lists a no-cost monthly allowance. Both providers' free plans have limits; Render's free web service sleeps after 15 minutes without traffic, and its local filesystem is temporary. Uploaded files are therefore not durable.
+The repository includes a Render Blueprint in `render.yaml`. It deploys the Express app and static frontend as one web service. Render does not provision a MySQL database for this app, so provide a separate MySQL-compatible database (for example, TiDB Cloud) and use the database provider's current connection and network-access requirements. Free plans and limits can change; Render's free web service sleeps after inactivity and its local filesystem is temporary.
 
 1. Push the deployment changes to GitHub and sign in to [Render](https://dashboard.render.com/).
-2. Create a free [TiDB Cloud Starter](https://tidbcloud.com/free-trial) cluster. Copy the connection host, port, username, password, and database name from its connection details; TiDB requires TLS.
-3. In Render, select **New > Blueprint** and choose this GitHub repository. Review the `tradenova` web service and choose the Free plan.
-4. Set the service variables `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` to the TiDB connection values, and set `DB_SSL=true`. Keep `NODE_ENV=production`; Render generates `JWT_SECRET` for the service.
-5. Export your local `tradenova_db` schema/data and import it into TiDB. This repository does not contain a usable SQL schema or dump, so database-backed features will not work until your tables are imported.
-6. Open the Render service URL and verify `/api/health` returns success. The first request after an idle period may take about a minute while the free service wakes.
+2. Create a MySQL-compatible database and an empty database/schema for TradeNova. Keep the provider's host, port, username, password, and database name private.
+3. In Render, select **New > Blueprint** and choose this GitHub repository. Review the `tradenova` web service and select an available plan.
+4. Set `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` to the provider's connection values. The Blueprint defaults `DB_SSL=true`; change it only if your provider does not support TLS. Keep `NODE_ENV=production`; Render generates `JWT_SECRET`.
+5. Deploy. The server verifies its DB connection and creates the required tables before listening; it seeds four clearly labeled demo stocks only when the stocks table is empty. The local database's users and records are not copied automatically.
+6. Open the Render service URL and verify `/api/health` returns success. A fresh database is ready for registration after schema initialization.
 
-Free-tier details can change; check the providers' [Render free-instance limits](https://render.com/docs/free) and [TiDB Cloud pricing](https://www.pingcap.com/tidb-cloud-pricing/) before using them. This demo simulates prices and trades and is not suitable for real investments or payments.
+Keep database network access restricted to the hosting provider's supported outbound access where possible. Never put production credentials in GitHub or in `server/.env.example`. The previously committed credential should be considered exposed and rotated.
 
-The AI assistant requires `GEMINI_API_KEY` in the Render service environment. In Render, open the `tradenova` service, go to **Environment**, add `GEMINI_API_KEY` with your Google AI Studio key, save, and redeploy. The assistant sends the question and recent conversation context to Google Gemini; TradeNova does not save chat messages, and Google handles API data under its own policies. The assistant has no live market-data feed and does not provide personalized financial, tax, or legal advice. Google API usage may be subject to its quotas, pricing, and data policies.
-
-Use only a disposable/demo database for this prototype. It simulates prices and trades and is not suitable for handling real investments or payments.
+This project simulates prices and trades and is not suitable for real investments or payments. Use only a disposable/demo database.
 
 ## Repository
 

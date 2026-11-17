@@ -350,16 +350,113 @@
         { symbol: "GROW", name: "Growth Practice Ltd.", price: 125 },
         { symbol: "NOVA", name: "Nova Demo Energy", price: 760 }
     ];
+    const PRACTICE_CLOSING_PRICES = [
+        101, 100, 103, 102, 104, 103, 106, 105, 107, 104, 108, 107,
+        110, 108, 111, 109, 112, 111, 114, 110, 113, 115, 113, 117,
+        115, 118, 116, 120, 117, 121, 119, 123, 120, 124, 122, 126
+    ];
+    const REPLAY_CLOSING_PRICES = [
+        100, 102, 101, 104, 103, 105, 102, 99, 101, 98, 96, 99,
+        102, 100, 104, 107, 105, 109, 111, 108, 112, 115
+    ];
+    const SIMULATED_MARKET_MOVES = {
+        ALFA: [0, 0.018, 0.027, -0.014, -0.045, -0.068, -0.032, 0.014, 0.038],
+        BETA: [0, -0.008, 0.012, 0.021, 0.009, -0.019, -0.031, -0.004, 0.016],
+        GROW: [0, 0.025, -0.011, -0.036, -0.058, -0.024, 0.019, 0.047, 0.031],
+        NOVA: [0, -0.013, -0.028, -0.009, 0.026, 0.055, 0.018, -0.041, -0.019]
+    };
     const STARTING_CASH = 100000;
-    const PROGRESS_KEY = "tradenovaLearningProgress";
-    const PAPER_KEY = "tradenovaPaperTrading";
+    const USER_STORAGE_SCOPE = getUserStorageScope();
+    const PROGRESS_KEY = USER_STORAGE_SCOPE
+        ? `tradenovaLearningProgress:${USER_STORAGE_SCOPE}` : "tradenovaLearningProgress";
+    const PAPER_KEY = USER_STORAGE_SCOPE
+        ? `tradenovaPaperTrading:${USER_STORAGE_SCOPE}` : "tradenovaPaperTrading";
+    const LAB_KEY = USER_STORAGE_SCOPE
+        ? `tradenovaPracticeProgress:${USER_STORAGE_SCOPE}` : "tradenovaPracticeProgress";
+    const REPLAY_DATA_KEY = USER_STORAGE_SCOPE
+        ? `tradenovaHistoricalReplay:${USER_STORAGE_SCOPE}` : "tradenovaHistoricalReplay";
+    const SYNC_KEY = USER_STORAGE_SCOPE ? `tradenovaLearningSync:${USER_STORAGE_SCOPE}` : null;
+    const CHART_QUESTIONS = [
+        { topic: "Candlesticks", prompt: "The latest candle closes above its open. What does its body show?", options: ["The close was higher than the open", "The next candle must also rise", "The company reported a profit"], answer: 0, explanation: "A green candle means this candle's close was above its open; it does not predict the next candle." },
+        { topic: "Trend reading", prompt: "Recent swing highs and swing lows are both rising. What is the simplest description?", options: ["A short-term uptrend", "A guaranteed breakout", "A fixed support level"], answer: 0, explanation: "Higher highs and higher lows describe an uptrend over the selected window, not a forecast." },
+        { topic: "Support & resistance", prompt: "Price has paused near the same area several times. How should you read that area?", options: ["A reference area where price previously reacted", "A guaranteed floor that cannot break", "A guaranteed place to buy"], answer: 0, explanation: "Support and resistance are historical reference areas. Price can move through them." },
+        { topic: "Breakouts", prompt: "Price moves above a prior resistance area. What is the most careful interpretation?", options: ["A possible breakout that still needs context and risk planning", "Proof that price will keep rising", "A signal to ignore position size"], answer: 0, explanation: "A move above resistance can fail. Volume, context and a defined risk plan still matter." },
+        { topic: "Candlestick patterns", prompt: "A candle has a long lower wick and closes back above its open. What can that describe?", options: ["Price fell intraperiod but buyers lifted the close; it is not a guarantee", "Price never moved below its open", "The next session must gap up"], answer: 0, explanation: "A long lower wick shows the low was well below the close. It describes that period only." },
+        { topic: "RSI", prompt: "A 14-period RSI reading is above 70. What does this commonly suggest?", options: ["Strong recent momentum that may be called overbought—not an automatic sell", "A guaranteed price reversal", "That the price cannot rise further"], answer: 0, explanation: "Above 70 is often called overbought, but strong trends can remain elevated and indicators can mislead." },
+        { topic: "Moving averages", prompt: "The short moving average is above the long moving average. What does that compare?", options: ["Recent average prices are higher than the longer-period average", "The stock is guaranteed to outperform", "The company has more cash than debt"], answer: 0, explanation: "Moving averages smooth past prices. They lag and do not guarantee future direction." }
+    ];
+    const SCENARIOS = [
+        {
+            id: "sudden-fall", topic: "Risk management", title: "A sudden 5% price drop",
+            situation: "A simulated holding falls 5% quickly. Your original reason for entering has not been reviewed yet.",
+            options: [
+                { label: "Pause, check the plan and predefined risk limit", score: 100, feedback: "A pause and a pre-written risk plan help avoid a rushed reaction. Reassess the original hypothesis and risk; no response guarantees an outcome." },
+                { label: "Immediately buy more to recover faster", score: 0, feedback: "Adding after a loss without a fresh plan can increase concentration and risk. Review the position before acting." },
+                { label: "Ignore the move because prices always recover", score: 0, feedback: "Prices do not always recover. A risk limit and an honest review are safer learning habits than assuming a recovery." }
+            ]
+        },
+        {
+            id: "good-results", topic: "Fundamental analysis", title: "A company announces strong results",
+            situation: "A company reports higher revenue. You have not read its full results or checked its debt and cash flow.",
+            options: [
+                { label: "Read the full filing, compare context and note what remains uncertain", score: 100, feedback: "Revenue is only one part of a company's results. Check profitability, debt, cash flow, guidance and the source before forming a view." },
+                { label: "Buy immediately because revenue increased", score: 0, feedback: "Revenue growth alone does not establish business quality or fair value. Read the rest of the report and consider uncertainty." },
+                { label: "Assume the share price must rise", score: 0, feedback: "Prices can fall even after positive news, for example when expectations differ. No announcement guarantees a price move." }
+            ]
+        },
+        {
+            id: "breakout", topic: "Chart reading", title: "Price moves above resistance",
+            situation: "Price moves above an area it previously struggled to cross. Volume is not noticeably higher.",
+            options: [
+                { label: "Treat it as a possible breakout; check context and define risk first", score: 100, feedback: "A breakout can fail. Confirmation, context and a defined loss limit matter more than assuming the pattern must continue." },
+                { label: "Assume the breakout guarantees a rally", score: 0, feedback: "Chart patterns are not guarantees. A price can reverse or move sideways after crossing a reference area." },
+                { label: "Use the largest possible position", score: 0, feedback: "Position size controls the impact of a wrong idea. Conviction is not a substitute for a risk limit." }
+            ]
+        },
+        {
+            id: "rsi-75", topic: "Technical indicators", title: "RSI reaches 75",
+            situation: "A simulated 14-period RSI reads 75 while price is trending upward.",
+            options: [
+                { label: "Read it as strong recent momentum; avoid treating it as a standalone sell signal", score: 100, feedback: "An RSI above 70 is often described as overbought, but a strong trend can stay elevated. Indicators can give false signals." },
+                { label: "Sell immediately because reversal is certain", score: 0, feedback: "An elevated RSI does not guarantee a reversal. Consider timeframe, context and risk rather than one indicator." },
+                { label: "Ignore risk because momentum is strong", score: 0, feedback: "Momentum can change. A risk plan remains useful regardless of an indicator reading." }
+            ]
+        },
+        {
+            id: "market-crash", topic: "Portfolio protection", title: "The broader market falls sharply",
+            situation: "Several simulated holdings decline together during a market-wide sell-off.",
+            options: [
+                { label: "Review concentration, cash needs and the plan before any changes", score: 100, feedback: "A broad decline can affect many holdings at once. Check concentration, time horizon and risk limits without assuming recovery." },
+                { label: "Assume diversification prevents further losses", score: 0, feedback: "Diversification may reduce single-company risk but cannot eliminate market-wide losses." },
+                { label: "Make an impulsive trade to win back the loss today", score: 0, feedback: "Trying to recover losses immediately can turn into revenge trading. Taking a pause is a valid risk-control action." }
+            ]
+        }
+    ];
+    const INITIAL_LAB_PROGRESS = {
+        firstQuizResults: {},
+        attempts: [],
+        mistakes: [],
+        replayIndex: 5,
+        replayCorrect: 0,
+        replayTotal: 0,
+        replayAwaitingNext: false,
+        replayFeedback: "",
+        replayDataset: "",
+        scenarioResults: {}
+    };
     let activeModuleId = null;
     let selectedQuizAnswer = null;
     let activeQuizQuestions = [];
     let activeQuestionIndex = 0;
     let questionAnswered = false;
-    const assistantHistory = [];
-    let assistantRequestPending = false;
+    let activeChartQuestionIndex = 0;
+    let chartQuestionAnswered = false;
+    let applyingRemoteState = false;
+    let remoteSyncReady = false;
+    let remoteSyncTimer = null;
+    let remoteSyncQueue = Promise.resolve();
+    let labProgress = loadLabProgress();
+    let activeReplayData = null;
 
     const $ = (id) => document.getElementById(id);
     const formatCurrency = (amount) => `₹${Number(amount).toLocaleString("en-IN", {
@@ -377,14 +474,814 @@
         }
     }
 
+    function getUserStorageScope() {
+        try {
+            const user = JSON.parse(localStorage.getItem("user") || "null");
+            if (user && (typeof user.id === "string" || typeof user.id === "number") && String(user.id).trim()) {
+                return `user-${encodeURIComponent(String(user.id).trim())}`;
+            }
+            return "";
+        } catch (error) {
+            console.error("Unable to identify the signed-in user for learning progress", error);
+            return "";
+        }
+    }
+
+    function getAuthToken() {
+        try {
+            return localStorage.getItem("token") || sessionStorage.getItem("token") || "";
+        } catch (error) {
+            console.error("Unable to read the sign-in token for learning sync", error);
+            return "";
+        }
+    }
+
+    function setSyncStatus(message, isError = false, canRetry = false) {
+        const status = $("learningSyncStatus");
+        if (!status) return;
+        status.textContent = message;
+        status.classList.toggle("is-error", isError);
+        $("retryLearningSync").hidden = !canRetry;
+    }
+
+    function getLocalStateTimestamp() {
+        if (!SYNC_KEY) return 0;
+        try {
+            const savedAt = Number(localStorage.getItem(SYNC_KEY));
+            if (Number.isFinite(savedAt) && savedAt > 0) return savedAt;
+        } catch (error) {
+            console.error("Unable to read the learning sync timestamp", error);
+        }
+        const savedProgress = readJSON(LAB_KEY, null);
+        const savedPaper = readJSON(PAPER_KEY, null);
+        const quizTimes = savedProgress && savedProgress.firstQuizResults
+            ? Object.values(savedProgress.firstQuizResults).map((result) => Number(result.time) || 0) : [];
+        const attemptTimes = savedProgress && Array.isArray(savedProgress.attempts)
+            ? savedProgress.attempts.map((attempt) => Number(attempt.time) || 0) : [];
+        const mistakeTimes = savedProgress && Array.isArray(savedProgress.mistakes)
+            ? savedProgress.mistakes.map((mistake) => Number(mistake.lastAt) || 0) : [];
+        const tradeTimes = savedPaper && Array.isArray(savedPaper.history)
+            ? savedPaper.history.map((trade) => Number(trade.time) || 0) : [];
+        return Math.max(0, ...quizTimes, ...attemptTimes, ...mistakeTimes, ...tradeTimes);
+    }
+
+    function getLocalLearningState() {
+        return {
+            labProgress,
+            paperAccount,
+            completedModules: getCompletedModules()
+        };
+    }
+
+    function scheduleRemoteSync() {
+        if (!SYNC_KEY || !remoteSyncReady || applyingRemoteState || !getAuthToken()) return;
+        if (remoteSyncTimer !== null) window.clearTimeout(remoteSyncTimer);
+        remoteSyncTimer = window.setTimeout(() => {
+            remoteSyncTimer = null;
+            remoteSyncQueue = remoteSyncQueue.then(syncLocalState).catch((error) => {
+                console.error("Unable to sync learning progress", error);
+                setSyncStatus(error.message || "Learning progress could not sync. Your local copy is saved.", true, true);
+            });
+        }, 500);
+    }
+
+    async function syncLocalState() {
+        const token = getAuthToken();
+        if (!token) throw new Error("You are signed out. Sign in again to sync this progress.");
+        setSyncStatus("Syncing your learning progress and virtual account…");
+        const response = await fetch(`${window.location.origin}/api/learning/state`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(getLocalLearningState())
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success || !data.updatedAt || !Number.isFinite(Date.parse(data.updatedAt))) {
+            throw new Error(data.message || `Learning progress sync failed (${response.status}).`);
+        }
+        localStorage.setItem(SYNC_KEY, String(Date.parse(data.updatedAt)));
+        setSyncStatus("Learning progress and virtual trades are synced to your signed-in account.");
+    }
+
+    function applyRemoteState(state, updatedAt) {
+        applyingRemoteState = true;
+        try {
+            labProgress = loadLabProgress(state.labProgress);
+            restoreHistoricalReplaySelection();
+            paperAccount = loadPaperAccount(state.paperAccount);
+            if (!saveJSON(PROGRESS_KEY, state.completedModules) ||
+                !saveJSON(LAB_KEY, labProgress) ||
+                !saveJSON(PAPER_KEY, paperAccount)) {
+                throw new Error("The server copy loaded, but this browser could not save the local copy.");
+            }
+            localStorage.setItem(SYNC_KEY, String(updatedAt));
+        } finally {
+            applyingRemoteState = false;
+        }
+        const activeFilter = document.querySelector(".level-filter.active");
+        renderModules(activeFilter ? activeFilter.dataset.level : "all");
+        updateProgress();
+        renderPaperAccount();
+        renderReplayChart();
+        renderScenarios();
+    }
+
+    async function syncLearningState() {
+        if (!SYNC_KEY) {
+            setSyncStatus(getAuthToken()
+                ? "Your local user profile is unavailable. Progress remains saved in this browser."
+                : "Saved in this browser. Sign in to sync progress to your account.",
+            Boolean(getAuthToken()));
+            return;
+        }
+        const token = getAuthToken();
+        if (!token) {
+            remoteSyncReady = false;
+            setSyncStatus("Saved in this browser. Sign in to sync progress to your account.");
+            return;
+        }
+
+        const localTimeAtStart = getLocalStateTimestamp();
+        remoteSyncReady = false;
+        setSyncStatus("Checking your saved learning progress…");
+        try {
+            const response = await fetch(`${window.location.origin}/api/learning/state`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || `Learning progress could not load (${response.status}).`);
+            }
+            const localTimeNow = getLocalStateTimestamp();
+            const remoteTime = data.state ? Date.parse(data.state.updatedAt) : 0;
+            if (data.state && !Number.isFinite(remoteTime)) {
+                throw new Error("The server returned an invalid learning progress timestamp.");
+            }
+
+            if (localTimeNow > localTimeAtStart || localTimeNow > remoteTime) {
+                remoteSyncReady = true;
+                await syncLocalState();
+            } else if (data.state && remoteTime > localTimeNow) {
+                applyRemoteState(data.state, remoteTime);
+                remoteSyncReady = true;
+                setSyncStatus("Your latest learning progress and virtual trades were loaded from your account.");
+            } else {
+                remoteSyncReady = true;
+                await syncLocalState();
+            }
+        } catch (error) {
+            remoteSyncReady = true;
+            console.error("Unable to load account learning progress", error);
+            setSyncStatus(`${error.message || "Account sync is unavailable."} Your local copy is still available.`, true, true);
+        }
+    }
+
     function saveJSON(key, value) {
         try {
             localStorage.setItem(key, JSON.stringify(value));
+            if (SYNC_KEY && !applyingRemoteState &&
+                [PROGRESS_KEY, PAPER_KEY, LAB_KEY].includes(key)) {
+                localStorage.setItem(SYNC_KEY, String(Date.now()));
+                scheduleRemoteSync();
+            }
             return true;
         } catch (error) {
             console.error(`Unable to save learning data: ${key}`, error);
             return false;
         }
+    }
+
+    function loadLabProgress(savedValue) {
+        const saved = arguments.length ? savedValue : readJSON(LAB_KEY, null);
+        if (!saved || typeof saved !== "object" || Array.isArray(saved)) {
+            return JSON.parse(JSON.stringify(INITIAL_LAB_PROGRESS));
+        }
+        return {
+            firstQuizResults: saved.firstQuizResults && typeof saved.firstQuizResults === "object" && !Array.isArray(saved.firstQuizResults)
+                ? saved.firstQuizResults : {},
+            attempts: Array.isArray(saved.attempts) ? saved.attempts.filter((item) =>
+                item && ["knowledge", "chart", "decision", "risk"].includes(item.category) &&
+                Number.isFinite(item.score) && item.score >= 0 && item.score <= 100 &&
+                Number.isFinite(item.time) && typeof item.session === "string"
+            ).slice(-200) : [],
+            mistakes: Array.isArray(saved.mistakes) ? saved.mistakes.filter((item) =>
+                item && typeof item.type === "string" && Number.isSafeInteger(item.count) && item.count > 0
+            ).slice(-30) : [],
+            replayIndex: Number.isSafeInteger(saved.replayIndex)
+                ? Math.max(5, Math.min(REPLAY_CLOSING_PRICES.length - 1, saved.replayIndex)) : 5,
+            replayCorrect: Number.isSafeInteger(saved.replayCorrect) && saved.replayCorrect >= 0 ? saved.replayCorrect : 0,
+            replayTotal: Number.isSafeInteger(saved.replayTotal) && saved.replayTotal >= 0 ? saved.replayTotal : 0,
+            replayAwaitingNext: saved.replayAwaitingNext === true,
+            replayFeedback: typeof saved.replayFeedback === "string" ? saved.replayFeedback.slice(0, 500) : "",
+            replayDataset: typeof saved.replayDataset === "string" &&
+                /^[A-Z0-9^][A-Z0-9.^_-]{0,23}:(1mo|3mo|6mo|1y):\d{4}-\d{2}-\d{2}:\d{4}-\d{2}-\d{2}$/.test(saved.replayDataset)
+                ? saved.replayDataset : "",
+            scenarioResults: saved.scenarioResults && typeof saved.scenarioResults === "object" && !Array.isArray(saved.scenarioResults)
+                ? saved.scenarioResults : {}
+        };
+    }
+
+    function isValidHistoricalCandle(candle) {
+        return candle && typeof candle.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(candle.date) &&
+            ["open", "high", "low", "close", "volume"].every((key) => Number.isFinite(candle[key])) &&
+            candle.open > 0 && candle.high > 0 && candle.low > 0 && candle.close > 0 &&
+            candle.volume >= 0 && candle.high >= Math.max(candle.open, candle.close) &&
+            candle.low <= Math.min(candle.open, candle.close) && candle.high >= candle.low;
+    }
+
+    function loadStoredReplayData() {
+        const saved = readJSON(REPLAY_DATA_KEY, null);
+        if (!saved || typeof saved.symbol !== "string" || typeof saved.range !== "string" ||
+            !/^[A-Z0-9^][A-Z0-9.^_-]{0,23}$/.test(saved.symbol) ||
+            !["1mo", "3mo", "6mo", "1y"].includes(saved.range) || !Array.isArray(saved.candles)) {
+            return null;
+        }
+        const candles = saved.candles.filter(isValidHistoricalCandle).slice(-22);
+        if (candles.length < 7) return null;
+        const datasetKey = `${saved.symbol}:${saved.range}:${candles[0].date}:${candles[candles.length - 1].date}`;
+        return {
+            symbol: saved.symbol,
+            name: typeof saved.name === "string" ? saved.name.slice(0, 120) : saved.symbol,
+            exchange: typeof saved.exchange === "string" ? saved.exchange.slice(0, 40) : "",
+            currency: typeof saved.currency === "string" ? saved.currency.slice(0, 12) : "",
+            range: saved.range,
+            source: "Yahoo Finance",
+            datasetKey,
+            candles
+        };
+    }
+
+    function restoreHistoricalReplaySelection() {
+        activeReplayData = loadStoredReplayData();
+        if (!labProgress.replayDataset && activeReplayData) {
+            labProgress.replayDataset = activeReplayData.datasetKey;
+        }
+
+        if (labProgress.replayDataset) {
+            const [symbol, range] = labProgress.replayDataset.split(":");
+            $("historicalSymbol").value = symbol;
+            $("historicalRange").value = range;
+            if (!activeReplayData || activeReplayData.datasetKey !== labProgress.replayDataset) {
+                activeReplayData = null;
+                $("historicalDataStatus").textContent =
+                    `Load ${symbol} · ${range} again to resume the saved historical replay on this device.`;
+                return;
+            }
+            $("historicalDataStatus").textContent =
+                `${activeReplayData.name} · Cached historical data from Yahoo Finance. Reload to check for newer candles.`;
+            return;
+        }
+
+        $("historicalDataStatus").textContent = activeReplayData
+            ? `${activeReplayData.name} · Cached historical data from Yahoo Finance.`
+            : "Using the built-in synthetic replay. Example symbols: RELIANCE.NS, TCS.NS or AAPL.";
+    }
+
+    function persistLabProgress() {
+        return saveJSON(LAB_KEY, labProgress);
+    }
+
+    function getPracticeSessionId() {
+        const sessionKey = "tradenovaLabSession";
+        try {
+            let session = sessionStorage.getItem(sessionKey);
+            if (!session) {
+                session = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+                sessionStorage.setItem(sessionKey, session);
+            }
+            return session;
+        } catch (error) {
+            console.error("Unable to read the practice session in this browser", error);
+            return `page-${Date.now()}`;
+        }
+    }
+
+    function recordPerformance(category, score, topic, mistakeType = "") {
+        labProgress.attempts.push({
+            category,
+            score: Math.max(0, Math.min(100, Math.round(score))),
+            topic,
+            time: Date.now(),
+            session: getPracticeSessionId()
+        });
+        labProgress.attempts = labProgress.attempts.slice(-200);
+        if (mistakeType) {
+            const existing = labProgress.mistakes.find((mistake) => mistake.type === mistakeType);
+            if (existing) {
+                existing.count += 1;
+                existing.lastAt = Date.now();
+            } else {
+                labProgress.mistakes.push({ type: mistakeType, count: 1, lastAt: Date.now() });
+                labProgress.mistakes = labProgress.mistakes.slice(-30);
+            }
+        }
+        persistLabProgress();
+        renderAnalytics();
+    }
+
+    function getCategoryStats(category) {
+        const attempts = labProgress.attempts.filter((item) => item.category === category);
+        return {
+            count: attempts.length,
+            score: attempts.length
+                ? Math.round(attempts.reduce((sum, item) => sum + item.score, 0) / attempts.length)
+                : null
+        };
+    }
+
+    function getQuizStats() {
+        const results = Object.values(labProgress.firstQuizResults);
+        return {
+            count: results.length,
+            score: results.length
+                ? Math.round(results.reduce((sum, item) => sum + (item.correct ? 100 : 0), 0) / results.length)
+                : null
+        };
+    }
+
+    function renderAnalytics() {
+        const categories = [
+            { key: "knowledge", title: "Knowledge", stats: getQuizStats() },
+            { key: "chart", title: "Chart reading", stats: getCategoryStats("chart") },
+            { key: "decision", title: "Decision-making", stats: getCategoryStats("decision") },
+            { key: "risk", title: "Risk management", stats: getCategoryStats("risk") }
+        ];
+        const overall = Math.round(categories.reduce((sum, item, index) =>
+            sum + (item.stats.score || 0) * [0.4, 0.2, 0.2, 0.2][index], 0));
+        const level = overall >= 75 ? "Advanced learner" : overall >= 45 ? "Intermediate learner" : "Beginner learner";
+        $("learningScore").innerHTML = `${overall}<span>/100</span>`;
+        $("learnerLevel").textContent = labProgress.attempts.length ? level : "New learner";
+        $("quizAccuracy").textContent = categories[0].stats.score === null ? "—" : `${categories[0].stats.score}%`;
+        $("completedLessons").textContent = `${getCompletedModules().length} / ${MODULES.length}`;
+        $("practiceSessions").textContent = new Set(labProgress.attempts.map((item) => item.session)).size.toString();
+        $("repeatedMistakes").textContent = labProgress.mistakes.filter((item) => item.count >= 2).length.toString();
+        const closedTrades = paperAccount.history.filter((trade) =>
+            trade.side === "SELL" && Number.isFinite(trade.pnl));
+        const realizedPnl = closedTrades.reduce((sum, trade) => sum + trade.pnl, 0);
+        const unrealizedPnl = Object.entries(paperAccount.holdings).reduce((sum, [symbol, holding]) =>
+            sum + (getInstrumentPrice(symbol) - holding.averageCost) * holding.quantity, 0);
+        const totalPnl = realizedPnl + unrealizedPnl;
+        const positiveTrades = closedTrades.filter((trade) => trade.pnl > 0).length;
+        $("tradingPerformance").textContent = formatCurrency(totalPnl);
+        $("tradingPerformance").classList.toggle("negative-value", totalPnl < 0);
+        $("tradingPerformance").classList.toggle("positive-value", totalPnl >= 0);
+        $("tradingPerformanceDetail").textContent = closedTrades.length
+            ? `${closedTrades.length} closed exits · ${Math.round(positiveTrades / closedTrades.length * 100)}% positive`
+            : "No closed practice trades";
+        const replayAttempts = labProgress.attempts.filter((item) =>
+            item.category === "decision" && ["Historical replay", "Synthetic replay"].includes(item.topic));
+        $("historicalReplayScore").textContent = replayAttempts.length
+            ? `${Math.round(replayAttempts.reduce((sum, item) => sum + item.score, 0) / replayAttempts.length)}%`
+            : "—";
+        $("skillBreakdown").innerHTML = categories.map((item) => `<div class="skill-row">
+            <span>${item.title}</span><span class="skill-track"><span style="width:${item.stats.score || 0}%"></span></span>
+            <strong>${item.stats.score === null ? "—" : item.stats.score}</strong></div>`).join("");
+        renderTopicMastery();
+        renderWeeklyPerformance();
+        renderRecommendations(categories);
+    }
+
+    function renderTopicMastery() {
+        const quizTopics = [
+            { title: "Market basics", modules: ["market-basics", "market-participants", "quotes-and-tickers", "order-types", "investing-vs-trading"] },
+            { title: "Technical analysis", modules: ["technical-analysis", "systematic-strategies"] },
+            { title: "Chart reading", category: "chart" },
+            { title: "Risk management", category: "risk" },
+            { title: "Fundamental analysis", modules: ["fundamental-analysis", "valuation"] }
+        ];
+        $("topicMastery").innerHTML = quizTopics.map((topic) => {
+            const results = topic.category
+                ? labProgress.attempts.filter((item) => item.category === topic.category)
+                : Object.entries(labProgress.firstQuizResults)
+                    .filter(([id]) => topic.modules.some((moduleId) => id.startsWith(`${moduleId}:`)))
+                    .map(([, item]) => item);
+            const score = results.length
+                ? Math.round(results.reduce((sum, item) => sum + (topic.category ? item.score : item.correct ? 100 : 0), 0) / results.length)
+                : null;
+            return `<div class="topic-row"><span>${topic.title}</span>
+                <span class="topic-track"><span style="width:${score || 0}%"></span></span>
+                <strong>${score === null ? "Not started" : `${score}%`}</strong></div>`;
+        }).join("");
+    }
+
+    function renderWeeklyPerformance() {
+        const today = new Date();
+        const days = [];
+        for (let offset = 6; offset >= 0; offset -= 1) {
+            const date = new Date(today);
+            date.setDate(today.getDate() - offset);
+            const key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+            const matches = labProgress.attempts.filter((item) => {
+                const attempt = new Date(item.time);
+                return `${attempt.getFullYear()}-${attempt.getMonth()}-${attempt.getDate()}` === key;
+            });
+            days.push({
+                label: date.toLocaleDateString(undefined, { weekday: "short" }),
+                score: matches.length
+                    ? Math.round(matches.reduce((sum, item) => sum + item.score, 0) / matches.length)
+                    : null
+            });
+        }
+        const plotted = days.filter((day) => day.score !== null);
+        $("weeklyPerformance").setAttribute("aria-label", plotted.length
+            ? `Practice scores recorded on ${plotted.length} of the last seven days`
+            : "No practice scores yet");
+        $("weeklyCaption").textContent = plotted.length
+            ? `${plotted.length} of the last 7 days have recorded practice scores.`
+            : "Complete an exercise to start your personal trend.";
+        const points = days.map((day, index) => ({
+            ...day,
+            x: 30 + index * 45,
+            y: day.score === null ? null : 128 - day.score * 0.9
+        }));
+        const linePoints = points.filter((point) => point.score !== null).map((point) => `${point.x},${point.y}`).join(" ");
+        $("weeklyPerformance").innerHTML = `<svg viewBox="0 0 340 155" aria-hidden="true">
+            ${[0, 50, 100].map((value) => {
+                const y = 128 - value * 0.9;
+                return `<line x1="20" y1="${y}" x2="325" y2="${y}" stroke="#edf1f5"/><text x="0" y="${y + 3}">${value}</text>`;
+            }).join("")}
+            ${linePoints ? `<polyline points="${linePoints}" fill="none" stroke="#23866e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>` : ""}
+            ${points.map((point) => `<circle cx="${point.x}" cy="${point.y === null ? 137 : point.y}" r="${point.score === null ? 2 : 4}" fill="${point.score === null ? "#d8e1e8" : "#23866e"}"/>
+                <text x="${point.x}" y="151" text-anchor="middle">${point.label}</text>${point.score === null ? "" : `<text x="${point.x}" y="${point.y - 8}" text-anchor="middle">${point.score}</text>`}`).join("")}
+        </svg>`;
+    }
+
+    function renderRecommendations(categories) {
+        const recommendations = [];
+        const mistake = (type) => labProgress.mistakes.find((item) => item.type === type);
+        const missingStop = mistake("trade-without-stop");
+        const missingTarget = mistake("trade-without-target");
+        const missingReason = mistake("missing-trade-reason");
+        const oversized = mistake("oversized-position");
+        const tradingAfterLoss = mistake("trade-after-loss");
+        const chartScore = categories[1].stats;
+        const decisionScore = categories[2].stats;
+        const riskScore = categories[3].stats;
+        const knowledgeScore = categories[0].stats;
+        const getModuleQuizScore = (moduleId) => {
+            const results = Object.entries(labProgress.firstQuizResults)
+                .filter(([id]) => id.startsWith(`${moduleId}:`))
+                .map(([, item]) => item);
+            return {
+                count: results.length,
+                score: results.length
+                    ? Math.round(results.reduce((sum, item) => sum + (item.correct ? 100 : 0), 0) / results.length)
+                    : null
+            };
+        };
+        const technicalQuiz = getModuleQuizScore("technical-analysis");
+        const fundamentalQuiz = getModuleQuizScore("fundamental-analysis");
+
+        if (missingStop && missingStop.count >= 2) {
+            recommendations.push({
+                title: "Build a stop-loss habit",
+                text: `You placed ${missingStop.count} practice trades without a stop level. Review how planned exits and position sizing work.`,
+                href: "learning.html#paperPractice",
+                action: "Set a stop on your next practice order"
+            });
+        }
+        if (missingTarget && missingTarget.count >= 2 && recommendations.length < 2) {
+            recommendations.push({
+                title: "Plan an exit before entry",
+                text: `You placed ${missingTarget.count} practice trades without a target. Practise writing down both sides of a simulated exit plan.`,
+                href: "learning.html#paperPractice",
+                action: "Write a practice trade plan"
+            });
+        }
+        if (missingReason && missingReason.count >= 2 && recommendations.length < 2) {
+            recommendations.push({
+                title: "Keep a decision journal",
+                text: `You have ${missingReason.count} practice entries without a written reason. Record a hypothesis or learning goal before your next order.`,
+                href: "learning.html#paperPractice",
+                action: "Add a reason to your next practice trade"
+            });
+        }
+        if (oversized && oversized.count >= 2) {
+            recommendations.push({
+                title: "Practise position sizing",
+                text: `Your virtual risk exceeded the 1% learning-rubric limit ${oversized.count} times. Revisit the risk plan before another simulated order.`,
+                href: "learning.html#paperPractice",
+                action: "Review your practice trade plan"
+            });
+        }
+        if (tradingAfterLoss && tradingAfterLoss.count >= 2 && recommendations.length < 2) {
+            recommendations.push({
+                title: "Pause after a simulated loss",
+                text: `You opened ${tradingAfterLoss.count} practice trades immediately after a losing exit. Review your written plan before the next simulated decision.`,
+                href: "learning.html#courseCatalog",
+                action: "Review trading psychology"
+            });
+        }
+        if (technicalQuiz.count && technicalQuiz.score < 50 && recommendations.length < 2) {
+            recommendations.push({
+                title: "Revisit RSI and chart indicators",
+                text: `Your technical-analysis first-attempt score is ${technicalQuiz.score}%. Review indicator limits, then practise the chart-reading questions.`,
+                href: "learning.html#chartPractice",
+                action: "Open the chart studio"
+            });
+        }
+        if (fundamentalQuiz.count && fundamentalQuiz.score < 50 && recommendations.length < 2) {
+            recommendations.push({
+                title: "Build a company-research habit",
+                text: `Your fundamental-analysis first-attempt score is ${fundamentalQuiz.score}%. Review company reports, cash flow and valuation context.`,
+                href: "learning.html#courseCatalog",
+                action: "Review the fundamentals lessons"
+            });
+        }
+        if (riskScore.count && riskScore.score < 60 && recommendations.length < 2) {
+            recommendations.push({
+                title: "Strengthen risk management",
+                text: `Your current risk-plan score is ${riskScore.score}/100. Practise a stop, a sensible position size and a written reason.`,
+                href: "learning.html#courseCatalog",
+                action: "Open Risk management & trading psychology"
+            });
+        }
+        if (chartScore.count && chartScore.score < 60 && recommendations.length < 2) {
+            recommendations.push({
+                title: "Practise reading charts",
+                text: `Your chart-reading score is ${chartScore.score}/100. Review candles, trend and indicator limits, then try the chart studio again.`,
+                href: "learning.html#chartPractice",
+                action: "Try a chart-reading exercise"
+            });
+        }
+        if (decisionScore.count && decisionScore.score < 60 && recommendations.length < 2) {
+            recommendations.push({
+                title: "Slow down in replay",
+                text: `Your replay and scenario score is ${decisionScore.score}/100. Record a reasoned choice before revealing the next simulated candle.`,
+                href: "learning.html#historicalReplay",
+                action: "Continue the candle replay"
+            });
+        }
+        if (knowledgeScore.count && knowledgeScore.score < 50 && recommendations.length < 2) {
+            const weakTopic = Object.entries(labProgress.firstQuizResults)
+                .filter(([, result]) => !result.correct)
+                .map(([id]) => id.split(":")[0])[0];
+            const module = MODULES.find((item) => item.id === weakTopic) || MODULES[0];
+            recommendations.push({
+                title: "Refresh a lesson concept",
+                text: `Your first-attempt quiz accuracy is ${knowledgeScore.score}%. Review a lesson and retry its knowledge check.`,
+                href: "learning.html#courseCatalog",
+                action: `Review ${module.title}`
+            });
+        }
+        if (!recommendations.length) {
+            const title = labProgress.attempts.length ? "Keep building your practice streak" : "Start with a quick learning activity";
+            const text = labProgress.attempts.length
+                ? "Your recorded results have no repeated weak area yet. Try another chart or replay exercise to grow your personal score history."
+                : "Complete a lesson quiz, chart-reading question or scenario. Your dashboard will adapt to your own results.";
+            recommendations.push({
+                title,
+                text,
+                href: labProgress.attempts.length ? "learning.html#chartPractice" : "learning.html#courseCatalog",
+                action: labProgress.attempts.length ? "Open the chart studio" : "Start the first lesson"
+            });
+        }
+        $("learningRecommendations").innerHTML = `<div class="recommendation-list">${recommendations.slice(0, 2).map((item) =>
+            `<article class="recommendation-item"><strong>${item.title}</strong><p>${item.text}</p>
+            <a href="${item.href}">${item.action} →</a></article>`).join("")}</div>`;
+    }
+
+    function createCandles(closes) {
+        return closes.map((close, index) => {
+            const open = index ? closes[index - 1] : close - 0.7;
+            const high = Math.max(open, close) + 1 + (index % 3) * 0.3;
+            const lowerWick = index === closes.length - 1 ? 3.8 : 0.8 + (index % 4) * 0.25;
+            const low = Math.min(open, close) - lowerWick;
+            return { open, high, low, close, volume: 420 + (index * 73) % 530 };
+        });
+    }
+
+    function buildCandleChart(candles, options = {}) {
+        if (!candles.length) return "";
+        const width = 640;
+        const height = 205;
+        const chartTop = 13;
+        const chartBottom = options.volume === false ? 177 : 150;
+        const maxPrice = Math.max(...candles.map((item) => item.high));
+        const minPrice = Math.min(...candles.map((item) => item.low));
+        const spread = Math.max(maxPrice - minPrice, 1);
+        const maxVolume = Math.max(1, ...candles.map((item) => item.volume || 0));
+        const yFor = (price) => chartTop + (maxPrice - price) / spread * (chartBottom - chartTop);
+        const slot = (width - 48) / candles.length;
+        const bodyWidth = Math.max(3, Math.min(12, slot * 0.48));
+        const startX = 31;
+        const grid = [0, 1, 2, 3].map((line) => {
+            const y = chartTop + line * (chartBottom - chartTop) / 3;
+            const price = maxPrice - spread * line / 3;
+            return `<line class="grid-line" x1="24" y1="${y}" x2="${width - 8}" y2="${y}"/>
+                <text x="2" y="${y + 3}">${price.toFixed(0)}</text>`;
+        }).join("");
+        const bars = candles.map((candle, index) => {
+            const x = startX + index * slot + slot / 2;
+            const up = candle.close >= candle.open;
+            const bodyY = Math.min(yFor(candle.open), yFor(candle.close));
+            const bodyHeight = Math.max(2, Math.abs(yFor(candle.open) - yFor(candle.close)));
+            const volumeHeight = options.volume === false ? 0 : (candle.volume || 0) / maxVolume * 24;
+            return `<line class="wick ${up ? "wick-up" : "wick-down"}" x1="${x}" y1="${yFor(candle.high)}" x2="${x}" y2="${yFor(candle.low)}"/>
+                <rect class="${up ? "candle-up" : "candle-down"}" x="${x - bodyWidth / 2}" y="${bodyY}" width="${bodyWidth}" height="${bodyHeight}" rx="1"/>
+                ${options.volume === false ? "" : `<rect x="${x - bodyWidth / 2}" y="${height - volumeHeight - 8}" width="${bodyWidth}" height="${volumeHeight}" fill="${up ? "#a9dfca" : "#f2c0b9"}" rx="1"/>`}`;
+        }).join("");
+        let movingAverage = "";
+        if (options.showMovingAverage) {
+            const points = candles.map((item, index) => {
+                const sample = candles.slice(Math.max(0, index - 4), index + 1);
+                const average = sample.reduce((sum, candle) => sum + candle.close, 0) / sample.length;
+                return `${startX + index * slot + slot / 2},${yFor(average)}`;
+            }).join(" ");
+            movingAverage = `<polyline class="moving-average" points="${points}"/>`;
+        }
+        const support = options.showSupport
+            ? `<line class="support-line" x1="24" y1="${yFor(minPrice)}" x2="${width - 8}" y2="${yFor(minPrice)}"/>` : "";
+        return `<svg viewBox="0 0 ${width} ${height}" aria-hidden="true">${grid}${support}${bars}${movingAverage}
+            <text x="24" y="${height - 1}">Earlier candles</text><text x="${width - 8}" y="${height - 1}" text-anchor="end">Latest</text>
+            ${options.showMovingAverage ? `<text x="${width - 52}" y="${chartTop + 12}" fill="#4084c5">MA 5</text>` : ""}
+        </svg>`;
+    }
+
+    function calculateIndicators(closes, candles) {
+        const average = (values) => values.reduce((sum, value) => sum + value, 0) / values.length;
+        const ema = (values, period) => {
+            const multiplier = 2 / (period + 1);
+            return values.reduce((result, value, index) =>
+                index === 0 ? [value] : [...result, value * multiplier + result[index - 1] * (1 - multiplier)], []);
+        };
+        const differences = closes.slice(1).map((value, index) => value - closes[index]);
+        const recentChanges = differences.slice(-14);
+        const gains = recentChanges.filter((change) => change > 0);
+        const losses = recentChanges.filter((change) => change < 0);
+        const avgGain = gains.reduce((sum, value) => sum + value, 0) / 14;
+        const avgLoss = Math.abs(losses.reduce((sum, value) => sum + value, 0)) / 14;
+        const rsi = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss);
+        const ema12 = ema(closes, 12);
+        const ema26 = ema(closes, 26);
+        const macd = ema12.map((value, index) => value - ema26[index]);
+        const macdSignal = ema(macd, 9);
+        return {
+            ma5: average(closes.slice(-5)),
+            ma20: average(closes.slice(-20)),
+            rsi,
+            macd: macd[macd.length - 1] - macdSignal[macdSignal.length - 1],
+            volume: average(candles.slice(-5).map((item) => item.volume))
+        };
+    }
+
+    function renderChartStudio() {
+        const candles = createCandles(PRACTICE_CLOSING_PRICES);
+        const closes = candles.map((item) => item.close);
+        const indicators = calculateIndicators(closes, candles);
+        $("practiceChart").innerHTML = buildCandleChart(candles, { showMovingAverage: true, showSupport: true });
+        $("indicatorReadings").innerHTML = [
+            ["MA 5 / MA 20", `${indicators.ma5.toFixed(1)} / ${indicators.ma20.toFixed(1)}`, indicators.ma5 > indicators.ma20 ? "Short avg. above long" : "Short avg. below long"],
+            ["RSI (14)", indicators.rsi.toFixed(1), indicators.rsi >= 70 ? "Elevated momentum" : indicators.rsi <= 30 ? "Low recent momentum" : "Mid-range momentum"],
+            ["MACD histogram", `${indicators.macd >= 0 ? "+" : ""}${indicators.macd.toFixed(2)}`, "EMA 12/26 − signal 9"],
+            ["Avg. volume · 5", `${Math.round(indicators.volume)} units`, "Illustrative candle volume"]
+        ].map(([label, value, note]) => `<div class="indicator-reading"><span>${label}</span><strong>${value}</strong><small>${note}</small></div>`).join("");
+        renderChartQuestion();
+    }
+
+    function renderChartQuestion() {
+        if (activeChartQuestionIndex >= CHART_QUESTIONS.length) {
+            $("chartQuestionCount").textContent = `${CHART_QUESTIONS.length} of ${CHART_QUESTIONS.length} complete`;
+            $("chartQuestionProgress").style.width = "100%";
+            $("chartQuestionTopic").textContent = "CHART STUDIO COMPLETE";
+            $("chartQuestion").textContent = "";
+            $("chartOptions").innerHTML = `<div class="exercise-complete"><strong>Chart studio complete</strong>
+                <p>Your chart-reading score is saved. The explanations are here whenever you want to review the concepts.</p>
+                <button type="button" class="exercise-next" id="restartChartQuestions">Practise these questions again</button></div>`;
+            $("chartFeedback").textContent = "";
+            $("nextChartQuestion").hidden = true;
+            return;
+        }
+        const question = CHART_QUESTIONS[activeChartQuestionIndex];
+        chartQuestionAnswered = false;
+        $("chartQuestionCount").textContent = `Question ${activeChartQuestionIndex + 1} of ${CHART_QUESTIONS.length}`;
+        $("chartQuestionProgress").style.width = `${activeChartQuestionIndex / CHART_QUESTIONS.length * 100}%`;
+        $("chartQuestionTopic").textContent = question.topic;
+        $("chartQuestion").textContent = question.prompt;
+        $("chartFeedback").textContent = "";
+        $("nextChartQuestion").hidden = true;
+        $("chartOptions").innerHTML = question.options.map((option, index) =>
+            `<button type="button" class="practice-choice" data-chart-answer="${index}">${option}</button>`).join("");
+    }
+
+    function renderReplayChart() {
+        const replayReady = !labProgress.replayDataset ||
+            (activeReplayData && activeReplayData.datasetKey === labProgress.replayDataset);
+        const replayCandles = activeReplayData ? activeReplayData.candles : createCandles(REPLAY_CLOSING_PRICES);
+        const visible = replayReady ? replayCandles.slice(0, labProgress.replayIndex + 1) : [];
+        $("replayChart").innerHTML = buildCandleChart(visible, { volume: false });
+        const total = replayCandles.length - 6;
+        const complete = replayReady && labProgress.replayIndex >= replayCandles.length - 1;
+        $("replayProgress").textContent = !replayReady
+            ? `Saved replay · ${labProgress.replayDataset}`
+            : complete ? `Replay complete · ${total} decisions`
+                : `Warm-up · Candle ${labProgress.replayIndex + 1} of ${replayCandles.length}`;
+        $("replaySourceLabel").textContent = !replayReady
+            ? "Load the saved symbol and period to resume this replay"
+            : activeReplayData
+                ? `${activeReplayData.name} · ${activeReplayData.symbol} · ${activeReplayData.candles[0].date} to ${activeReplayData.candles[activeReplayData.candles.length - 1].date} · Daily`
+                : "Built-in synthetic practice data · Not live";
+        $("replayScore").textContent = `${labProgress.replayCorrect} correct · ${labProgress.replayTotal} ${labProgress.replayTotal === 1 ? "decision" : "decisions"}`;
+        $("replayDecision").hidden = !replayReady || complete || labProgress.replayAwaitingNext;
+        $("nextReplayCandle").hidden = !replayReady || complete || !labProgress.replayAwaitingNext;
+        $("replayFeedback").textContent = !replayReady
+            ? "Load this saved historical symbol and period to continue. The replay will not substitute synthetic candles."
+            : complete
+            ? "Replay finished. Your choices are saved with your learning progress. Restart the replay to practise again."
+            : labProgress.replayAwaitingNext ? labProgress.replayFeedback : "";
+        $("replayActions").innerHTML = ["BUY", "HOLD", "SELL"].map((action) =>
+            `<button class="replay-action" type="button" data-replay-action="${action}"${replayReady ? "" : " disabled"}>${action === "BUY" ? "Buy" : action === "SELL" ? "Sell" : "Hold"}</button>`).join("");
+    }
+
+    async function loadHistoricalReplay() {
+        const symbol = $("historicalSymbol").value.trim().toUpperCase();
+        const range = $("historicalRange").value;
+        const status = $("historicalDataStatus");
+        const button = $("loadHistoricalData");
+        if (!/^[A-Z0-9^][A-Z0-9.^_-]{0,23}$/.test(symbol) ||
+            !["1mo", "3mo", "6mo", "1y"].includes(range)) {
+            status.textContent = "Enter a valid Yahoo Finance symbol and choose a history period.";
+            status.classList.add("is-error");
+            return;
+        }
+
+        button.disabled = true;
+        status.classList.remove("is-error");
+        status.textContent = `Loading daily history for ${symbol}…`;
+        try {
+            const query = new URLSearchParams({ symbol, range });
+            const response = await fetch(`${window.location.origin}/api/learning/market-history?${query}`);
+            const contentType = response.headers.get("content-type") || "";
+            if (!contentType.includes("application/json")) {
+                throw new Error(response.status === 404
+                    ? "The historical-data API is not active yet. Restart the TradeNova server and try again."
+                    : `The server returned an unexpected response (${response.status}).`);
+            }
+            const data = await response.json();
+            if (!response.ok || !data.success || !Array.isArray(data.candles)) {
+                throw new Error(data.message || `Historical data could not load (${response.status}).`);
+            }
+            const candles = data.candles.filter(isValidHistoricalCandle).slice(-22);
+            if (candles.length < 7) {
+                throw new Error("This symbol does not have enough valid daily candles for replay.");
+            }
+
+            const datasetKey = `${data.symbol}:${range}:${candles[0].date}:${candles[candles.length - 1].date}`;
+            const sameDataset = labProgress.replayDataset === datasetKey;
+            activeReplayData = {
+                symbol: data.symbol,
+                name: typeof data.name === "string" ? data.name.slice(0, 120) : data.symbol,
+                exchange: typeof data.exchange === "string" ? data.exchange.slice(0, 40) : "",
+                currency: typeof data.currency === "string" ? data.currency.slice(0, 12) : "",
+                range,
+                source: "Yahoo Finance",
+                datasetKey,
+                candles
+            };
+            $("historicalSymbol").value = activeReplayData.symbol;
+            if (!sameDataset) {
+                labProgress.replayIndex = 5;
+                labProgress.replayCorrect = 0;
+                labProgress.replayTotal = 0;
+                labProgress.replayAwaitingNext = false;
+                labProgress.replayFeedback = "";
+            } else {
+                labProgress.replayIndex = Math.max(5, Math.min(candles.length - 1, labProgress.replayIndex));
+            }
+            labProgress.replayDataset = activeReplayData.datasetKey;
+            let cacheSaved = true;
+            try {
+                localStorage.setItem(REPLAY_DATA_KEY, JSON.stringify(activeReplayData));
+            } catch (error) {
+                cacheSaved = false;
+                console.error("Unable to cache historical replay data", error);
+            }
+            persistLabProgress();
+            renderReplayChart();
+            status.textContent = `${activeReplayData.name} · ${activeReplayData.candles.length} recent daily candles from Yahoo Finance.${cacheSaved ? " Cached in this browser." : " Available until you leave this page; browser storage is full or unavailable."} Historical data can be delayed; it is not a live quote.`;
+            status.classList.toggle("is-error", !cacheSaved);
+        } catch (error) {
+            console.error("Unable to load historical replay data", error);
+            status.textContent = error.message || "Historical data could not load. The synthetic replay is still available.";
+            status.classList.add("is-error");
+        } finally {
+            button.disabled = false;
+        }
+    }
+
+    function renderScenarios() {
+        $("scenarioGrid").innerHTML = SCENARIOS.map((scenario) => {
+            const selected = labProgress.scenarioResults[scenario.id];
+            return `<article class="scenario-card" data-scenario-id="${scenario.id}">
+                <span class="scenario-tag">${scenario.topic}</span><h3>${scenario.title}</h3><p>${scenario.situation}</p>
+                <div class="practice-options" role="group" aria-label="Choose a response to ${scenario.title}">${scenario.options.map((option, index) =>
+                    `<button type="button" class="practice-choice" data-scenario-answer="${index}"${selected ? " disabled" : ""}>${option.label}</button>`).join("")}</div>
+                <p class="scenario-feedback" role="status" aria-live="polite">${selected ? escapeHTML(selected.feedback) : ""}</p>
+                ${selected ? `<button type="button" class="scenario-retry" data-scenario-retry="${scenario.id}">Try scenario again</button>` : ""}
+            </article>`;
+        }).join("");
     }
 
     function getCompletedModules() {
@@ -405,6 +1302,7 @@
             const status = card.querySelector(".module-complete");
             status.textContent = done ? "✓ Completed" : "";
         });
+        renderAnalytics();
     }
 
     function renderModules(level = "all") {
@@ -506,18 +1404,24 @@
         $("lessonPanel").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    function loadPaperAccount() {
-        const saved = readJSON(PAPER_KEY, null);
+    function loadPaperAccount(savedValue) {
+        const saved = arguments.length ? savedValue : readJSON(PAPER_KEY, null);
         if (!saved || typeof saved.cash !== "number" || !Number.isFinite(saved.cash) || saved.cash < 0 ||
             !saved.holdings || typeof saved.holdings !== "object" || Array.isArray(saved.holdings) || !Array.isArray(saved.history)) {
-            return { cash: STARTING_CASH, holdings: {}, history: [] };
+            return { cash: STARTING_CASH, holdings: {}, history: [], marketStep: 0 };
         }
         const holdings = {};
         Object.entries(saved.holdings).forEach(([symbol, holding]) => {
             if (INSTRUMENTS.some((item) => item.symbol === symbol) && holding &&
                 Number.isSafeInteger(holding.quantity) && holding.quantity > 0 &&
                 Number.isFinite(holding.averageCost) && holding.averageCost > 0) {
-                holdings[symbol] = { quantity: holding.quantity, averageCost: holding.averageCost };
+                holdings[symbol] = {
+                    quantity: holding.quantity,
+                    averageCost: holding.averageCost,
+                    stopLoss: Number.isFinite(holding.stopLoss) && holding.stopLoss > 0 ? holding.stopLoss : null,
+                    target: Number.isFinite(holding.target) && holding.target > 0 ? holding.target : null,
+                    reason: typeof holding.reason === "string" ? holding.reason.slice(0, 240) : ""
+                };
             }
         });
         return {
@@ -528,7 +1432,20 @@
                 INSTRUMENTS.some((item) => item.symbol === trade.symbol) &&
                 Number.isSafeInteger(trade.quantity) && trade.quantity > 0 &&
                 Number.isFinite(trade.price) && Number.isFinite(trade.time)
-            ).slice(0, 10)
+            ).map((trade) => ({
+                side: trade.side,
+                symbol: trade.symbol,
+                quantity: trade.quantity,
+                price: trade.price,
+                time: trade.time,
+                stopLoss: Number.isFinite(trade.stopLoss) ? trade.stopLoss : null,
+                target: Number.isFinite(trade.target) ? trade.target : null,
+                reason: typeof trade.reason === "string" ? trade.reason.slice(0, 240) : "",
+                pnl: Number.isFinite(trade.pnl) ? trade.pnl : null,
+                outcome: typeof trade.outcome === "string" ? trade.outcome.slice(0, 80) : ""
+            })).slice(0, 30),
+            marketStep: Number.isSafeInteger(saved.marketStep)
+                ? Math.max(0, Math.min(8, saved.marketStep)) : 0
         };
     }
 
@@ -544,10 +1461,18 @@
             .map(([symbol, holding]) => {
                 const instrument = INSTRUMENTS.find((item) => item.symbol === symbol);
                 if (!instrument || !Number.isFinite(Number(holding.averageCost))) return null;
-                return { symbol, instrument, quantity: Number(holding.quantity), averageCost: Number(holding.averageCost) };
+                return {
+                    symbol,
+                    instrument,
+                    price: getInstrumentPrice(symbol),
+                    quantity: Number(holding.quantity),
+                    averageCost: Number(holding.averageCost),
+                    stopLoss: holding.stopLoss,
+                    target: holding.target
+                };
             }).filter(Boolean);
-        const holdingsValue = positions.reduce((sum, item) => sum + item.quantity * item.instrument.price, 0);
-        const unrealised = positions.reduce((sum, item) => sum + (item.instrument.price - item.averageCost) * item.quantity, 0);
+        const holdingsValue = positions.reduce((sum, item) => sum + item.quantity * item.price, 0);
+        const unrealised = positions.reduce((sum, item) => sum + (item.price - item.averageCost) * item.quantity, 0);
 
         $("paperCash").textContent = formatCurrency(paperAccount.cash);
         $("paperHoldingsValue").textContent = formatCurrency(holdingsValue);
@@ -555,19 +1480,29 @@
         $("paperPnl").textContent = formatCurrency(unrealised);
         $("paperPnl").classList.toggle("negative-value", unrealised < 0);
         $("paperPositions").innerHTML = positions.map((item) => {
-            const pnl = (item.instrument.price - item.averageCost) * item.quantity;
+            const pnl = (item.price - item.averageCost) * item.quantity;
             return `<tr><td>${item.instrument.name}<br><small>${item.symbol}</small></td>
-                <td>${item.quantity}</td><td>${formatCurrency(item.averageCost)}</td>
-                <td>${formatCurrency(item.quantity * item.instrument.price)}</td>
+                <td>${item.quantity}</td><td>${formatCurrency(item.averageCost)}<br><small>${item.stopLoss ? `SL ${formatCurrency(item.stopLoss)}` : "No stop"}${item.target ? ` · Target ${formatCurrency(item.target)}` : ""}</small></td>
+                <td>${formatCurrency(item.quantity * item.price)}</td>
                 <td class="${pnl < 0 ? "negative-value" : "positive-value"}">${formatCurrency(pnl)}</td></tr>`;
         }).join("");
         $("emptyPositions").hidden = positions.length > 0;
         $("paperHistory").innerHTML = paperAccount.history.length
             ? paperAccount.history.map((trade) => `<div class="history-row">
-                <span><strong class="${trade.side === "BUY" ? "history-buy" : "history-sell"}">${trade.side}</strong> ${trade.quantity} × ${trade.symbol}</span>
-                <span>${formatCurrency(trade.price)} · ${new Date(trade.time).toLocaleString()}</span>
+                <span><strong class="${trade.side === "BUY" ? "history-buy" : "history-sell"}">${trade.side}</strong> ${trade.quantity} × ${trade.symbol}
+                    <small class="history-detail">${trade.reason ? escapeHTML(trade.reason) : "No trade reason recorded."}
+                    ${trade.stopLoss ? ` · Stop ${formatCurrency(trade.stopLoss)}` : ""}${trade.target ? ` · Target ${formatCurrency(trade.target)}` : ""}</small></span>
+                <span class="history-outcome">${formatCurrency(trade.price)} · ${new Date(trade.time).toLocaleString()}
+                    ${trade.outcome ? `<small class="history-auto-exit">${escapeHTML(trade.outcome)}</small>` : ""}
+                    ${trade.pnl !== null ? `<small class="${trade.pnl < 0 ? "negative-value" : "positive-value"}">P&amp;L ${formatCurrency(trade.pnl)}</small>` : ""}</span>
             </div>`).join("")
             : "<p>No simulated orders yet.</p>";
+        $("marketStepLabel").textContent = `Candle ${paperAccount.marketStep + 1} of 9`;
+        $("advanceMarket").disabled = paperAccount.marketStep >= 8;
+        $("advanceMarket").textContent = paperAccount.marketStep >= 8 ? "Simulation complete" : "Advance simulated market →";
+        $("advanceMarket").setAttribute("aria-label", paperAccount.marketStep >= 8
+            ? "Simulated price path complete" : `Advance to simulated candle ${paperAccount.marketStep + 2}`);
+        updateSelectedQuote();
     }
 
     function setTradeMessage(message, isError = false) {
@@ -575,96 +1510,61 @@
         $("tradeMessage").classList.toggle("error-message", isError);
     }
 
-    function appendAssistantMessage(message, isUser = false, isError = false) {
-        const article = document.createElement("article");
-        article.className = `chat-message ${isUser ? "user-message" : "assistant-message"}${isError ? " assistant-error-message" : ""}`;
-
-        const avatar = document.createElement("span");
-        avatar.className = "chat-avatar";
-        avatar.setAttribute("aria-hidden", "true");
-        avatar.textContent = isUser ? "YOU" : "TN";
-
-        const bubble = document.createElement("div");
-        bubble.className = "chat-bubble";
-
-        const label = document.createElement("strong");
-        label.textContent = isUser ? "You" : "TradeNova AI Assistant";
-        bubble.appendChild(label);
-
-        const text = document.createElement("p");
-        text.textContent = message.text;
-        bubble.appendChild(text);
-
-        if (message.source) {
-            const source = document.createElement("span");
-            source.className = "chat-source";
-            source.textContent = message.source;
-            bubble.appendChild(source);
-        }
-
-        article.append(avatar, bubble);
-        $("assistantChat").appendChild(article);
-        $("assistantChat").scrollTop = $("assistantChat").scrollHeight;
+    function getInstrumentPrice(symbol, step = paperAccount.marketStep) {
+        const instrument = INSTRUMENTS.find((item) => item.symbol === symbol);
+        const path = SIMULATED_MARKET_MOVES[symbol];
+        if (!instrument || !path) return 0;
+        const move = path[Math.max(0, Math.min(path.length - 1, step))];
+        return Math.round(instrument.price * (1 + move) * 100) / 100;
     }
 
-    async function submitAssistantQuestion(question) {
-        const trimmedQuestion = question.trim();
-        if (!trimmedQuestion) {
-            $("assistantStatus").textContent = "Type a question first.";
-            $("assistantStatus").classList.add("assistant-error");
-            return false;
+    function updateRiskEstimate() {
+        const symbol = $("paperSymbol").value;
+        const instrument = INSTRUMENTS.find((item) => item.symbol === symbol);
+        const quantity = Number($("paperQuantity").value);
+        const stopLoss = Number($("paperStopLoss").value);
+        const target = Number($("paperTarget").value);
+        const output = $("riskEstimate");
+        output.classList.remove("is-risky");
+        if (!instrument || !Number.isSafeInteger(quantity) || quantity <= 0) {
+            output.textContent = "";
+            return;
         }
-
-        if (assistantRequestPending) return false;
-        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        if (!token) {
-            $("assistantStatus").textContent = "Please log in to use the AI Assistant.";
-            $("assistantStatus").classList.add("assistant-error");
-            appendAssistantMessage({ text: "Your session has ended. Please log in again, then return to the AI Assistant." }, false, true);
-            return false;
+        const entry = getInstrumentPrice(symbol);
+        if (!Number.isFinite(stopLoss) || stopLoss <= 0) {
+            output.textContent = "No stop-loss entered. This order will be counted as a risk-planning practice mistake.";
+            output.classList.add("is-risky");
+            return;
         }
+        if (stopLoss >= entry || (Number.isFinite(target) && target > 0 && target <= entry)) {
+            output.textContent = "For a simulated long buy, set the stop below entry and any target above entry.";
+            output.classList.add("is-risky");
+            return;
+        }
+        const portfolio = paperAccount.cash + Object.entries(paperAccount.holdings).reduce((sum, [holdingSymbol, holding]) =>
+            sum + holding.quantity * getInstrumentPrice(holdingSymbol), 0);
+        const risk = (entry - stopLoss) * quantity;
+        const riskPercent = portfolio > 0 ? risk / portfolio * 100 : 0;
+        const rewardRisk = Number.isFinite(target) && target > entry ? (target - entry) / (entry - stopLoss) : null;
+        output.textContent = `Planned virtual risk ${formatCurrency(risk)} (${riskPercent.toFixed(2)}% of simulated portfolio)${rewardRisk === null ? "" : ` · Reward/risk ${rewardRisk.toFixed(2)}:1`}. The 1% score guide is illustrative, not investment advice.`;
+        if (riskPercent > 1 || (rewardRisk !== null && rewardRisk < 1.5)) output.classList.add("is-risky");
+    }
 
-        appendAssistantMessage({ text: trimmedQuestion }, true);
-        assistantHistory.push({ role: "user", content: trimmedQuestion });
-        assistantRequestPending = true;
-        $("assistantSend").disabled = true;
-        $("assistantStatus").textContent = "Gemini is preparing an answer...";
-        $("assistantStatus").classList.remove("assistant-error");
-
-        try {
-            const response = await fetch(`${window.location.origin}/api/assistant/chat`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    question: trimmedQuestion,
-                    history: assistantHistory.slice(-11, -1)
-                }),
-                signal: AbortSignal.timeout(35000)
-            });
-            const data = await response.json();
-            if (!response.ok || !data.success || typeof data.answer !== "string" || !data.answer.trim()) {
-                throw new Error(data.message || `The AI request failed (${response.status}).`);
+    function saveTradeProgress(score, mistakes) {
+        (mistakes || []).forEach((mistake) => {
+            const existing = labProgress.mistakes.find((item) => item.type === mistake);
+            if (existing) {
+                existing.count += 1;
+                existing.lastAt = Date.now();
+            } else {
+                labProgress.mistakes.push({ type: mistake, count: 1, lastAt: Date.now() });
             }
-            appendAssistantMessage({ text: data.answer.trim() });
-            assistantHistory.push({ role: "model", content: data.answer.trim() });
-            if (assistantHistory.length > 12) assistantHistory.splice(0, assistantHistory.length - 12);
-            $("assistantStatus").textContent = "AI-generated answer. Verify important information with reliable sources.";
-            return true;
-        } catch (error) {
-            const message = error.name === "TimeoutError" || error.name === "AbortError"
-                ? "The answer took too long. Please try again."
-                : error.message || "Unable to get an AI response. Please try again.";
-            appendAssistantMessage({ text: message }, false, true);
-            $("assistantStatus").textContent = message;
-            $("assistantStatus").classList.add("assistant-error");
-            if (assistantHistory[assistantHistory.length - 1]?.role === "user") assistantHistory.pop();
-            return false;
-        } finally {
-            assistantRequestPending = false;
-            $("assistantSend").disabled = false;
+        });
+        labProgress.mistakes = labProgress.mistakes.slice(-30);
+        persistLabProgress();
+        recordPerformance("risk", score, "Risk management");
+        if (mistakes && mistakes.some((item) => item === "trade-without-stop" || item === "oversized-position")) {
+            $("tradeMessage").textContent += " Your learning tracker noted a risk-planning habit to review.";
         }
     }
 
@@ -677,10 +1577,23 @@
             return;
         }
 
-        const total = quantity * instrument.price;
+        const price = getInstrumentPrice(symbol);
+        const total = quantity * price;
         const current = paperAccount.holdings[symbol] || { quantity: 0, averageCost: 0 };
         if (!Number.isFinite(total) || total <= 0) {
             setTradeMessage("This practice order amount is invalid.", true);
+            return;
+        }
+        const stopInput = $("paperStopLoss").value.trim();
+        const targetInput = $("paperTarget").value.trim();
+        const stopLoss = stopInput ? Number(stopInput) : null;
+        const target = targetInput ? Number(targetInput) : null;
+        const immediatelyAfterLoss = side === "BUY" && paperAccount.history[0] &&
+            paperAccount.history[0].side === "SELL" && Number.isFinite(paperAccount.history[0].pnl) &&
+            paperAccount.history[0].pnl < 0;
+        if (side === "BUY" && ((stopLoss !== null && (!Number.isFinite(stopLoss) || stopLoss <= 0 || stopLoss >= price)) ||
+            (target !== null && (!Number.isFinite(target) || target <= price)))) {
+            setTradeMessage("For this simulated long buy, the stop must be below entry and the target must be above entry.", true);
             return;
         }
         if (side === "BUY" && total > paperAccount.cash) {
@@ -696,6 +1609,9 @@
             const newQuantity = current.quantity + quantity;
             current.averageCost = (current.quantity * current.averageCost + total) / newQuantity;
             current.quantity = newQuantity;
+            current.stopLoss = stopLoss;
+            current.target = target;
+            current.reason = $("paperReason").value.trim().slice(0, 240);
             paperAccount.cash -= total;
             paperAccount.holdings[symbol] = current;
         } else {
@@ -704,13 +1620,86 @@
             if (current.quantity === 0) delete paperAccount.holdings[symbol];
         }
 
-        paperAccount.history.unshift({ side, symbol, quantity, price: instrument.price, time: Date.now() });
-        paperAccount.history = paperAccount.history.slice(0, 10);
+        const trade = {
+            side,
+            symbol,
+            quantity,
+            price,
+            time: Date.now(),
+            stopLoss: side === "BUY" ? stopLoss : current.stopLoss,
+            target: side === "BUY" ? target : current.target,
+            reason: side === "BUY" ? current.reason : current.reason,
+            pnl: side === "SELL" ? (price - current.averageCost) * quantity : null,
+            outcome: side === "SELL" ? "Manual simulated exit" : ""
+        };
+        paperAccount.history.unshift(trade);
+        paperAccount.history = paperAccount.history.slice(0, 30);
         const saved = persistPaperAccount();
         renderPaperAccount();
+        renderAnalytics();
         setTradeMessage(saved
-            ? `${side === "BUY" ? "Bought" : "Sold"} ${quantity} ${symbol} at the illustrative price of ${formatCurrency(instrument.price)}.`
+            ? `${side === "BUY" ? "Bought" : "Sold"} ${quantity} ${symbol} at the illustrative price of ${formatCurrency(price)}.`
             : "The simulated order was processed, but this browser could not save it. Your changes will be lost when you leave this page.", !saved);
+        if (side === "BUY") {
+            const portfolio = paperAccount.cash + Object.entries(paperAccount.holdings).reduce((sum, [holdingSymbol, holding]) =>
+                sum + holding.quantity * getInstrumentPrice(holdingSymbol), 0);
+            const risk = stopLoss === null ? null : (price - stopLoss) * quantity;
+            const riskPercent = risk === null || portfolio <= 0 ? null : risk / portfolio * 100;
+            const rewardRisk = stopLoss && target
+                ? (target - price) / (price - stopLoss)
+                : null;
+            const mistakes = [];
+            if (stopLoss === null) mistakes.push("trade-without-stop");
+            if (target === null) mistakes.push("trade-without-target");
+            if (riskPercent !== null && riskPercent > 1) mistakes.push("oversized-position");
+            if (target !== null && rewardRisk !== null && rewardRisk < 1.5) mistakes.push("weak-reward-risk-plan");
+            const hasReason = current.reason.length >= 10;
+            if (!hasReason) mistakes.push("missing-trade-reason");
+            if (immediatelyAfterLoss) mistakes.push("trade-after-loss");
+            let score = (stopLoss !== null ? 35 : 0) + (riskPercent !== null && riskPercent <= 1 ? 25 : 0) +
+                (rewardRisk !== null && rewardRisk >= 1.5 ? 25 : 0) + (hasReason ? 15 : 0);
+            if (immediatelyAfterLoss) score = Math.max(0, score - 15);
+            saveTradeProgress(score, mistakes);
+            setTradeMessage(`${saved ? "Simulated order placed" : "Simulated order placed, but not saved"}: ${quantity} ${symbol} at ${formatCurrency(price)}. Risk-plan learning score ${score}/100.`);
+            $("paperReason").value = "";
+        }
+        updateRiskEstimate();
+    }
+
+    function advanceSimulatedMarket() {
+        if (paperAccount.marketStep >= 8) return;
+        paperAccount.marketStep += 1;
+        const exits = [];
+        Object.entries(paperAccount.holdings).forEach(([symbol, holding]) => {
+            const price = getInstrumentPrice(symbol);
+            const triggeredByStop = Number.isFinite(holding.stopLoss) && price <= holding.stopLoss;
+            const triggeredByTarget = Number.isFinite(holding.target) && price >= holding.target;
+            if (!triggeredByStop && !triggeredByTarget) return;
+            const pnl = (price - holding.averageCost) * holding.quantity;
+            paperAccount.cash += price * holding.quantity;
+            paperAccount.history.unshift({
+                side: "SELL",
+                symbol,
+                quantity: holding.quantity,
+                price,
+                time: Date.now(),
+                stopLoss: holding.stopLoss,
+                target: holding.target,
+                reason: holding.reason,
+                pnl,
+                outcome: triggeredByStop ? "Simulated stop triggered at candle close" : "Simulated target reached at candle close"
+            });
+            delete paperAccount.holdings[symbol];
+            exits.push(`${symbol} ${triggeredByStop ? "stop" : "target"} triggered`);
+        });
+        paperAccount.history = paperAccount.history.slice(0, 30);
+        const saved = persistPaperAccount();
+        renderPaperAccount();
+        renderAnalytics();
+        setTradeMessage(exits.length
+            ? `${exits.join("; ")}. This simulation checks candle closes only${saved ? "." : "; changes could not be saved."}`
+            : `Illustrative prices advanced to candle ${paperAccount.marketStep + 1}. No active stop or target was reached.${saved ? "" : " Changes could not be saved."}`,
+        !saved);
     }
 
     function initializePage() {
@@ -721,9 +1710,8 @@
             })
             .then((html) => {
                 $("sidebar").innerHTML = html;
-                const active = window.location.hash === "#aiAssistant"
-                    ? $("aiAssistantLink")
-                    : [...document.querySelectorAll(".sidebar li")].find((item) => item.textContent.includes("Learn & Practice"));
+                const active = [...document.querySelectorAll(".sidebar li")]
+                    .find((item) => item.textContent.includes("Learn & Practice"));
                 if (active) active.classList.add("active");
             })
             .catch((error) => console.error("Unable to load the sidebar", error));
@@ -742,43 +1730,20 @@
             `<option value="${item.symbol}">${item.symbol} — ${item.name}</option>`
         ).join("");
         updateSelectedQuote();
-        $("assistantForm").addEventListener("submit", async (event) => {
-            event.preventDefault();
-            const input = $("assistantInput");
-            const question = input.value;
-            input.value = "";
-            await submitAssistantQuestion(question);
-            if (!assistantRequestPending) input.focus();
-        });
-        $("assistantInput").addEventListener("input", () => {
-            if (!assistantRequestPending) {
-                $("assistantStatus").textContent = `${1000 - $("assistantInput").value.length} characters remaining`;
-                $("assistantStatus").classList.remove("assistant-error");
-            }
-        });
-        $("assistantInput").addEventListener("keydown", (event) => {
-            if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault();
-                $("assistantForm").requestSubmit();
-            }
-        });
-        document.querySelectorAll(".assistant-prompt").forEach((button) => {
-            button.addEventListener("click", () => {
-                submitAssistantQuestion(button.textContent);
-                $("assistantInput").focus();
-            });
-        });
-
-        if (window.location.hash === "#aiAssistant") {
-            window.setTimeout(() => $("aiAssistant").scrollIntoView({ behavior: "smooth" }), 300);
-        }
+        renderChartStudio();
+        restoreHistoricalReplaySelection();
+        renderReplayChart();
+        renderScenarios();
+        renderAnalytics();
+        syncLearningState();
     }
 
     function updateSelectedQuote() {
         const instrument = INSTRUMENTS.find((item) => item.symbol === $("paperSymbol").value);
         $("selectedQuote").textContent = instrument
-            ? `Illustrative price: ${formatCurrency(instrument.price)} per unit`
+            ? `Illustrative candle-close price: ${formatCurrency(getInstrumentPrice(instrument.symbol))} per unit`
             : "";
+        updateRiskEstimate();
     }
 
     function escapeHTML(value) {
@@ -884,6 +1849,16 @@
             const correct = selectedQuizAnswer === question.answer;
             questionAnswered = correct;
             $("quizFeedback").textContent = `${correct ? "That's right! " : "Not quite yet. "}${question.explanation}`;
+            const quizResultKey = `${activeModuleId}:${activeQuestionIndex}`;
+            if (!Object.prototype.hasOwnProperty.call(labProgress.firstQuizResults, quizResultKey)) {
+                labProgress.firstQuizResults[quizResultKey] = {
+                    correct,
+                    topic: activeModuleId,
+                    time: Date.now()
+                };
+                persistLabProgress();
+                recordPerformance("knowledge", correct ? 100 : 0, activeModuleId, correct ? "" : `quiz:${activeModuleId}`);
+            }
             if (correct) {
                 document.querySelectorAll(".quiz-option").forEach((button) => {
                     button.disabled = true;
@@ -898,6 +1873,98 @@
                 $("checkAnswer").hidden = true;
                 $("retryQuestion").hidden = false;
             }
+        }
+
+        const chartAnswer = event.target.closest("[data-chart-answer]");
+        if (chartAnswer && !chartQuestionAnswered && activeChartQuestionIndex < CHART_QUESTIONS.length) {
+            const question = CHART_QUESTIONS[activeChartQuestionIndex];
+            const answer = Number(chartAnswer.dataset.chartAnswer);
+            const correct = answer === question.answer;
+            chartQuestionAnswered = true;
+            document.querySelectorAll("[data-chart-answer]").forEach((button) => {
+                button.disabled = true;
+                const buttonAnswer = Number(button.dataset.chartAnswer);
+                if (buttonAnswer === question.answer) button.classList.add("is-correct");
+                else if (buttonAnswer === answer) button.classList.add("is-wrong");
+            });
+            $("chartFeedback").textContent = `${correct ? "Correct. " : "Not quite. "}${question.explanation}`;
+            $("nextChartQuestion").hidden = false;
+            $("nextChartQuestion").textContent = activeChartQuestionIndex === CHART_QUESTIONS.length - 1
+                ? "See my score →" : "Next question →";
+            recordPerformance("chart", correct ? 100 : 0, question.topic, correct ? "" : `chart:${question.topic}`);
+        }
+
+        if (event.target.closest("#nextChartQuestion")) {
+            activeChartQuestionIndex += 1;
+            renderChartQuestion();
+        }
+
+        if (event.target.closest("#restartChartQuestions")) {
+            activeChartQuestionIndex = 0;
+            renderChartQuestion();
+        }
+
+        const replayAction = event.target.closest("[data-replay-action]");
+        const replayCandles = activeReplayData ? activeReplayData.candles : createCandles(REPLAY_CLOSING_PRICES);
+        const replayReady = !labProgress.replayDataset ||
+            (activeReplayData && activeReplayData.datasetKey === labProgress.replayDataset);
+        if (replayAction && replayReady && !labProgress.replayAwaitingNext &&
+            labProgress.replayIndex < replayCandles.length - 1) {
+            const index = labProgress.replayIndex;
+            const current = replayCandles[index].close;
+            const next = replayCandles[index + 1].close;
+            const change = (next - current) / current;
+            const action = replayAction.dataset.replayAction;
+            const correct = action === "BUY" ? change > 0 : action === "SELL" ? change < 0 : Math.abs(change) < 0.004;
+            const score = correct ? 100 : action === "HOLD" ? 65 : 25;
+            const outcome = change > 0 ? "the next candle closed higher" : change < 0 ? "the next candle closed lower" : "the next candle closed flat";
+            const dataType = activeReplayData ? "historical" : "synthetic";
+            labProgress.replayTotal += 1;
+            if (correct) labProgress.replayCorrect += 1;
+            labProgress.replayAwaitingNext = true;
+            labProgress.replayFeedback = `${correct ? "Your choice matched the next candle: " : "The next candle shows why no single decision is certain: "}${outcome} (${change >= 0 ? "+" : ""}${(change * 100).toFixed(2)}%). This score measures one ${dataType} candle only—not profit, a strategy result or a forecast.`;
+            persistLabProgress();
+            recordPerformance("decision", score, activeReplayData ? "Historical replay" : "Synthetic replay", score < 70 ? "replay-decision-mismatch" : "");
+            renderReplayChart();
+        }
+
+        if (event.target.closest("#nextReplayCandle") && replayReady && labProgress.replayAwaitingNext) {
+            labProgress.replayIndex = Math.min(labProgress.replayIndex + 1, replayCandles.length - 1);
+            labProgress.replayAwaitingNext = false;
+            labProgress.replayFeedback = "";
+            persistLabProgress();
+            renderReplayChart();
+        }
+
+        const scenarioAnswer = event.target.closest("[data-scenario-answer]");
+        if (scenarioAnswer) {
+            const card = scenarioAnswer.closest(".scenario-card");
+            const scenario = SCENARIOS.find((item) => item.id === card.dataset.scenarioId);
+            if (!scenario || labProgress.scenarioResults[scenario.id]) return;
+            const choice = scenario.options[Number(scenarioAnswer.dataset.scenarioAnswer)];
+            if (!choice) return;
+            labProgress.scenarioResults[scenario.id] = { score: choice.score, feedback: choice.feedback };
+            persistLabProgress();
+            card.querySelectorAll("[data-scenario-answer]").forEach((button, index) => {
+                button.disabled = true;
+                if (index === Number(scenarioAnswer.dataset.scenarioAnswer) && choice.score === 0) button.classList.add("is-wrong");
+                if (scenario.options[index].score === 100) button.classList.add("is-correct");
+            });
+            card.querySelector(".scenario-feedback").textContent = choice.feedback;
+            const retry = document.createElement("button");
+            retry.type = "button";
+            retry.className = "scenario-retry";
+            retry.dataset.scenarioRetry = scenario.id;
+            retry.textContent = "Try scenario again";
+            card.appendChild(retry);
+            recordPerformance("decision", choice.score, scenario.topic, choice.score < 70 ? `scenario:${scenario.id}` : "");
+        }
+
+        const retryScenario = event.target.closest("[data-scenario-retry]");
+        if (retryScenario) {
+            delete labProgress.scenarioResults[retryScenario.dataset.scenarioRetry];
+            persistLabProgress();
+            renderScenarios();
         }
 
         if (event.target.closest("#retryQuestion")) {
@@ -941,13 +2008,30 @@
     });
     $("sellPaper").addEventListener("click", () => executePaperTrade("SELL"));
     $("paperSymbol").addEventListener("change", updateSelectedQuote);
+    $("paperQuantity").addEventListener("input", updateRiskEstimate);
+    $("paperStopLoss").addEventListener("input", updateRiskEstimate);
+    $("paperTarget").addEventListener("input", updateRiskEstimate);
+    $("paperReason").addEventListener("input", updateRiskEstimate);
+    $("advanceMarket").addEventListener("click", advanceSimulatedMarket);
+    $("resetReplay").addEventListener("click", () => {
+        labProgress.replayIndex = 5;
+        labProgress.replayCorrect = 0;
+        labProgress.replayTotal = 0;
+        labProgress.replayAwaitingNext = false;
+        labProgress.replayFeedback = "";
+        persistLabProgress();
+        renderReplayChart();
+    });
+    $("loadHistoricalData").addEventListener("click", loadHistoricalReplay);
+    $("retryLearningSync").addEventListener("click", syncLearningState);
     $("printStudyGuide").addEventListener("click", printStudyGuide);
     $("downloadStudyGuide").addEventListener("click", downloadStudyGuide);
     $("resetSimulation").addEventListener("click", () => {
         if (!window.confirm("Reset your paper account to ₹1,00,000 and clear simulated holdings and orders?")) return;
-        paperAccount = { cash: STARTING_CASH, holdings: {}, history: [] };
+        paperAccount = { cash: STARTING_CASH, holdings: {}, history: [], marketStep: 0 };
         const saved = persistPaperAccount();
         renderPaperAccount();
+        renderAnalytics();
         setTradeMessage(saved
             ? "Practice account reset to ₹1,00,000 in virtual cash."
             : "Account reset for this page, but your browser could not save the reset.", !saved);

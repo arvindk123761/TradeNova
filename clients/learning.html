@@ -22,7 +22,10 @@
                     <span class="eyebrow">TRADE NOVA ACADEMY</span>
                     <h1>Learn the markets. Practice without risk.</h1>
                     <p>Build your knowledge from the first market basics to advanced strategies, then try the concepts with a simulated portfolio.</p>
-                    <a class="learning-hero-button" href="#courseCatalog">Explore learning path <span aria-hidden="true">↓</span></a>
+                    <div class="learning-hero-actions">
+                        <a class="learning-hero-button" href="#courseCatalog">Explore learning path <span aria-hidden="true">↓</span></a>
+                        <a class="learning-hero-lab-link" href="#paperPractice">Jump into the virtual lab <span aria-hidden="true">→</span></a>
+                    </div>
                 </div>
                 <div class="hero-progress" aria-label="Course progress">
                     <span class="hero-progress-icon" aria-hidden="true">🎓</span>
@@ -34,44 +37,63 @@
 
             <section class="learning-disclaimer" aria-label="Educational disclaimer">
                 <span aria-hidden="true">ⓘ</span>
-                <p><strong>Learning only:</strong> This content is educational, not investment advice. The practice area uses virtual money and illustrative prices; it does not place real orders or show live market data.</p>
+                <p><strong>Learning only:</strong> This content is educational, not investment advice. Paper-trading prices are illustrative; historical replay uses Yahoo Finance daily data when available, which may be delayed or incomplete. Practice uses virtual money only; progress stays in this browser and syncs to your account when signed in and online.</p>
             </section>
 
-            <section class="assistant-section" id="aiAssistant" aria-labelledby="assistantTitle">
-                <div class="assistant-heading">
-                    <div class="assistant-avatar" aria-hidden="true">TN</div>
+            <nav class="learning-journey" aria-label="Learning journey">
+                <a href="#courseCatalog"><strong>01 · LEARN</strong><span>Lessons &amp; quizzes</span><small>Build market basics</small></a>
+                <a href="#paperPractice"><strong>02 · PRACTICE</strong><span>Virtual trading lab</span><small>Plan risk with ₹1 lakh</small></a>
+                <a href="#historicalReplay"><strong>03 · ANALYSE</strong><span>Replay &amp; scenarios</span><small>Review your decisions</small></a>
+                <a href="#myProgress"><strong>04 · IMPROVE</strong><span>Your progress</span><small>Get a personal next step</small></a>
+            </nav>
+
+            <section class="performance-section" id="myProgress" aria-labelledby="performanceTitle">
+                <div class="section-heading">
                     <div>
-                        <span class="eyebrow">POWERED BY GOOGLE GEMINI</span>
-                        <h2 id="assistantTitle">TradeNova AI Assistant</h2>
-                        <p>Ask about stocks, markets, investing concepts, or your learning modules.</p>
+                        <span class="eyebrow">YOUR PERFORMANCE</span>
+                        <h2 id="performanceTitle">Progress that reflects your decisions</h2>
+                        <p>Learning is measured by knowledge, chart reading, decision-making and risk habits—not profit alone.</p>
                     </div>
+                    <span class="learner-level" id="learnerLevel">New learner</span>
                 </div>
-                <div class="assistant-notice">
-                    Your question and recent chat context are sent to Google Gemini. TradeNova does not save chat messages; Google handles API data under its own policies. This assistant has no live market-data feed, cannot place trades, and is not personalized financial advice. Verify current facts with reliable sources.
+                <div class="performance-summary">
+                    <article class="performance-score-card">
+                        <span>Learning score</span>
+                        <strong id="learningScore">0<span>/100</span></strong>
+                        <small>40% knowledge · 20% charts · 20% decisions · 20% risk</small>
+                    </article>
+                    <article class="performance-stat"><span>Practice sessions</span><strong id="practiceSessions">0</strong></article>
+                    <article class="performance-stat"><span>Lessons completed</span><strong id="completedLessons">0 / 16</strong></article>
+                    <article class="performance-stat"><span>Quiz accuracy</span><strong id="quizAccuracy">—</strong></article>
+                    <article class="performance-stat"><span>Repeated mistakes</span><strong id="repeatedMistakes">0</strong></article>
+                    <article class="performance-stat"><span>Simulated trade P&amp;L</span><strong id="tradingPerformance">₹0</strong><small id="tradingPerformanceDetail">No closed practice trades</small></article>
+                    <article class="performance-stat"><span>Replay score</span><strong id="historicalReplayScore">—</strong></article>
                 </div>
-                <div class="assistant-suggestions" role="group" aria-label="Try asking">
-                    <button class="assistant-prompt" type="button">What is a share?</button>
-                    <button class="assistant-prompt" type="button">Explain risk in simple words</button>
-                    <button class="assistant-prompt" type="button">What is a limit order?</button>
-                    <button class="assistant-prompt" type="button">How does paper trading work?</button>
-                </div>
-                <div class="assistant-chat" id="assistantChat" role="log" aria-live="polite" aria-relevant="additions">
-                    <article class="chat-message assistant-message">
-                        <span class="chat-avatar" aria-hidden="true">TN</span>
-                        <div class="chat-bubble">
-                            <strong>TradeNova AI Assistant</strong>
-                            <p>Hi! I can help explain stock-market concepts, discuss how to research a company, and answer questions about your learning modules. What would you like to know?</p>
-                        </div>
+                <div class="analytics-grid">
+                    <article class="analytics-card">
+                        <div class="analytics-card-heading"><div><h3>Skill breakdown</h3><p>Scores update when you practise.</p></div><span class="score-legend">/ 100</span></div>
+                        <div class="skill-list" id="skillBreakdown"></div>
+                        <p class="score-formula">Learning score = Knowledge × 40% + Chart reading × 20% + Decision-making × 20% + Risk management × 20%.</p>
+                    </article>
+                    <article class="analytics-card weekly-card">
+                        <div class="analytics-card-heading"><div><h3>7-day practice trend</h3><p>Your average score per day, from completed exercises.</p></div><span class="score-legend">/ 100</span></div>
+                        <div id="weeklyPerformance" class="weekly-performance" role="img" aria-label="No practice scores yet"></div>
+                        <p class="chart-caption" id="weeklyCaption">Complete an exercise to start your personal trend.</p>
+                    </article>
+                    <article class="analytics-card recommendation-card">
+                        <div class="analytics-card-heading"><div><h3>Your next best step</h3><p>Rule-based suggestions from your results.</p></div><span aria-hidden="true">✨</span></div>
+                        <div id="learningRecommendations"></div>
+                    </article>
+                    <article class="analytics-card topic-card">
+                        <div class="analytics-card-heading"><div><h3>Topic mastery</h3><p>Based on your first quiz attempts.</p></div></div>
+                        <div class="topic-list" id="topicMastery"></div>
                     </article>
                 </div>
-                <form class="assistant-form" id="assistantForm">
-                    <label class="sr-only" for="assistantInput">Your question for the AI assistant</label>
-                    <textarea id="assistantInput" rows="2" maxlength="1000" placeholder="Ask a stock or investing question..." required></textarea>
-                    <div class="assistant-form-footer">
-                        <span id="assistantStatus" role="status">Chat history is kept in this page only.</span>
-                        <button type="submit" id="assistantSend">Send</button>
-                    </div>
-                </form>
+                <p class="performance-disclaimer">Practice scores are learning signals, not forecasts or investing advice. Simulated profit is shown separately and does not increase the learning score or mean a decision was low-risk.</p>
+                <div class="learning-sync" aria-live="polite">
+                    <p class="learning-sync-status" id="learningSyncStatus" role="status">Saved in this browser. Sign in to sync progress to your account.</p>
+                    <button class="learning-sync-retry" id="retryLearningSync" type="button" hidden>Retry sync</button>
+                </div>
             </section>
 
             <section class="course-section" id="courseCatalog">
@@ -176,6 +198,13 @@
                         <p class="selected-quote" id="selectedQuote"></p>
                         <label for="paperQuantity">Quantity</label>
                         <input id="paperQuantity" type="number" min="1" step="1" value="1" required>
+                        <div class="risk-fields">
+                            <div><label for="paperStopLoss">Stop loss <span>(optional)</span></label><input id="paperStopLoss" type="number" min="0.01" step="0.01" placeholder="e.g. 240"></div>
+                            <div><label for="paperTarget">Target <span>(optional)</span></label><input id="paperTarget" type="number" min="0.01" step="0.01" placeholder="e.g. 275"></div>
+                        </div>
+                        <label for="paperReason">Why are you taking this practice trade?</label>
+                        <textarea id="paperReason" rows="2" maxlength="240" placeholder="Your hypothesis, chart signal or learning goal"></textarea>
+                        <p class="risk-estimate" id="riskEstimate" aria-live="polite"></p>
                         <div class="trade-buttons">
                             <button class="buy-paper" type="submit" data-side="buy">Buy with virtual cash</button>
                             <button class="sell-paper" type="button" id="sellPaper">Sell holding</button>
@@ -193,10 +222,82 @@
                         <p class="empty-positions" id="emptyPositions">No practice holdings yet. Place a simulated buy to get started.</p>
                     </div>
                 </div>
+                <div class="market-simulator">
+                    <div><strong>Price movement practice</strong><p>Advance one candle in this predefined simulated price path. Stop-loss or target levels on a holding are checked at each step.</p></div>
+                    <button class="advance-market" id="advanceMarket" type="button">Advance simulated market →</button>
+                    <span id="marketStepLabel">Candle 1</span>
+                </div>
                 <div class="trade-history">
-                    <h3>Recent practice orders</h3>
+                    <h3>Practice trading journal</h3>
+                    <p class="journal-intro">Your entry reason, risk plan and simulated exit are saved with each order.</p>
                     <div id="paperHistory"><p>No simulated orders yet.</p></div>
                 </div>
+            </section>
+
+            <section class="lab-section" id="chartPractice" aria-labelledby="chartPracticeTitle">
+                <div class="section-heading">
+                    <div><span class="eyebrow">CHART READING STUDIO</span><h2 id="chartPracticeTitle">Read the chart, then check your understanding</h2><p>Practise candles, trend, support/resistance, breakouts, RSI and moving averages using a fixed illustrative chart.</p></div>
+                    <span class="simulated-badge">● Simulated OHLCV</span>
+                </div>
+                <div class="chart-lab-grid">
+                    <article class="analytics-card chart-card">
+                        <div class="chart-title"><div><h3>ALFA · 1-day candles</h3><p>Each candle shows open, high, low and close.</p></div><span class="chart-live-label">ILLUSTRATIVE</span></div>
+                        <div class="price-chart" id="practiceChart" role="img" aria-label="Illustrative candlestick chart"></div>
+                        <div class="indicator-grid" id="indicatorReadings"></div>
+                        <p class="chart-caption">Indicators use only the displayed simulated prices. They are descriptive and can give false signals.</p>
+                    </article>
+                    <article class="analytics-card chart-question-card">
+                        <div class="chart-question-progress"><span id="chartQuestionCount">Question 1 of 7</span><span class="mini-progress"><span id="chartQuestionProgress"></span></span></div>
+                        <span class="question-topic" id="chartQuestionTopic"></span>
+                        <h3 id="chartQuestion"></h3>
+                        <div class="practice-options" id="chartOptions" role="group" aria-label="Chart practice answers"></div>
+                        <p class="practice-feedback" id="chartFeedback" role="status" aria-live="polite"></p>
+                        <button class="exercise-next" id="nextChartQuestion" type="button" hidden>Next question →</button>
+                    </article>
+                </div>
+            </section>
+
+            <section class="lab-section" id="historicalReplay" aria-labelledby="replayTitle">
+                <div class="section-heading">
+                    <div><span class="eyebrow">CANDLE-BY-CANDLE REPLAY</span><h2 id="replayTitle">Make a call before the next candle appears</h2><p>Future candles stay hidden until you record a decision. Load free daily history or use the clearly labelled synthetic practice sequence.</p></div>
+                    <button class="lab-reset" id="resetReplay" type="button">Restart replay</button>
+                </div>
+                <div class="historical-data-controls">
+                    <div>
+                        <label for="historicalSymbol">Yahoo Finance symbol</label>
+                        <input id="historicalSymbol" type="text" maxlength="24" value="RELIANCE.NS" autocomplete="off" autocapitalize="characters" spellcheck="false">
+                    </div>
+                    <div>
+                        <label for="historicalRange">Daily history</label>
+                        <select id="historicalRange">
+                            <option value="1mo">1 month</option>
+                            <option value="3mo" selected>3 months</option>
+                            <option value="6mo">6 months</option>
+                            <option value="1y">1 year</option>
+                        </select>
+                    </div>
+                    <button class="load-historical-data" id="loadHistoricalData" type="button">Load free historical data</button>
+                </div>
+                <p class="historical-data-status" id="historicalDataStatus" role="status" aria-live="polite">Using the built-in synthetic replay. Example symbols: RELIANCE.NS, TCS.NS or AAPL.</p>
+                <article class="analytics-card replay-card">
+                    <div class="replay-topline"><div><strong id="replayProgress">Warm-up · Candle 6 of 22</strong><span id="replaySourceLabel">Built-in synthetic practice data · Not live</span></div><span class="replay-score" id="replayScore">0 correct · 0 decisions</span></div>
+                    <div class="replay-chart" id="replayChart" role="img" aria-label="Replay chart showing revealed candles only"></div>
+                    <div class="replay-decision" id="replayDecision">
+                        <h3>What would you do at this point?</h3>
+                        <p>Choose an action and a direction before revealing the next candle.</p>
+                        <div class="replay-actions" id="replayActions" role="group" aria-label="Choose replay decision"></div>
+                    </div>
+                    <div class="replay-feedback" id="replayFeedback" role="status" aria-live="polite"></div>
+                    <button class="exercise-next" id="nextReplayCandle" type="button" hidden>Reveal next candle →</button>
+                </article>
+            </section>
+
+            <section class="lab-section" id="marketScenarios" aria-labelledby="scenarioTitle">
+                <div class="section-heading">
+                    <div><span class="eyebrow">DECISION SIMULATOR</span><h2 id="scenarioTitle">What would you do?</h2><p>Practise responding to common market situations. Each choice includes a learning explanation.</p></div>
+                    <span class="module-count" id="scenarioCount">5 scenarios</span>
+                </div>
+                <div class="scenario-grid" id="scenarioGrid"></div>
             </section>
         </div>
     </main>
