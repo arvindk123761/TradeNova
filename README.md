@@ -76,7 +76,7 @@ The repository includes a Render Blueprint in `render.yaml`. It deploys the Expr
 1. Push the deployment changes to GitHub and sign in to [Render](https://dashboard.render.com/).
 2. Create a MySQL-compatible database and an empty database/schema for TradeNova. Keep the provider's host, port, username, password, and database name private.
 3. In Render, select **New > Blueprint** and choose this GitHub repository. Review the `tradenova` web service and select an available plan.
-4. Set `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` to the provider's connection values. The Blueprint defaults `DB_SSL=true`; change it only if your provider does not support TLS. Keep `NODE_ENV=production`; Render generates `JWT_SECRET`.
+4. Set `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` to the provider's connection values. The database user needs `SELECT`, `INSERT`, `UPDATE`, `DELETE`, and `CREATE` privileges on `DB_NAME` because startup creates the migration table and any missing application tables. The Blueprint defaults `DB_SSL=true`; change it only if your provider does not support TLS. Keep `NODE_ENV=production`; Render generates `JWT_SECRET`.
 5. Deploy. The server verifies its DB connection and creates the required tables before listening; it seeds four clearly labeled demo stocks only when the stocks table is empty. The local database's users and records are not copied automatically.
 6. Open the Render service URL and verify `/api/health` returns success. A fresh database is ready for registration after schema initialization.
 
