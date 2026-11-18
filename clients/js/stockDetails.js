@@ -39,6 +39,7 @@ currentPrice = Number(stock.current_price);
                 stockChart = TradeNovaStockChart.create({
                     canvas: document.getElementById("priceChart"),
                     rangeButtons: document.querySelectorAll(".chart .stock-chart-ranges button"),
+                    chartTypeButtons: document.querySelectorAll(".chart .stock-chart-types button"),
                     lowElement: document.getElementById("chart52WeekLow"),
                     highElement: document.getElementById("chart52WeekHigh")
                 });
@@ -80,7 +81,7 @@ showToast("Server Error","error");
 }
 
 loadStock();
-
+setInterval(loadStock, 5000);
 
 function openBuyModal() {
 

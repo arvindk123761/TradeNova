@@ -111,11 +111,348 @@
     text-align: right;
 }
 
+.signals-technical {
+    margin: 0 0 22px;
+    padding: 22px;
+    border: 1px solid #dbeafe;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #f8fbff, #fff);
+}
+
+.signals-technical__intro h2 {
+    margin: 6px 0;
+    color: #172033;
+    font-size: 21px;
+}
+
+.signals-technical__intro > p,
+.signals-technical__item p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.signals-technical__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.signals-technical__item {
+    padding: 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.signals-technical__item h3 {
+    margin: 0 0 6px;
+    color: #334155;
+    font-size: 14px;
+}
+
+.signals-technical__item--timeframe {
+    border-color: #bfdbfe;
+    background: #eff6ff;
+}
+
+.signals-technical__item--timeframe h3 {
+    color: #1d4ed8;
+}
+
 .signals-summary {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
     margin-bottom: 18px;
+}
+
+.screener {
+    margin: 0 0 22px;
+    padding: 22px;
+    border: 1px solid #dbe3ef;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, .05);
+}
+
+.screener__header,
+.screener__filters {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.screener__header {
+    margin-bottom: 16px;
+}
+
+.screener__header h2 {
+    margin: 5px 0;
+    color: #172033;
+    font-size: 22px;
+}
+
+.screener__header p,
+.screener__note {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.screener__search,
+.screener__filters label {
+    display: grid;
+    gap: 6px;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.screener__search input,
+.screener__filters select {
+    min-height: 40px;
+    padding: 8px 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    background: #fff;
+    color: #172033;
+    font: inherit;
+}
+
+.screener__search input {
+    min-width: 220px;
+}
+
+.screener__filters {
+    justify-content: flex-start;
+    margin-bottom: 13px;
+}
+
+#screenerStatus {
+    margin: 0 0 2px auto;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.screener__table-wrap {
+    overflow-x: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+.screener__table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.screener__table th {
+    padding: 12px 14px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 11px;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+}
+
+.screener__table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #eef2f7;
+    color: #334155;
+    font-size: 13px;
+}
+
+.screener__table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.screener__rank {
+    color: #64748b !important;
+    font-weight: 800;
+}
+
+.screener__company,
+.screener__symbol {
+    display: block;
+}
+
+.screener__company {
+    color: #172033;
+}
+
+.screener__symbol {
+    margin-top: 3px;
+    color: #64748b;
+    font-size: 11px;
+}
+
+.screener__return {
+    color: #15803d !important;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.screener__return--bearish {
+    color: #b91c1c !important;
+}
+
+.screener__return--neutral {
+    color: #64748b !important;
+}
+
+.screener__combined {
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.screener__combined--up {
+    color: #15803d !important;
+}
+
+.screener__combined--down {
+    color: #b91c1c !important;
+}
+
+.screener__buy,
+.screener-buy__confirm {
+    padding: 9px 16px;
+    border: 0;
+    border-radius: 8px;
+    background: #15803d;
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 800;
+}
+
+.screener__buy:hover,
+.screener-buy__confirm:hover:not(:disabled) {
+    background: #166534;
+}
+
+.screener__empty {
+    padding: 26px !important;
+    color: #64748b !important;
+    text-align: center;
+}
+
+.screener__note {
+    margin-top: 11px;
+    font-size: 11px;
+}
+
+.screener-buy {
+    width: min(440px, calc(100vw - 32px));
+    padding: 25px;
+    border: 0;
+    border-radius: 16px;
+    color: #172033;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, .24);
+}
+
+.screener-buy::backdrop {
+    background: rgba(15, 23, 42, .62);
+    backdrop-filter: blur(3px);
+}
+
+.screener-buy__close-form {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+}
+
+.screener-buy__close {
+    border: 0;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 25px;
+}
+
+.screener-buy h2 {
+    margin: 0 0 7px;
+}
+
+.screener-buy__identity,
+.screener-buy__price,
+.screener-buy__total {
+    color: #475569;
+}
+
+.screener-buy__quantity {
+    display: block;
+    margin: 18px 0 6px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.screener-buy input {
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    font: inherit;
+}
+
+.screener-buy__total strong,
+.screener-buy__price strong {
+    color: #172033;
+}
+
+.screener-buy__message {
+    min-height: 19px;
+    color: #b91c1c;
+    font-size: 13px;
+}
+
+.screener-buy__login {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.screener-buy [hidden] {
+    display: none;
+}
+
+.screener-buy__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.screener-buy__cancel {
+    padding: 9px 16px;
+    border: 0;
+    border-radius: 8px;
+    background: #e2e8f0;
+    color: #334155;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+.screener-buy__confirm:disabled {
+    cursor: not-allowed;
+    opacity: .55;
+}
+
+.screener__search input:focus-visible,
+.screener__filters select:focus-visible,
+.screener__buy:focus-visible,
+.screener-buy button:focus-visible,
+.screener-buy input:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
 }
 
 .signals-count {
@@ -252,10 +589,43 @@
     display: block;
     width: 100%;
     height: 82px;
-    margin: 14px 0;
     overflow: visible;
     border-radius: 10px;
     background: #f8fafc;
+}
+
+.signal-chart-wrap {
+    margin: 14px 0;
+}
+
+.signal-chart-types {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.signal-chart-types button {
+    padding: 4px 9px;
+    border: 1px solid #dbe3ef;
+    border-radius: 7px;
+    background: #fff;
+    color: #475569;
+    cursor: pointer;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.signal-chart-types button.active {
+    border-color: #0f766e;
+    background: #0f766e;
+    color: #fff;
+}
+
+.signal-chart-types button:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
 }
 
 .signal-chart__line {
@@ -276,6 +646,35 @@
 
 .signal-chart__line--neutral {
     stroke: #64748b;
+}
+
+.signal-chart__wick--up,
+.signal-chart__candle--up {
+    stroke: #15803d;
+    fill: #16a34a;
+}
+
+.signal-chart__wick--down,
+.signal-chart__candle--down {
+    stroke: #b91c1c;
+    fill: #dc2626;
+}
+
+.signal-chart__wick {
+    stroke-width: 1.2;
+}
+
+.signal-chart__latest-marker {
+    fill: #2563eb;
+    stroke: #fff;
+    stroke-width: 1;
+}
+
+.signal-chart__latest-label {
+    fill: #2563eb;
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: .5px;
 }
 
 .signal-card__basis-title {
@@ -344,6 +743,32 @@
 
     .signals-summary {
         gap: 9px;
+    }
+
+    .signals-technical {
+        padding: 16px;
+    }
+
+    .signals-technical__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .screener {
+        padding: 16px;
+    }
+
+    .screener__header,
+    .screener__filters {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .screener__search input {
+        min-width: 0;
+    }
+
+    #screenerStatus {
+        margin-left: 0;
     }
 
     .signals-count {

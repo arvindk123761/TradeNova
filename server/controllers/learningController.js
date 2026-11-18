@@ -7,7 +7,28 @@ const SCENARIO_IDS = new Set([
     "rsi-75",
     "market-crash"
 ]);
-const INSTRUMENTS = new Set(["ALFA", "BETA", "GROW", "NOVA"]);
+const INSTRUMENTS = new Set([
+    "RELIANCE",
+    "TCS",
+    "HDFCBANK",
+    "ICICIBANK",
+    "SBIN",
+    "INFY",
+    "LTIM",
+    "BHARTIARTL",
+    "SUNPHARMA",
+    "TATAMOTORS",
+    "ITC",
+    "ASIANPAINT",
+    "AXISBANK",
+    "NTPC",
+    "POWERGRID",
+    "KOTAKBANK",
+    "ULTRACEMCO",
+    "INDUSINDBK",
+    "MARUTI",
+    "WIPRO"
+]);
 const TABLE_SQL = `CREATE TABLE IF NOT EXISTS learning_lab_state (
     user_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
     lab_progress LONGTEXT NOT NULL,
@@ -45,7 +66,7 @@ function sanitizeLabProgress(value) {
     if (!isRecord(value) || !isRecord(value.firstQuizResults) ||
         !Array.isArray(value.attempts) || !Array.isArray(value.mistakes) ||
         !isRecord(value.scenarioResults) ||
-        !Number.isSafeInteger(value.replayIndex) || value.replayIndex < 5 || value.replayIndex > 21 ||
+        !Number.isSafeInteger(value.replayIndex) || value.replayIndex < 0 || value.replayIndex > 21 ||
         !Number.isSafeInteger(value.replayCorrect) || value.replayCorrect < 0 ||
         !Number.isSafeInteger(value.replayTotal) || value.replayTotal < 0 ||
         typeof value.replayAwaitingNext !== "boolean" ||

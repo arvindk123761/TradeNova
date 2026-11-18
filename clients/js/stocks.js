@@ -3,6 +3,15 @@ const API = `${window.location.origin}/api`;
 let stocks = [];
 let selectedStock = null;
 let detailsChart = null;
+let latestStocksRequest = 0;
+const stockPriceFormat = new Intl.NumberFormat("en-IN", {
+minimumFractionDigits: 2,
+maximumFractionDigits: 2
+});
+
+function formatStockPrice(value){
+return `₹${stockPriceFormat.format(Number(value) || 0)}`;
+}
 
 /* ===================================
    LOAD COMMON COMPONENTS
@@ -34,9 +43,12 @@ async function loadStocks(){
 
 try{
 
-const response = await fetch(`${API}/stocks`);
+const requestId = ++latestStocksRequest;
+const response = await fetch(`${API}/stocks`, { cache: "no-store" });
 
 const data = await response.json();
+
+if(requestId !== latestStocksRequest) return;
 
 stocks = data.stocks || data;
 
@@ -78,18 +90,23 @@ return;
 
 list.forEach(stock=>{
 
-const change =
-Number(stock.change_percent);
+const previousClose = Number(stock.previous_close ?? stock.previous_price ?? stock.current_price ?? 0);
+const currentPrice = Number(stock.current_price ?? 0);
+const dayChange = currentPrice - previousClose;
+const computedChange = previousClose > 0 ? ((dayChange / previousClose) * 100) : 0;
+const storedChange = Number(stock.change_percent ?? 0);
+const effectiveChange = Number.isFinite(storedChange) && storedChange !== 0 ? storedChange : computedChange;
+const pnlText = `${dayChange >= 0 ? "+" : "-"}₹${Math.abs(dayChange).toFixed(2)}`;
 
 const badge =
-change>=0
+effectiveChange >= 0
 ?
 `<div class="stock-change up">
-▲ ${change}%
+▲ ${effectiveChange.toFixed(2)}%
 </div>`
 :
 `<div class="stock-change down">
-▼ ${change}%
+▼ ${Math.abs(effectiveChange).toFixed(2)}%
 </div>`;
 
 container.innerHTML +=`
@@ -112,9 +129,13 @@ ${stock.symbol}
 
 <h3>
 
-₹${Number(stock.current_price).toFixed(2)}
+${formatStockPrice(currentPrice)}
 
 </h3>
+
+<div class="stock-pnl ${dayChange >= 0 ? 'up' : 'down'}">
+${dayChange >= 0 ? 'Profit' : 'Loss'}: ${pnlText}
+</div>
 
 <div class="stock-buttons">
 
@@ -395,6 +416,7 @@ if (detailsChart) {
     detailsChart = TradeNovaStockChart.create({
         canvas: document.getElementById("stockDetailsChart"),
         rangeButtons: document.querySelectorAll(".stock-chart-ranges button"),
+      chartTypeButtons: document.querySelectorAll(".stock-chart-types button"),
         lowElement: document.getElementById("chart52WeekLow"),
         highElement: document.getElementById("chart52WeekHigh")
     });
@@ -517,7 +539,7 @@ box.innerHTML +=`
 
 <small>
 
-₹${Number(stock.current_price).toFixed(2)}
+${formatStockPrice(stock.current_price)}
 
 </small>
 
@@ -581,7 +603,7 @@ box.innerHTML +=`
 
 <small>
 
-₹${Number(stock.current_price).toFixed(2)}
+${formatStockPrice(stock.current_price)}
 
 </small>
 

@@ -20,7 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
             "profile.html": "profileLink",
             "ipo.html": "ipoLink",
             "mutualfunds.html": "mutualFundsLink",
-            "recommendations.html": "marketSignalsLink"
+            "recommendations.html": "marketSignalsLink",
+            "arcade.html": "arcadeLink",
+            "assistant.html": "assistantLink"
 
         };
 

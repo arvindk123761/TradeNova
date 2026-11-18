@@ -278,9 +278,16 @@
                     </div>
                     <button class="load-historical-data" id="loadHistoricalData" type="button">Load free historical data</button>
                 </div>
-                <p class="historical-data-status" id="historicalDataStatus" role="status" aria-live="polite">Using the built-in synthetic replay. Example symbols: RELIANCE.NS, TCS.NS or AAPL.</p>
+                <div class="historical-symbol-presets" role="group" aria-label="Quick-select practice companies">
+                    <span>Quick practice:</span>
+                    <button type="button" data-replay-symbol="TCS.NS">TCS</button>
+                    <button type="button" data-replay-symbol="HDFCBANK.NS">HDFC Bank</button>
+                    <button type="button" data-replay-symbol="INFY.NS">Infosys</button>
+                    <button type="button" data-replay-symbol="ICICIBANK.NS">ICICI Bank</button>
+                </div>
+                <p class="historical-data-status" id="historicalDataStatus" role="status" aria-live="polite">Using the built-in synthetic replay. Examples: RELIANCE.NS, TCS.NS, HDFCBANK.NS, INFY.NS, ICICIBANK.NS or AAPL.</p>
                 <article class="analytics-card replay-card">
-                    <div class="replay-topline"><div><strong id="replayProgress">Warm-up · Candle 6 of 22</strong><span id="replaySourceLabel">Built-in synthetic practice data · Not live</span></div><span class="replay-score" id="replayScore">0 correct · 0 decisions</span></div>
+                    <div class="replay-topline"><div><strong id="replayProgress">Candle 6 of 22</strong><span id="replaySourceLabel">Built-in synthetic practice data · Not live</span></div><span class="replay-score" id="replayScore">0 correct · 0 decisions</span></div>
                     <div class="replay-chart" id="replayChart" role="img" aria-label="Replay chart showing revealed candles only"></div>
                     <div class="replay-decision" id="replayDecision">
                         <h3>What would you do at this point?</h3>
@@ -295,7 +302,7 @@
             <section class="lab-section" id="marketScenarios" aria-labelledby="scenarioTitle">
                 <div class="section-heading">
                     <div><span class="eyebrow">DECISION SIMULATOR</span><h2 id="scenarioTitle">What would you do?</h2><p>Practise responding to common market situations. Each choice includes a learning explanation.</p></div>
-                    <span class="module-count" id="scenarioCount">5 scenarios</span>
+                    <div class="scenario-tools"><span class="module-count" id="scenarioCount">15 scenarios · 5 random per set</span><button class="scenario-new-set" id="newScenarioSet" type="button">New random set ↻</button></div>
                 </div>
                 <div class="scenario-grid" id="scenarioGrid"></div>
             </section>

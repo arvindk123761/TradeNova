@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#07111f">
+    <title>TradeNova | Arcade</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/topbar.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/arcade.css">
+</head>
+<body>
+    <div id="sidebar"></div>
+    <main class="main arcade-main">
+        <div id="topbar"></div>
+        <div class="arcade-page">
+            <header class="arcade-hero">
+                <div class="arcade-hero__copy">
+                    <span class="arcade-kicker"><span class="arcade-kicker__dot"></span> PLAY · LEARN · LEVEL UP</span>
+                    <h1>TradeNova <span>Arcade</span></h1>
+                    <p>Sharpen your market instincts with quick, risk-free games. Read the chart, make a call, and learn from every round.</p>
+                    <div class="arcade-hero__actions">
+                        <a class="arcade-button arcade-button--primary" href="#game-desk">Play a game <span aria-hidden="true">↘</span></a>
+                        <span class="arcade-safe"><span aria-hidden="true">✦</span> Virtual points only · No real trades</span>
+                    </div>
+                </div>
+                <div class="arcade-hero__art" aria-hidden="true">
+                    <div class="arcade-art-glow"></div>
+                    <div class="arcade-art-label"><span>MARKET SIMULATOR</span><strong>YOUR NEXT MOVE?</strong></div>
+                    <svg class="arcade-hero-chart" viewBox="0 0 510 220" role="presentation">
+                        <path d="M8 192H502M8 142H502M8 92H502M8 42H502" stroke="rgba(148,163,184,.16)" stroke-dasharray="4 8"/>
+                        <path d="M18 178 C55 166 62 141 98 151 S149 169 178 122 S219 140 251 99 S292 124 324 78 S370 110 403 55 S453 81 491 22" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+                        <g stroke-width="3">
+                            <path d="M52 112v50m-9-33h18" stroke="#22c55e"/><rect x="46" y="128" width="12" height="18" rx="2" fill="#22c55e"/>
+                            <path d="M112 92v56m-9-42h18" stroke="#fb7185"/><rect x="106" y="108" width="12" height="23" rx="2" fill="#fb7185"/>
+                            <path d="M171 76v67m-9-52h18" stroke="#22c55e"/><rect x="165" y="92" width="12" height="26" rx="2" fill="#22c55e"/>
+                            <path d="M231 48v71m-9-58h18" stroke="#22c55e"/><rect x="225" y="65" width="12" height="29" rx="2" fill="#22c55e"/>
+                            <path d="M292 41v66m-9-49h18" stroke="#fb7185"/><rect x="286" y="58" width="12" height="26" rx="2" fill="#fb7185"/>
+                            <path d="M352 25v70m-9-56h18" stroke="#22c55e"/><rect x="346" y="40" width="12" height="27" rx="2" fill="#22c55e"/>
+                            <path d="M413 8v62m-9-48h18" stroke="#22c55e"/><rect x="407" y="23" width="12" height="27" rx="2" fill="#22c55e"/>
+                            <path d="M471 5v50m-9-39h18" stroke="#22c55e"/><rect x="465" y="18" width="12" height="20" rx="2" fill="#22c55e"/>
+                        </g>
+                    </svg>
+                    <div class="arcade-art-chip arcade-art-chip--one">↑ 2.4%</div>
+                    <div class="arcade-art-chip arcade-art-chip--two">BULL · BEAR · YOU</div>
+                </div>
+                <div class="arcade-hero__stats" aria-label="Arcade score">
+                    <span class="arcade-stat-icon" aria-hidden="true">🏆</span>
+                    <span><small>YOUR ARCADE SCORE</small><strong id="arcadeTotalScore">0 <em>pts</em></strong></span>
+                    <span class="arcade-stat-divider"></span>
+                    <span><small>ROUNDS PLAYED</small><strong id="arcadeRoundsPlayed">0</strong></span>
+                </div>
+            </header>
+
+            <section class="arcade-games" aria-labelledby="arcadeGamesTitle">
+                <div class="arcade-section-heading">
+                    <div><span class="arcade-section-eyebrow">PICK YOUR CHALLENGE</span><h2 id="arcadeGamesTitle">Choose a game</h2></div>
+                    <span class="arcade-games-count">3 MINI GAMES <span aria-hidden="true">✦</span></span>
+                </div>
+                <div class="arcade-game-grid">
+                    <button class="arcade-game-card is-selected" type="button" data-game="predict" aria-pressed="true">
+                        <span class="arcade-game-card__visual arcade-game-card__visual--predict" aria-hidden="true">
+                            <span class="visual-pill">LIVE ROUND</span>
+                            <svg viewBox="0 0 320 116"><path d="M0 98H320M0 58H320M0 18H320" stroke="rgba(255,255,255,.1)"/><polyline points="8,83 38,66 64,74 91,38 119,52 148,29 177,49 203,18 232,41 263,13 294,22 312,6" fill="none" stroke="#7dd3fc" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="294" cy="22" r="5" fill="#34d399"/></svg>
+                            <span class="visual-bottom-label">BULL VS BEAR</span>
+                        </span>
+                        <span class="arcade-game-card__body"><span class="arcade-game-card__meta"><span>01 · MARKET MOMENTUM</span><span class="difficulty difficulty--easy">EASY</span></span><strong>Bull vs Bear</strong><span>Predict the next move from the candles. Will the market rise, fall, or move sideways?</span><span class="arcade-card-link">Play game <b>→</b></span></span>
+                    </button>
+                    <button class="arcade-game-card" type="button" data-game="detective" aria-pressed="false">
+                        <span class="arcade-game-card__visual arcade-game-card__visual--detective" aria-hidden="true">
+                            <span class="visual-pill">PATTERN QUIZ</span>
+                            <svg viewBox="0 0 320 116">
+                                <path d="M0 98H320M0 58H320M0 18H320" stroke="rgba(255,255,255,.1)"/>
+                                <g stroke-width="3"><path d="M44 28v73m-11-18h22" stroke="#22c55e"/><rect x="37" y="65" width="14" height="18" rx="2" fill="#22c55e"/><path d="M101 18v76m-11-20h22" stroke="#22c55e"/><rect x="94" y="45" width="14" height="29" rx="2" fill="#22c55e"/><path d="M158 30v67m-11-17h22" stroke="#fb7185"/><rect x="151" y="53" width="14" height="23" rx="2" fill="#fb7185"/><path d="M215 17v78m-11-20h22" stroke="#fb7185"/><rect x="208" y="42" width="14" height="33" rx="2" fill="#fb7185"/><path d="M272 24v72m-11-18h22" stroke="#22c55e"/><rect x="265" y="47" width="14" height="25" rx="2" fill="#22c55e"/></g>
+                            </svg>
+                            <span class="visual-bottom-label">CANDLESTICK DETECTIVE</span>
+                        </span>
+                        <span class="arcade-game-card__body"><span class="arcade-game-card__meta"><span>02 · CHART READING</span><span class="difficulty difficulty--medium">MEDIUM</span></span><strong>Candlestick Detective</strong><span>Spot a candle pattern and learn what its shape may suggest about market sentiment.</span><span class="arcade-card-link">Play game <b>→</b></span></span>
+                    </button>
+                    <button class="arcade-game-card" type="button" data-game="stoploss" aria-pressed="false">
+                        <span class="arcade-game-card__visual arcade-game-card__visual--portfolio" aria-hidden="true">
+                            <span class="visual-pill">ENTRY · STOP · TARGET</span>
+                            <svg viewBox="0 0 320 116"><path d="M0 98H320M0 58H320M0 18H320" stroke="rgba(255,255,255,.1)"/><polyline points="8,91 33,76 60,83 87,58 114,64 143,35 170,42 198,26 225,52 252,38 279,71 310,82" fill="none" stroke="#c4b5fd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M0 31H320" stroke="#fb7185" stroke-dasharray="5 5"/><path d="M0 82H320" stroke="#34d399" stroke-dasharray="5 5"/><rect x="250" y="23" width="48" height="15" rx="5" fill="#fb7185"/><text x="274" y="34" text-anchor="middle" fill="#fff" font-size="8">STOP</text><rect x="250" y="74" width="48" height="15" rx="5" fill="#34d399"/><text x="274" y="85" text-anchor="middle" fill="#063b2c" font-size="8">TARGET</text></svg>
+                            <span class="visual-bottom-label">STOP-LOSS CHALLENGE</span>
+                        </span>
+                        <span class="arcade-game-card__body"><span class="arcade-game-card__meta"><span>03 · RISK MANAGEMENT</span><span class="difficulty difficulty--medium">MEDIUM</span></span><strong>Stop-Loss Challenge</strong><span>Choose an entry, stop-loss, target, and quantity. Calculate risk, reward, and risk-reward ratio.</span><span class="arcade-card-link">Play game <b>→</b></span></span>
+                    </button>
+                </div>
+            </section>
+
+            <section id="game-desk" class="arcade-desk" aria-live="polite">
+                <div class="arcade-desk__heading">
+                    <div><span class="arcade-section-eyebrow">ARCADE FLOOR</span><h2 id="activeGameTitle">Bull vs Bear</h2><p id="activeGameIntro">Read the visible price action, then make your call before the next candle is revealed.</p></div>
+                    <span class="round-counter" id="gameRoundLabel">ROUND 1</span>
+                </div>
+                <div id="gameStage" class="game-stage"></div>
+            </section>
+
+            <footer class="arcade-footer"><span>🎮 TradeNova Arcade</span><span>For learning and entertainment only. Simulated charts and scores do not predict real prices or represent investment advice.</span></footer>
+        </div>
+    </main>
+    <script src="js/topbar.js"></script>
+    <script src="js/arcade.js"></script>
+</body>
+</html>

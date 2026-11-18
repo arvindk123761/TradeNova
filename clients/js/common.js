@@ -11,7 +11,9 @@ window.addEventListener("load", () => {
         "orders.html":"ordersLink",
         "profile.html":"profileLink",
         "ipo.html":"ipoLink",
-        "recommendations.html":"marketSignalsLink"
+        "recommendations.html":"marketSignalsLink",
+        "arcade.html":"arcadeLink",
+        "assistant.html":"assistantLink"
     };
 
     const id = map[page];

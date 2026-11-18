@@ -10,10 +10,12 @@ TradeNova is a full-stack stock trading and investment dashboard built with a va
 - Stock buy and sell flow with portfolio updates
 - Portfolio summary, holdings, profit/loss, and a Day/Week/Month/Year performance chart with five-minute history snapshots and five-second current-value refreshes
 - Orders, watchlist, and activity history
-- Market Signals section with day/week/month simulated-chart trend indicators, transparent signal criteria, and a neutral option when signals conflict
+- Market Signals section with day/week/month simulated-chart trend indicators, a searchable and sortable top-five weekly/monthly Buy screener, and authenticated paper-trade orders
+- Authenticated AI Assistant for stock-market education, backed by a server-side Gemini API key
 - IPO listings with offer dates, lot sizes, simulated demo applications, and per-user application history
 - Mutual Fund simulated NAVs, wallet-backed unit purchases, portfolio valuation, and partial/full unit selling
-- Learning academy with 16 lessons and quizzes, chart and indicator exercises, candle replay, market scenarios, virtual trading journal, performance-based recommendations, and per-user progress sync
+- Learning academy with 16 lessons and quizzes, chart and indicator exercises, candle replay, a 15-scenario randomized decision simulator, virtual trading journal, performance-based recommendations, and per-user progress sync
+- TradeNova Arcade with Bull vs Bear price-action prediction, ten Candlestick Detective patterns, and a Stop-Loss Challenge for entry, quantity, and risk-reward calculations; points are saved locally
 - Profile and password change
 - Authenticated admin stock management routes
 
@@ -31,7 +33,7 @@ TradeNova is a full-stack stock trading and investment dashboard built with a va
    npm install
    ```
 
-2. Copy `server/.env.example` to `server/.env` and set your local MySQL credentials and a long random `JWT_SECRET`.
+2. Copy `server/.env.example` to `server/.env` and set your local MySQL credentials and a long random `JWT_SECRET`. To enable the AI Assistant, add your own `GEMINI_API_KEY` from Google AI Studio. The key stays on the server and must never be placed in frontend code or committed to Git.
 
 3. Make sure the MySQL database `tradenova_db` exists. On startup, the server creates the required tables and adds a small demo stock catalog only when the stocks table is empty.
 
@@ -61,11 +63,13 @@ This is a final-year project prototype. Stock prices are simulated, and the inve
 
 Signed-in learning progress and virtual-trading accounts sync to the authenticated user through `GET`/`PUT /api/learning/state`; the `learning_lab_state` table is created automatically on first use. A browser-local copy remains available if the API is temporarily unreachable. Guest progress stays in that browser.
 
-The learning replay can load daily historical candles through `GET /api/learning/market-history` from Yahoo Finance's free chart endpoint; no API key is required. Enter a Yahoo ticker such as `RELIANCE.NS`, `TCS.NS`, or `AAPL`, choose a period, and load the most recent candles. The provider endpoint is unofficial, may be delayed or rate-limited, and can change without notice; this is for education, not live trading or investment decisions. The last 22 candles are cached in the browser. On another device, load the same symbol and period again to resume. The built-in synthetic replay remains available when the provider is unreachable.
+The learning replay can load daily historical candles through `GET /api/learning/market-history` from Yahoo Finance's free chart endpoint; no API key is required. Enter a Yahoo ticker such as `RELIANCE.NS`, `TCS.NS`, `HDFCBANK.NS`, `INFY.NS`, `ICICIBANK.NS`, or `AAPL`, choose a period, and load the most recent candles. The provider endpoint is unofficial, may be delayed or rate-limited, and can change without notice; this is for education, not live trading or investment decisions. The last 22 candles are cached in the browser. On another device, load the same symbol and period again to resume. The built-in synthetic replay remains available when the provider is unreachable.
 
 Paper-trading prices and sample instruments remain illustrative simulations. The learning lab does not provide live quotes or broker connectivity.
 
-The Market Signals page analyzes the same illustrative price series shown in stock details. Its bullish/bearish labels are educational, rule-based signals—not live market analysis, investment advice, or a promise of future performance.
+The Market Signals page analyzes the same illustrative price series shown in stock details. Its bullish/bearish labels and weekly/monthly screener are educational, rule-based signals—not live market analysis, investment advice, or a promise of future performance. The screener ranks matching stocks by average weekly/monthly return, and its Buy action submits an authenticated paper-trade order using the server's current stock price.
+
+The AI Assistant is available to signed-in users at `assistant.html`. It answers educational stock-market questions through the server's authenticated `/api/assistant/chat` endpoint and requires `GEMINI_API_KEY`; without the key, the UI explains that the feature is not configured. Requests are limited per user, chat history is held only in the current page session, and questions are sent to Google Gemini for answers. It has no live-price or account access and must not be used for personalized investment decisions. Configure the key as a private environment variable in Render for deployment; do not commit it.
 
 Never commit `server/.env`, credentials, access tokens, or other secrets. The credentials previously embedded in source code should be considered exposed and rotated.
 

@@ -134,6 +134,7 @@
     });
     let activeMarketKey = null;
     let activeMarketPeriod = "day";
+    let activeMarketChartType = "line";
     let marketTick = 0;
     let selectedChartPoint = null;
 
@@ -231,6 +232,12 @@
             button.classList.toggle("active", selected);
             button.setAttribute("aria-pressed", String(selected));
         });
+        document.querySelectorAll("[data-market-chart-type]").forEach((button) => {
+            const selected = button.dataset.marketChartType === activeMarketChartType;
+            button.classList.toggle("active", selected);
+            button.setAttribute("aria-pressed", String(selected));
+        });
+        svg.dataset.chartType = activeMarketChartType;
 
         const points = Array.from({ length: period.count }, (_, position) => {
             const progress = position / (period.count - 1);
@@ -263,14 +270,46 @@
             svg.appendChild(line);
         });
 
-        const chartLine = document.createElementNS(namespace, "polyline");
-        chartLine.setAttribute("points", chartPoints.join(" "));
-        chartLine.setAttribute("fill", "none");
-        chartLine.setAttribute("stroke", index.color);
-        chartLine.setAttribute("stroke-width", "1.8");
-        chartLine.setAttribute("stroke-linecap", "round");
-        chartLine.setAttribute("stroke-linejoin", "round");
-        svg.appendChild(chartLine);
+        if (activeMarketChartType === "line") {
+            const chartLine = document.createElementNS(namespace, "polyline");
+            chartLine.setAttribute("class", "market-chart-line");
+            chartLine.setAttribute("points", chartPoints.join(" "));
+            chartLine.setAttribute("fill", "none");
+            chartLine.setAttribute("stroke", index.color);
+            chartLine.setAttribute("stroke-width", "1.8");
+            chartLine.setAttribute("stroke-linecap", "round");
+            chartLine.setAttribute("stroke-linejoin", "round");
+            svg.appendChild(chartLine);
+        } else {
+            const bodyWidth = Math.max(3, Math.min(12, 600 / points.length * 0.52));
+            points.forEach((close, position) => {
+                const open = position === 0 ? close : points[position - 1];
+                const candleX = 20 + position * (600 / (points.length - 1));
+                const wickSize = Math.max(valueRange * 0.012, close * 0.00015);
+                const high = Math.max(open, close) + wickSize;
+                const low = Math.min(open, close) - wickSize;
+                const openY = 20 + ((maxValue - open) / valueRange) * 145;
+                const closeY = 20 + ((maxValue - close) / valueRange) * 145;
+                const rising = close >= open;
+                const candleClass = rising ? "market-chart-candle--up" : "market-chart-candle--down";
+
+                const wick = document.createElementNS(namespace, "line");
+                wick.setAttribute("class", `market-chart-candle__wick ${candleClass}`);
+                wick.setAttribute("x1", String(candleX));
+                wick.setAttribute("x2", String(candleX));
+                wick.setAttribute("y1", String(20 + ((maxValue - high) / valueRange) * 145));
+                wick.setAttribute("y2", String(20 + ((maxValue - low) / valueRange) * 145));
+                svg.appendChild(wick);
+
+                const body = document.createElementNS(namespace, "rect");
+                body.setAttribute("class", `market-chart-candle__body ${candleClass}`);
+                body.setAttribute("x", String(candleX - bodyWidth / 2));
+                body.setAttribute("y", String(Math.min(openY, closeY)));
+                body.setAttribute("width", String(bodyWidth));
+                body.setAttribute("height", String(Math.max(2, Math.abs(closeY - openY))));
+                svg.appendChild(body);
+            });
+        }
 
         chartPoints.forEach((point, position) => {
             const [x, y] = point.split(",");
@@ -342,6 +381,18 @@
         chart.addEventListener("click", (event) => {
             const point = event.target.closest("[data-point-index]");
             if (point) showChartPointValue(Number(point.dataset.pointIndex));
+        });
+
+        document.querySelectorAll("[data-market-chart-type]").forEach((button) => {
+            button.addEventListener("click", () => {
+                activeMarketChartType = button.dataset.marketChartType;
+                document.querySelectorAll("[data-market-chart-type]").forEach((item) => {
+                    const selected = item === button;
+                    item.classList.toggle("active", selected);
+                    item.setAttribute("aria-pressed", String(selected));
+                });
+                if (activeMarketKey) renderMarketDetails(activeMarketKey);
+            });
         });
 
         const hideSearchResults = () => {

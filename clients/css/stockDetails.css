@@ -87,6 +87,20 @@
     gap:6px;
 }
 
+.chart .stock-chart-controls{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    gap:8px;
+}
+
+.chart .stock-chart-types{
+    display:flex;
+    gap:6px;
+    padding-left:8px;
+    border-left:1px solid #e2e8f0;
+}
+
 .chart .stock-chart-ranges button{
     border:0;
     border-radius:8px;
@@ -97,8 +111,24 @@
     cursor:pointer;
 }
 
+.chart .stock-chart-types button{
+    border:1px solid #dbe3ef;
+    border-radius:8px;
+    background:#fff;
+    color:#475569;
+    padding:8px 11px;
+    font-weight:700;
+    cursor:pointer;
+}
+
 .chart .stock-chart-ranges button.active{
     background:#2563eb;
+    color:white;
+}
+
+.chart .stock-chart-types button.active{
+    border-color:#0f766e;
+    background:#0f766e;
     color:white;
 }
 
@@ -361,4 +391,15 @@ canvas{
 
     background:#b71c1c;
 
+}
+
+@media (max-width: 700px){
+    .chart .chart-heading{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .chart .stock-chart-controls{
+        justify-content:flex-start;
+    }
 }

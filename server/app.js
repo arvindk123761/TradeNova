@@ -17,6 +17,7 @@ const ipoRoutes = require("./routes/ipoRoutes");
 const activityRoutes = require("./routes/activityRoutes");
 const investmentRoutes = require("./routes/investmentRoutes");
 const learningRoutes = require("./routes/learningRoutes");
+const assistantRoutes = require("./routes/assistantRoutes");
 app.use(cors());
 app.use(express.json());
 
@@ -38,6 +39,7 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/activity", activityRoutes);
 app.use("/api/investments", investmentRoutes);
 app.use("/api/learning", learningRoutes);
+app.use("/api/assistant", assistantRoutes);
 
 app.use("/api/ipo", ipoRoutes);
 

@@ -96,7 +96,11 @@
                         <button type="button" data-market-period="month" aria-pressed="false">Month</button>
                         <button type="button" data-market-period="year" aria-pressed="false">Year</button>
                     </div>
-                    <svg id="marketDetailChart" viewBox="0 0 640 190" role="group" aria-label="Illustrative index trend chart. Hover over, focus, or tap a point to see its value."></svg>
+                    <div class="market-chart-type-tabs" role="group" aria-label="Chart style">
+                        <button type="button" class="active" data-market-chart-type="line" aria-pressed="true">Line</button>
+                        <button type="button" data-market-chart-type="candlestick" aria-pressed="false">Candles</button>
+                    </div>
+                    <svg id="marketDetailChart" data-chart-type="line" viewBox="0 0 640 190" role="group" aria-label="Illustrative index trend chart. Hover over, focus, or tap a point to see its value."></svg>
                     <p class="market-chart-point-value" id="marketChartPointValue" aria-live="polite">Hover over, focus, or tap a chart point to see its value.</p>
                     <div class="market-detail-chart-labels" id="marketDetailChartLabels"></div>
                 </div>
@@ -105,7 +109,7 @@
                     <p>Index membership can change. These are examples, not a complete current constituents list.</p>
                     <div id="marketDetailCompanyList"></div>
                 </div>
-                <p class="market-detail-disclaimer">Simulated example only; values and charts refresh every 5 seconds but are not live exchange data. Company lists are examples, not current full index constituents.</p>
+                <p class="market-detail-disclaimer">Simulated example only; values and charts refresh every 5 seconds but are not live exchange data. Candlestick OHLC bars are illustrative and derived from the same simulated index path. Company lists are examples, not current full index constituents.</p>
             </div>
         </section>
 

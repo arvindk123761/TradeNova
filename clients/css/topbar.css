@@ -391,6 +391,49 @@
     color:#116b5a;
 }
 
+.market-chart-type-tabs{
+    display:flex;
+    justify-content:flex-end;
+    gap:6px;
+    margin-top:10px;
+}
+
+.market-chart-type-tabs button{
+    padding:6px 11px;
+    border:1px solid #dbe3ec;
+    border-radius:8px;
+    background:#fff;
+    color:#475569;
+    font:inherit;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.market-chart-type-tabs button.active{
+    border-color:#0f766e;
+    background:#0f766e;
+    color:#fff;
+}
+
+.market-chart-candle__wick{
+    stroke-width:1.4;
+}
+
+.market-chart-candle--up{
+    stroke:#15803d;
+    fill:#16a34a;
+}
+
+.market-chart-candle--down{
+    stroke:#b91c1c;
+    fill:#dc2626;
+}
+
+.market-chart-candle__body{
+    stroke-width:1;
+}
+
 .market-detail-chart svg{
     display:block;
     width:100%;

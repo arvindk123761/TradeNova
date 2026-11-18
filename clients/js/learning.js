@@ -345,10 +345,26 @@
     };
 
     const INSTRUMENTS = [
-        { symbol: "ALFA", name: "Alpha Learning Co.", price: 250 },
-        { symbol: "BETA", name: "Beta Sample Bank", price: 480 },
-        { symbol: "GROW", name: "Growth Practice Ltd.", price: 125 },
-        { symbol: "NOVA", name: "Nova Demo Energy", price: 760 }
+        { symbol: "RELIANCE", name: "Reliance Industries", price: 2980 },
+        { symbol: "TCS", name: "Tata Consultancy Services", price: 3999 },
+        { symbol: "HDFCBANK", name: "HDFC Bank", price: 1689 },
+        { symbol: "ICICIBANK", name: "ICICI Bank", price: 1286 },
+        { symbol: "SBIN", name: "State Bank of India", price: 893 },
+        { symbol: "INFY", name: "Infosys", price: 1529 },
+        { symbol: "LTIM", name: "LTIMindtree", price: 6580 },
+        { symbol: "BHARTIARTL", name: "Bharti Airtel", price: 1494 },
+        { symbol: "SUNPHARMA", name: "Sun Pharmaceutical", price: 1641 },
+        { symbol: "TATAMOTORS", name: "Tata Motors", price: 1046 },
+        { symbol: "ITC", name: "ITC", price: 482 },
+        { symbol: "ASIANPAINT", name: "Asian Paints", price: 3196 },
+        { symbol: "AXISBANK", name: "Axis Bank", price: 1249 },
+        { symbol: "NTPC", name: "NTPC", price: 390 },
+        { symbol: "POWERGRID", name: "Power Grid", price: 319 },
+        { symbol: "KOTAKBANK", name: "Kotak Mahindra Bank", price: 1810 },
+        { symbol: "ULTRACEMCO", name: "UltraTech Cement", price: 11440 },
+        { symbol: "INDUSINDBK", name: "IndusInd Bank", price: 1520 },
+        { symbol: "MARUTI", name: "Maruti Suzuki", price: 12460 },
+        { symbol: "WIPRO", name: "Wipro", price: 558 }
     ];
     const PRACTICE_CLOSING_PRICES = [
         101, 100, 103, 102, 104, 103, 106, 105, 107, 104, 108, 107,
@@ -359,11 +375,28 @@
         100, 102, 101, 104, 103, 105, 102, 99, 101, 98, 96, 99,
         102, 100, 104, 107, 105, 109, 111, 108, 112, 115
     ];
+    const INITIAL_REPLAY_INDEX = 5;
     const SIMULATED_MARKET_MOVES = {
-        ALFA: [0, 0.018, 0.027, -0.014, -0.045, -0.068, -0.032, 0.014, 0.038],
-        BETA: [0, -0.008, 0.012, 0.021, 0.009, -0.019, -0.031, -0.004, 0.016],
-        GROW: [0, 0.025, -0.011, -0.036, -0.058, -0.024, 0.019, 0.047, 0.031],
-        NOVA: [0, -0.013, -0.028, -0.009, 0.026, 0.055, 0.018, -0.041, -0.019]
+        RELIANCE: [0, 0.018, 0.027, -0.014, -0.045, -0.068, -0.032, 0.014, 0.038],
+        TCS: [0, -0.008, 0.012, 0.021, 0.009, -0.019, -0.031, -0.004, 0.016],
+        HDFCBANK: [0, 0.025, -0.011, -0.036, -0.058, -0.024, 0.019, 0.047, 0.031],
+        ICICIBANK: [0, -0.013, -0.028, -0.009, 0.026, 0.055, 0.018, -0.041, -0.019],
+        SBIN: [0, 0.016, -0.012, 0.024, -0.015, 0.034, -0.021, 0.011, 0.027],
+        INFY: [0, -0.018, 0.019, 0.009, -0.014, 0.021, -0.009, 0.026, -0.005],
+        LTIM: [0, 0.023, 0.011, -0.018, 0.008, 0.019, -0.016, 0.028, 0.012],
+        BHARTIARTL: [0, -0.009, 0.013, 0.022, -0.006, 0.027, 0.018, -0.011, 0.017],
+        SUNPHARMA: [0, 0.015, -0.008, 0.021, 0.011, -0.017, 0.016, -0.007, 0.014],
+        TATAMOTORS: [0, -0.022, 0.031, -0.018, 0.025, -0.006, 0.019, -0.014, 0.018],
+        ITC: [0, 0.009, -0.011, 0.012, -0.005, 0.014, -0.011, 0.021, 0.007],
+        ASIANPAINT: [0, 0.013, 0.008, -0.009, 0.018, -0.013, 0.024, -0.007, 0.016],
+        AXISBANK: [0, -0.014, 0.017, 0.006, -0.019, 0.025, -0.011, 0.021, -0.003],
+        NTPC: [0, 0.012, -0.009, 0.016, -0.003, 0.018, -0.008, 0.014, 0.009],
+        POWERGRID: [0, -0.010, 0.015, -0.014, 0.021, -0.008, 0.012, -0.005, 0.011],
+        KOTAKBANK: [0, 0.017, -0.006, 0.022, -0.011, 0.019, -0.004, 0.016, 0.008],
+        ULTRACEMCO: [0, -0.007, 0.018, -0.012, 0.015, -0.005, 0.020, -0.010, 0.013],
+        INDUSINDBK: [0, 0.008, -0.011, 0.014, -0.009, 0.022, -0.004, 0.017, 0.006],
+        MARUTI: [0, -0.015, 0.021, -0.016, 0.013, -0.006, 0.018, -0.011, 0.014],
+        WIPRO: [0, 0.010, -0.007, 0.020, -0.012, 0.024, -0.015, 0.011, 0.013]
     };
     const STARTING_CASH = 100000;
     const USER_STORAGE_SCOPE = getUserStorageScope();
@@ -430,13 +463,106 @@
                 { label: "Assume diversification prevents further losses", score: 0, feedback: "Diversification may reduce single-company risk but cannot eliminate market-wide losses." },
                 { label: "Make an impulsive trade to win back the loss today", score: 0, feedback: "Trying to recover losses immediately can turn into revenge trading. Taking a pause is a valid risk-control action." }
             ]
+        },
+        {
+            id: "earnings-miss", topic: "Company research", title: "Quarterly earnings miss expectations",
+            situation: "A company reports lower-than-expected profit. A social post says the dip is a guaranteed buying opportunity.",
+            options: [
+                { label: "Read the official results, understand the reasons and reassess risk", score: 100, feedback: "Compare reported results with prior periods and guidance, and consider what is uncertain. A price drop alone does not establish value." },
+                { label: "Buy immediately because every earnings dip rebounds", score: 0, feedback: "Some prices recover and others do not. Review the company information and your risk plan before drawing conclusions." },
+                { label: "Rely only on the social post", score: 0, feedback: "A social post may be incomplete or wrong. Verify claims using official disclosures and reliable sources." }
+            ]
+        },
+        {
+            id: "gap-through-stop", topic: "Execution risk", title: "Price gaps below your stop",
+            situation: "A simulated stock opens below your planned stop-loss after overnight news.",
+            options: [
+                { label: "Recognize that a stop may execute at a worse price and review the position", score: 100, feedback: "A stop is not a guaranteed exit price. Gaps, liquidity and slippage can make the execution price different from the trigger." },
+                { label: "Assume the stop guarantees the exact planned loss", score: 0, feedback: "Stop orders can execute at a different price in fast or gapping markets. Position sizing should account for uncertainty." },
+                { label: "Increase the position to offset the gap", score: 0, feedback: "Increasing exposure after an adverse gap can magnify losses. Reassess before acting." }
+            ]
+        },
+        {
+            id: "sector-concentration", topic: "Diversification", title: "Most of your holdings are in one sector",
+            situation: "Several companies in your virtual portfolio are banks, so one sector event could affect many holdings at once.",
+            options: [
+                { label: "Review sector concentration and whether the portfolio matches your risk plan", score: 100, feedback: "Owning multiple companies in one sector may still leave correlated exposure. Diversification can reduce concentration risk but cannot eliminate market risk." },
+                { label: "Assume several bank stocks means full diversification", score: 0, feedback: "Different tickers can share similar sector risks. Consider how holdings may respond to the same event." },
+                { label: "Add more of the same sector without reviewing exposure", score: 0, feedback: "Adding without checking concentration can increase correlated risk. Review the whole portfolio first." }
+            ]
+        },
+        {
+            id: "rumor-check", topic: "Information quality", title: "An unverified takeover rumor spreads",
+            situation: "A chat group claims a company will be acquired, but there is no official exchange filing.",
+            options: [
+                { label: "Verify through official filings and avoid treating the rumor as confirmed", score: 100, feedback: "Unverified claims can be inaccurate or manipulative. Check official disclosures and remember that even confirmed news does not guarantee a price move." },
+                { label: "Buy before everyone else because the rumor must be true", score: 0, feedback: "A rumor is not confirmation. Acting on it can expose you to misinformation and rapid reversals." },
+                { label: "Forward it as verified information", score: 0, feedback: "Do not present unverified claims as facts. Check authoritative sources before sharing or acting." }
+            ]
+        },
+        {
+            id: "leverage-pressure", topic: "Leverage risk", title: "A leveraged trade looks tempting",
+            situation: "A platform shows that leverage could make a small price move produce a larger gain or loss.",
+            options: [
+                { label: "Understand that leverage magnifies losses too and avoid risking money you cannot afford to lose", score: 100, feedback: "Leverage increases exposure relative to capital and can magnify losses, trigger forced liquidation and add costs. It is not required for learning." },
+                { label: "Use maximum leverage because the chart looks bullish", score: 0, feedback: "A chart signal can be wrong. Maximum leverage can make a small adverse move cause a large loss." },
+                { label: "Ignore the possibility of liquidation", score: 0, feedback: "Leverage may trigger liquidation or losses beyond the initial expectation, depending on product terms. Understand the risks first." }
+            ]
+        },
+        {
+            id: "fomo-rally", topic: "Trading psychology", title: "A stock has already rallied sharply",
+            situation: "You notice a stock only after it has risen several sessions and worry you are missing out.",
+            options: [
+                { label: "Pause, review the setup and risk plan, and accept that skipping is an option", score: 100, feedback: "Fear of missing out can lead to rushed decisions. You do not have to trade every move; wait for a reasoned plan." },
+                { label: "Buy immediately because the rise will continue", score: 0, feedback: "Recent gains do not guarantee continuation. Price can reverse or consolidate." },
+                { label: "Borrow money to make the missed move worthwhile", score: 0, feedback: "Borrowing can magnify financial stress and losses. Avoid increasing risk to compensate for a missed opportunity." }
+            ]
+        },
+        {
+            id: "low-volume-breakout", topic: "Liquidity", title: "A breakout occurs on very low volume",
+            situation: "Price moves above a chart level, but trading volume is much lower than usual.",
+            options: [
+                { label: "Treat it as uncertain and check liquidity, context and risk before deciding", score: 100, feedback: "Low participation may make a move less informative and can increase execution difficulty. No single indicator confirms a reliable breakout." },
+                { label: "Assume the breakout is confirmed by price alone", score: 0, feedback: "A price crossing can fail. Consider volume, liquidity and broader context without treating them as guarantees." },
+                { label: "Use a large order in a thin market", score: 0, feedback: "Low liquidity can increase slippage and make exits harder. Position size and execution conditions matter." }
+            ]
+        },
+        {
+            id: "time-horizon", topic: "Planning", title: "You may need the money next month",
+            situation: "You are considering putting money needed for a near-term bill into a volatile stock.",
+            options: [
+                { label: "Keep essential near-term funds separate from risky investments", score: 100, feedback: "A short time horizon leaves less time to recover from a loss. Learning simulations are different from money needed for essential expenses." },
+                { label: "Invest it because the stock may rise before the bill is due", score: 0, feedback: "A possible gain is uncertain, while the expense is near-term. Avoid risking funds needed for essential obligations." },
+                { label: "Assume you can always sell at the planned price", score: 0, feedback: "Prices and liquidity can change. An exit at a specific price is not guaranteed." }
+            ]
+        },
+        {
+            id: "averaging-down", topic: "Position management", title: "A holding falls below your entry",
+            situation: "Your simulated position is losing value. You are thinking of buying more only to lower its average cost.",
+            options: [
+                { label: "Review the original thesis, total exposure and risk limit before adding", score: 100, feedback: "A lower average cost does not remove the loss or make the investment safer. Reassess the evidence and your total exposure." },
+                { label: "Add automatically so the loss disappears sooner", score: 0, feedback: "Adding increases exposure and cannot guarantee a recovery. Decide based on a fresh plan, not the desire to erase a loss." },
+                { label: "Ignore the position because the average entry is lower", score: 0, feedback: "The market value and risk remain. Track the full position and review your plan honestly." }
+            ]
+        },
+        {
+            id: "profit-taking", topic: "Trade planning", title: "Price reaches your planned target",
+            situation: "A simulated position reaches the target you wrote down before entering. Online comments say it will go much higher.",
+            options: [
+                { label: "Revisit the pre-written plan and make a deliberate choice", score: 100, feedback: "A plan helps reduce impulsive decisions, though it is not mandatory or guaranteed. If you change it, document why and reassess risk." },
+                { label: "Ignore your plan because online comments predict more upside", score: 0, feedback: "Comments are not reliable forecasts. Avoid changing a plan solely due to crowd excitement." },
+                { label: "Double the position without recalculating risk", score: 0, feedback: "Increasing the position changes potential loss and concentration. Recalculate risk before any change." }
+            ]
         }
     ];
+    const SCENARIO_BATCH_SIZE = 5;
+    let activeScenarioIds = [];
+    let seenScenarioIds = new Set();
     const INITIAL_LAB_PROGRESS = {
         firstQuizResults: {},
         attempts: [],
         mistakes: [],
-        replayIndex: 5,
+        replayIndex: INITIAL_REPLAY_INDEX,
         replayCorrect: 0,
         replayTotal: 0,
         replayAwaitingNext: false,
@@ -670,7 +796,7 @@
                 item && typeof item.type === "string" && Number.isSafeInteger(item.count) && item.count > 0
             ).slice(-30) : [],
             replayIndex: Number.isSafeInteger(saved.replayIndex)
-                ? Math.max(5, Math.min(REPLAY_CLOSING_PRICES.length - 1, saved.replayIndex)) : 5,
+                ? Math.max(INITIAL_REPLAY_INDEX, Math.min(REPLAY_CLOSING_PRICES.length - 1, saved.replayIndex)) : INITIAL_REPLAY_INDEX,
             replayCorrect: Number.isSafeInteger(saved.replayCorrect) && saved.replayCorrect >= 0 ? saved.replayCorrect : 0,
             replayTotal: Number.isSafeInteger(saved.replayTotal) && saved.replayTotal >= 0 ? saved.replayTotal : 0,
             replayAwaitingNext: saved.replayAwaitingNext === true,
@@ -736,7 +862,7 @@
 
         $("historicalDataStatus").textContent = activeReplayData
             ? `${activeReplayData.name} · Cached historical data from Yahoo Finance.`
-            : "Using the built-in synthetic replay. Example symbols: RELIANCE.NS, TCS.NS or AAPL.";
+            : "Using the built-in synthetic replay. Examples: RELIANCE.NS, TCS.NS, HDFCBANK.NS, INFY.NS, ICICIBANK.NS or AAPL.";
     }
 
     function persistLabProgress() {
@@ -1172,12 +1298,12 @@
         const replayCandles = activeReplayData ? activeReplayData.candles : createCandles(REPLAY_CLOSING_PRICES);
         const visible = replayReady ? replayCandles.slice(0, labProgress.replayIndex + 1) : [];
         $("replayChart").innerHTML = buildCandleChart(visible, { volume: false });
-        const total = replayCandles.length - 6;
+        const total = replayCandles.length - 1;
         const complete = replayReady && labProgress.replayIndex >= replayCandles.length - 1;
         $("replayProgress").textContent = !replayReady
             ? `Saved replay · ${labProgress.replayDataset}`
             : complete ? `Replay complete · ${total} decisions`
-                : `Warm-up · Candle ${labProgress.replayIndex + 1} of ${replayCandles.length}`;
+                : `Candle ${labProgress.replayIndex + 1} of ${replayCandles.length}`;
         $("replaySourceLabel").textContent = !replayReady
             ? "Load the saved symbol and period to resume this replay"
             : activeReplayData
@@ -1242,13 +1368,13 @@
             };
             $("historicalSymbol").value = activeReplayData.symbol;
             if (!sameDataset) {
-                labProgress.replayIndex = 5;
+                labProgress.replayIndex = Math.min(INITIAL_REPLAY_INDEX, candles.length - 1);
                 labProgress.replayCorrect = 0;
                 labProgress.replayTotal = 0;
                 labProgress.replayAwaitingNext = false;
                 labProgress.replayFeedback = "";
             } else {
-                labProgress.replayIndex = Math.max(5, Math.min(candles.length - 1, labProgress.replayIndex));
+                labProgress.replayIndex = Math.max(INITIAL_REPLAY_INDEX, Math.min(candles.length - 1, labProgress.replayIndex));
             }
             labProgress.replayDataset = activeReplayData.datasetKey;
             let cacheSaved = true;
@@ -1271,8 +1397,44 @@
         }
     }
 
-    function renderScenarios() {
-        $("scenarioGrid").innerHTML = SCENARIOS.map((scenario) => {
+    function renderScenarios(newRandomSet = false) {
+        if (newRandomSet || !activeScenarioIds.length) {
+            let unseenScenarios = SCENARIOS.filter((scenario) => !seenScenarioIds.has(scenario.id));
+            if (!unseenScenarios.length) {
+                seenScenarioIds.clear();
+                unseenScenarios = [...SCENARIOS];
+            }
+            const shuffle = (items) => {
+                const shuffled = [...items];
+                for (let index = shuffled.length - 1; index > 0; index -= 1) {
+                    const swapIndex = Math.floor(Math.random() * (index + 1));
+                    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+                }
+                return shuffled;
+            };
+            const firstChoices = shuffle(unseenScenarios);
+            const remainingChoices = shuffle(SCENARIOS.filter((scenario) =>
+                !firstChoices.some((item) => item.id === scenario.id)
+            ));
+            activeScenarioIds = [...firstChoices, ...remainingChoices]
+                .slice(0, SCENARIO_BATCH_SIZE)
+                .map((scenario) => scenario.id);
+            activeScenarioIds.forEach((id) => seenScenarioIds.add(id));
+
+            let clearedPreviousAnswers = false;
+            activeScenarioIds.forEach((id) => {
+                if (Object.prototype.hasOwnProperty.call(labProgress.scenarioResults, id)) {
+                    delete labProgress.scenarioResults[id];
+                    clearedPreviousAnswers = true;
+                }
+            });
+            if (clearedPreviousAnswers) persistLabProgress();
+        }
+
+        $("scenarioCount").textContent = `${SCENARIOS.length} scenarios · ${activeScenarioIds.length} random per set`;
+        $("scenarioGrid").innerHTML = activeScenarioIds.map((scenarioId) => {
+            const scenario = SCENARIOS.find((item) => item.id === scenarioId);
+            if (!scenario) return "";
             const selected = labProgress.scenarioResults[scenario.id];
             return `<article class="scenario-card" data-scenario-id="${scenario.id}">
                 <span class="scenario-tag">${scenario.topic}</span><h3>${scenario.title}</h3><p>${scenario.situation}</p>
@@ -1821,6 +1983,19 @@
     }
 
     document.addEventListener("click", (event) => {
+        if (event.target.closest("#newScenarioSet")) {
+            renderScenarios(true);
+            return;
+        }
+
+        const replaySymbol = event.target.closest("[data-replay-symbol]");
+        if (replaySymbol) {
+            $("historicalSymbol").value = replaySymbol.dataset.replaySymbol;
+            $("historicalSymbol").focus();
+            $("historicalDataStatus").textContent = `${replaySymbol.textContent.trim()} selected. Choose a history period, then load its daily candles to practise.`;
+            $("historicalDataStatus").classList.remove("is-error");
+        }
+
         const card = event.target.closest(".module-card");
         if (card) openModule(card.dataset.moduleId);
 
@@ -2014,7 +2189,9 @@
     $("paperReason").addEventListener("input", updateRiskEstimate);
     $("advanceMarket").addEventListener("click", advanceSimulatedMarket);
     $("resetReplay").addEventListener("click", () => {
-        labProgress.replayIndex = 5;
+        labProgress.replayIndex = activeReplayData
+            ? Math.min(INITIAL_REPLAY_INDEX, activeReplayData.candles.length - 1)
+            : INITIAL_REPLAY_INDEX;
         labProgress.replayCorrect = 0;
         labProgress.replayTotal = 0;
         labProgress.replayAwaitingNext = false;

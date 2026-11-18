@@ -1,4 +1,6 @@
 (function () {
+    const yearlyHistory = new Map();
+
     function createRandom(seed) {
         let value = seed >>> 0;
         return function () {
@@ -28,6 +30,21 @@
         }
 
         return prices.map(price => Math.max(0.01, price));
+    }
+
+    function getYearPrices(stock, currentPrice, seed) {
+        const key = String(stock.id || stock.symbol || "stock");
+        let prices = yearlyHistory.get(key);
+
+        if (!prices) {
+            prices = createYearPrices(currentPrice, seed);
+        } else {
+            prices = prices.slice();
+            prices[prices.length - 1] = Math.max(0.01, currentPrice);
+        }
+
+        yearlyHistory.set(key, prices);
+        return prices;
     }
 
     function createTradingDates(count) {
@@ -103,7 +120,7 @@
     function getSeries(stock, range) {
         const currentPrice = Number(stock.current_price);
         const seed = stockSeed(stock.id, stock.symbol);
-        const yearPrices = createYearPrices(currentPrice, seed);
+        const yearPrices = getYearPrices(stock, currentPrice, seed);
         const yearlyStats = {
             low: Math.min(...yearPrices),
             high: Math.max(...yearPrices)
@@ -199,10 +216,73 @@
     function analyze(stock, range) {
         return analyzePrices(getSeries(stock, range).values, range);
     }
+    function createIllustrativeCandles(values) {
+        return values.map((close, index) => {
+            const open = index === 0 ? close * 0.999 : values[index - 1];
+            const wick = Math.max(Math.abs(close - open) * 0.35, close * 0.0012);
+            return {
+                open,
+                high: Math.max(open, close) + wick,
+                low: Math.max(0.01, Math.min(open, close) - wick),
+                close
+            };
+        });
+    }
+    const candlestickPlugin = {
+        id: "tradeNovaCandlesticks",
+        afterDatasetsDraw(chart, args, pluginOptions) {
+            if (!pluginOptions.enabled || !chart.$tradeNovaCandles) return;
+            const { ctx, chartArea, scales: { x, y } } = chart;
+            const candles = chart.$tradeNovaCandles;
+            const step = candles.length > 1
+                ? Math.abs(x.getPixelForValue(1) - x.getPixelForValue(0))
+                : chartArea.width;
+            const bodyWidth = Math.max(2, Math.min(12, step * 0.58));
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(chartArea.left, chartArea.top, chartArea.width, chartArea.height);
+            ctx.clip();
+            candles.forEach((candle, index) => {
+                const center = chartArea.left + ((index + 0.5) / candles.length) * chartArea.width;
+                const rising = candle.close >= candle.open;
+                const color = rising ? "#16a34a" : "#dc2626";
+                const openY = y.getPixelForValue(candle.open);
+                const closeY = y.getPixelForValue(candle.close);
+                const bodyTop = Math.min(openY, closeY);
+                const bodyHeight = Math.max(2, Math.abs(closeY - openY));
+                ctx.strokeStyle = color;
+                ctx.fillStyle = color;
+                ctx.lineWidth = 1.25;
+                ctx.beginPath();
+                ctx.moveTo(center, y.getPixelForValue(candle.high));
+                ctx.lineTo(center, y.getPixelForValue(candle.low));
+                ctx.stroke();
+                ctx.fillRect(center - bodyWidth / 2, bodyTop, bodyWidth, bodyHeight);
+
+                if (index === candles.length - 1) {
+                    const latestY = y.getPixelForValue(candle.close);
+                    ctx.setLineDash([3, 4]);
+                    ctx.strokeStyle = "rgba(37, 99, 235, .65)";
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(center, chartArea.top);
+                    ctx.lineTo(center, chartArea.bottom);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                    ctx.fillStyle = "#2563eb";
+                    ctx.beginPath();
+                    ctx.arc(center, latestY, 3.5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+            ctx.restore();
+        }
+    };
 
     function create(options) {
         const canvas = options.canvas;
         const chart = new Chart(canvas, {
+            plugins: [candlestickPlugin],
             type: "line",
             data: {
                 labels: [],
@@ -224,6 +304,7 @@
                 interaction: { intersect: false, mode: "index" },
                 plugins: {
                     legend: { display: false },
+                    tradeNovaCandlesticks: { enabled: false },
                     tooltip: {
                         callbacks: {
                             label: context => `₹${Number(context.parsed.y).toLocaleString("en-IN", {
@@ -235,6 +316,8 @@
                 },
                 scales: {
                     x: {
+                        reverse: false,
+                        offset: true,
                         grid: { display: false },
                         ticks: { maxTicksLimit: 7, maxRotation: 0 }
                     },
@@ -251,12 +334,23 @@
 
         let activeStock = null;
         let activeRange = "day";
+        let activeChartType = "line";
 
         function render() {
             if (!activeStock) return;
             const series = getSeries(activeStock, activeRange);
+            const candles = createIllustrativeCandles(series.values);
+            const lows = candles.map(candle => candle.low);
+            const highs = candles.map(candle => candle.high);
+            chart.$tradeNovaCandles = candles;
             chart.data.labels = series.labels;
             chart.data.datasets[0].data = series.values;
+            chart.data.datasets[0].borderColor = activeChartType === "line" ? "#2563eb" : "rgba(0, 0, 0, 0)";
+            chart.data.datasets[0].backgroundColor = activeChartType === "line" ? "rgba(37, 99, 235, 0.12)" : "rgba(0, 0, 0, 0)";
+            chart.data.datasets[0].fill = activeChartType === "line";
+            chart.options.plugins.tradeNovaCandlesticks.enabled = activeChartType === "candlestick";
+            chart.options.scales.y.min = activeChartType === "candlestick" ? Math.min(...lows) : undefined;
+            chart.options.scales.y.max = activeChartType === "candlestick" ? Math.max(...highs) : undefined;
             chart.update("none");
 
             if (options.highElement) {
@@ -285,12 +379,32 @@
             });
         });
 
+        (options.chartTypeButtons || []).forEach(button => {
+            button.addEventListener("click", () => {
+                activeChartType = button.dataset.chartType;
+                (options.chartTypeButtons || []).forEach(item => {
+                    const isActive = item === button;
+                    item.classList.toggle("active", isActive);
+                    item.setAttribute("aria-pressed", String(isActive));
+                });
+                render();
+            });
+        });
+
         return {
             update(stock) {
+                const isNewStock = !activeStock || Number(activeStock.id) !== Number(stock.id);
                 activeStock = stock;
-                activeRange = "day";
-                options.rangeButtons.forEach(button => {
-                    const isActive = button.dataset.range === activeRange;
+                if (isNewStock) {
+                    activeRange = "day";
+                    options.rangeButtons.forEach(button => {
+                        const isActive = button.dataset.range === activeRange;
+                        button.classList.toggle("active", isActive);
+                        button.setAttribute("aria-pressed", String(isActive));
+                    });
+                }
+                (options.chartTypeButtons || []).forEach(button => {
+                    const isActive = button.dataset.chartType === activeChartType;
                     button.classList.toggle("active", isActive);
                     button.setAttribute("aria-pressed", String(isActive));
                 });

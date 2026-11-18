@@ -18,25 +18,23 @@ function updatePrices() {
 
         stocks.forEach(stock => {
 
-            // Random change between -5 and +5
+            const previousPrice = Number(stock.current_price || 0);
             const change = (Math.random() * 10 - 5).toFixed(2);
+            let newPrice = previousPrice + Number(change);
 
-            let newPrice = Number(stock.current_price) + Number(change);
-
-            // Prevent price going below ₹1
             if (newPrice < 1) {
                 newPrice = 1;
             }
 
-            const percentageChange = Number(
-                (((newPrice - Number(stock.current_price)) / Number(stock.current_price)) * 100).toFixed(2)
-            );
+            const percentageChange = previousPrice > 0
+                ? Number((((newPrice - previousPrice) / previousPrice) * 100).toFixed(2))
+                : 0;
 
             db.query(
                 `UPDATE stocks
                  SET previous_price=?, current_price=?, percentage_change=?
                  WHERE id=?`,
-                [stock.current_price, newPrice.toFixed(2), percentageChange, stock.id]
+                [previousPrice.toFixed(2), newPrice.toFixed(2), percentageChange, stock.id]
             );
 
         });

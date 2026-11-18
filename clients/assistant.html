@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f4f7fb">
+    <title>TradeNova | AI Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/topbar.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/assistant.css">
+</head>
+<body>
+    <div id="sidebar"></div>
+    <main class="main assistant-main">
+        <div id="topbar"></div>
+        <div class="assistant-page">
+            <header class="assistant-header">
+                <div>
+                    <span class="assistant-eyebrow"><span></span> TRADENOVA LEARNING TOOL</span>
+                    <h1>Stock market <span>AI assistant</span></h1>
+                    <p>Ask about market concepts, charts, investing terms, risk, or how to use TradeNova.</p>
+                </div>
+                <button id="clearConversation" class="assistant-clear" type="button">New conversation</button>
+            </header>
+
+            <aside class="assistant-notice" aria-label="Assistant limitations">
+                <span aria-hidden="true">ⓘ</span>
+                <p><strong>Educational answers only.</strong> The assistant does not have live prices, news, or access to your account. It cannot provide personalized buy/sell instructions. Don't share passwords, API keys, or sensitive financial details.</p>
+            </aside>
+
+            <section class="assistant-chat" aria-label="AI assistant chat">
+                <div id="chatMessages" class="assistant-messages" role="log" aria-live="polite" aria-relevant="additions">
+                    <article class="chat-message chat-message--assistant">
+                        <span class="chat-avatar" aria-hidden="true">✦</span>
+                        <div class="chat-bubble"><strong>TradeNova Assistant</strong><p>Hi! I can explain stock-market concepts in plain language. What would you like to learn?</p></div>
+                    </article>
+                </div>
+                <div class="assistant-suggestions" aria-label="Suggested questions">
+                    <button type="button" data-prompt="What is the difference between a limit order and a market order?">Limit vs market order</button>
+                    <button type="button" data-prompt="Explain RSI and its limitations in simple terms.">Explain RSI</button>
+                    <button type="button" data-prompt="How do stop-loss and position sizing help manage risk?">Risk management basics</button>
+                    <button type="button" data-prompt="How do I read a candlestick chart?">Read candlesticks</button>
+                </div>
+                <form id="assistantForm" class="assistant-composer">
+                    <label class="visually-hidden" for="assistantQuestion">Ask a stock-market question</label>
+                    <textarea id="assistantQuestion" rows="2" maxlength="1000" placeholder="Ask a stock-market question..." required></textarea>
+                    <div class="assistant-composer__footer">
+                        <span id="assistantStatus" role="status" aria-live="polite">AI answers can be incomplete. Verify important information.</span>
+                        <div><span id="questionLength">0 / 1000</span><button id="sendQuestion" type="submit" aria-label="Send question">Send <span aria-hidden="true">↑</span></button></div>
+                    </div>
+                </form>
+            </section>
+            <p class="assistant-provider-note">Your question is sent to the configured AI provider to generate a response. Chat history stays in this page session and is not saved to your TradeNova account.</p>
+        </div>
+    </main>
+    <script src="js/common.js"></script>
+    <script src="js/topbar.js"></script>
+    <script src="js/assistant.js"></script>
+</body>
+</html>

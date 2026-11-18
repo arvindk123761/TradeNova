@@ -1,4 +1,4 @@
-const GEMINI_MODEL = "gemini-3.8-flash";
+const GEMINI_MODEL = "gemini-3.5-flash-lite";
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 const MAX_QUESTION_LENGTH = 1000;
 const MAX_HISTORY_MESSAGES = 10;
@@ -96,7 +96,7 @@ async function chatWithAssistant(req, res) {
         { role: "user", parts: [{ text: question.trim() }] }
     ];
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30000);
+    const timeout = setTimeout(() => controller.abort(), 60000);
 
     try {
         const response = await fetch(GEMINI_ENDPOINT, {
@@ -121,6 +121,12 @@ async function chatWithAssistant(req, res) {
                 return res.status(503).json({
                     success: false,
                     message: "The AI provider is temporarily busy or its quota has been reached. Please try again later."
+                });
+            }
+            if (response.status === 503) {
+                return res.status(503).json({
+                    success: false,
+                    message: "Gemini is experiencing high demand right now. Please wait a moment and try again."
                 });
             }
             if ([401, 403, 404].includes(response.status)) {

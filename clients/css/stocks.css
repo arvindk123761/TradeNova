@@ -478,6 +478,40 @@ color:#dc2626;
 
 }
 
+.stock-pnl{
+
+margin:0 0 18px;
+
+font-size:13px;
+
+font-weight:700;
+
+padding:8px 12px;
+
+border-radius:10px;
+
+display:inline-flex;
+
+align-items:center;
+
+}
+
+.stock-pnl.up{
+
+background:#dcfce7;
+
+color:#15803d;
+
+}
+
+.stock-pnl.down{
+
+background:#fee2e2;
+
+color:#b91c1c;
+
+}
+
 /* ===================================
    BUY MODAL
 =================================== */
@@ -764,9 +798,23 @@ color:#64748b;
 font-size:12px;
 }
 
+.stock-chart-controls{
+display:flex;
+flex-wrap:wrap;
+justify-content:flex-end;
+gap:8px;
+}
+
 .stock-chart-ranges{
 display:flex;
 gap:6px;
+}
+
+.stock-chart-types{
+display:flex;
+gap:6px;
+padding-left:8px;
+border-left:1px solid #e2e8f0;
 }
 
 .stock-chart-ranges button{
@@ -779,14 +827,41 @@ font-weight:700;
 cursor:pointer;
 }
 
+.stock-chart-types button{
+border:1px solid #dbe3ef;
+border-radius:8px;
+background:#fff;
+color:#475569;
+padding:8px 11px;
+font-weight:700;
+cursor:pointer;
+}
+
 .stock-chart-ranges button.active{
 background:#2563eb;
+color:#fff;
+}
+
+.stock-chart-types button.active{
+border-color:#0f766e;
+background:#0f766e;
 color:#fff;
 }
 
 .stock-chart-canvas{
 height:220px;
 position:relative;
+}
+
+@media (max-width: 700px){
+.stock-chart-heading{
+align-items:flex-start;
+flex-direction:column;
+}
+
+.stock-chart-controls{
+justify-content:flex-start;
+}
 }
 
 .stock-chart-extremes{

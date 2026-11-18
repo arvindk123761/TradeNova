@@ -28,7 +28,7 @@
 
             <aside class="signals-disclaimer" aria-label="Important simulation notice">
                 <strong>Educational demo only</strong>
-                <p>These signals use TradeNova's simulated chart history, not live market prices. They are rule-based learning indicators, not investment advice or a guarantee of future performance.</p>
+                <p>These signals use TradeNova's simulated chart history, not live market prices. Candlestick open/high/low values are illustrative and derived from that same simulated price path. These are rule-based learning indicators, not investment advice or a guarantee of future performance.</p>
             </aside>
 
             <section class="signals-controls" aria-label="Signal timeframe">
@@ -40,7 +40,76 @@
                 <p id="signalsStatus" role="status" aria-live="polite">Loading your stock catalog...</p>
             </section>
 
+            <section class="signals-technical" aria-labelledby="technicalGuideTitle">
+                <div class="signals-technical__intro">
+                    <span class="signals-eyebrow">HOW THE SIGNAL IS BUILT</span>
+                    <h2 id="technicalGuideTitle">Technical analysis & timeframe</h2>
+                    <p>These are simple educational indicators applied to TradeNova's simulated chart points—not exchange candles or live market data.</p>
+                </div>
+                <div class="signals-technical__grid">
+                    <article class="signals-technical__item">
+                        <h3>Trend & momentum</h3>
+                        <p>Compares the first and latest price in the selected range. A move must cross the range threshold: Day ±0.15%, Week ±0.35%, or Month ±0.75%.</p>
+                    </article>
+                    <article class="signals-technical__item">
+                        <h3>5-point SMA</h3>
+                        <p>Simple moving average of the latest five points (or all available points if fewer). Latest price above/below it is one bullish/bearish confirmation.</p>
+                    </article>
+                    <article class="signals-technical__item">
+                        <h3>Price-action confirmation</h3>
+                        <p>Counts rising versus falling intervals. A majority in one direction is the second confirmation; momentum and at least one confirmation must agree for Buy or Sell.</p>
+                    </article>
+                    <article class="signals-technical__item signals-technical__item--timeframe" aria-live="polite">
+                        <h3 id="signalsTimeframeTitle">Day timeframe</h3>
+                        <p id="signalsTimeframeDetail">Loading timeframe details...</p>
+                    </article>
+                </div>
+            </section>
+
             <section id="signalsSummary" class="signals-summary" aria-label="Signal summary" aria-live="polite"></section>
+
+            <section class="screener" aria-labelledby="screenerTitle">
+                <div class="screener__header">
+                    <div>
+                        <span class="signals-eyebrow">WEEKLY + MONTHLY SCAN</span>
+                        <h2 id="screenerTitle">Top 5 Buy screener</h2>
+                        <p>Stocks with a Buy signal on both timeframes are ranked by their average weekly/monthly return.</p>
+                    </div>
+                    <label class="screener__search">
+                        <span>Search stocks</span>
+                        <input id="screenerSearch" type="search" placeholder="Company or symbol" autocomplete="off">
+                    </label>
+                </div>
+                <div class="screener__filters">
+                    <label>
+                        Rank by
+                        <select id="screenerSort">
+                            <option value="return">Average weekly/monthly return</option>
+                            <option value="price">Price: low to high</option>
+                            <option value="name">Company name</option>
+                        </select>
+                    </label>
+                    <p id="screenerStatus" role="status" aria-live="polite"></p>
+                </div>
+                <div class="screener__table-wrap">
+                    <table class="screener__table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Stock</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Weekly</th>
+                                <th scope="col">Monthly</th>
+                                <th scope="col">Avg. return</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="screenerRows"></tbody>
+                    </table>
+                </div>
+                <p class="screener__note">Signals and returns use illustrative simulated charts. The Buy action places a paper-trade order in your TradeNova account; it is not a real-market trade.</p>
+            </section>
+
             <section id="signalsGrid" class="signals-grid" aria-label="Stock trend analysis" aria-live="polite"></section>
 
             <p class="signals-method">
@@ -48,6 +117,24 @@
             </p>
         </div>
     </main>
+
+    <dialog id="screenerBuyDialog" class="screener-buy" aria-labelledby="screenerBuyTitle">
+        <form method="dialog" class="screener-buy__close-form">
+            <button type="submit" class="screener-buy__close" aria-label="Close buy dialog">&times;</button>
+        </form>
+        <h2 id="screenerBuyTitle">Buy stock</h2>
+        <p id="screenerBuyIdentity" class="screener-buy__identity"></p>
+        <p class="screener-buy__price">Current price: <strong id="screenerBuyPrice"></strong></p>
+        <label class="screener-buy__quantity" for="screenerBuyQuantity">Quantity</label>
+        <input id="screenerBuyQuantity" type="number" min="1" step="1" value="1">
+        <p class="screener-buy__total">Estimated total: <strong id="screenerBuyTotal"></strong></p>
+        <p id="screenerBuyMessage" class="screener-buy__message" role="status" aria-live="polite"></p>
+        <a id="screenerLoginLink" class="screener-buy__login" href="login.html">Sign in to place this paper-trade order</a>
+        <div class="screener-buy__actions">
+            <button id="screenerBuyCancel" type="button" class="screener-buy__cancel">Cancel</button>
+            <button id="screenerBuyConfirm" type="button" class="screener-buy__confirm">Buy stock</button>
+        </div>
+    </dialog>
 
     <script src="js/common.js"></script>
     <script src="js/topbar.js"></script>
